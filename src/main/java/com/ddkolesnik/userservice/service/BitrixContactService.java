@@ -5,6 +5,8 @@ import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
+import com.ddkolesnik.userservice.model.bitrix.Email;
+import com.ddkolesnik.userservice.model.bitrix.Phone;
 import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,6 +43,9 @@ public class BitrixContactService {
 
   @Value("${bitrix.crm.contact.update}")
   String BITRIX_CRM_CONTACT_UPDATE;
+
+  @Value("${bitrix.crm.contact.add}")
+  String BITRIX_CRM_CONTACT_ADD;
 
   final RestTemplate restTemplate;
 
@@ -105,14 +110,30 @@ public class BitrixContactService {
         .build();
   }
 
-  private Map<String, String> prepareFields(UserDTO userDTO) {
-    Map<String, String> fields = new LinkedHashMap<>();
+  private Map<String, Object> prepareFields(UserDTO userDTO) {
+    Map<String, Object> fields = new LinkedHashMap<>();
     fields.put("NAME", userDTO.getName());
     fields.put("SECOND_NAME", userDTO.getSecondName());
     fields.put("LAST_NAME", userDTO.getLastName());
-    fields.put("EMAIL", userDTO.getEmail());
+    fields.put("EMAIL", Collections.singletonList(convertEmail(userDTO.getEmail())));
+    fields.put("PHONE", Collections.singletonList(convertPhone(userDTO.getPhone())));
     fields.put("UF_CRM_1625221385", "1");
     return fields;
+  }
+
+  private Email convertEmail(String email) {
+    return Email.builder()
+        .value(email)
+        .valueType("WORK")
+        .typeId("EMAIL")
+        .build();
+  }
+
+  private Phone convertPhone(String phone) {
+    return Phone.builder()
+        .value(phone)
+        .valueType("WORK")
+        .build();
   }
 
 }

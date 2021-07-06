@@ -21,6 +21,6 @@ public class UpdateContact {
 
   Integer id;
   @Builder.Default
-  Map<String, String> fields = new LinkedHashMap<>();
+  Map<String, Object> fields = new LinkedHashMap<>();
 
 }
