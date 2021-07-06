@@ -50,6 +50,7 @@ public class BitrixContactServiceTest {
         .name("Александр")
         .secondName("Александрович")
         .lastName("Стегнин")
+        .email("myemail@example.com")
         .phone("+79224777567")
         .build();
   }
