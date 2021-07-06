@@ -8,6 +8,7 @@ import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.Email;
 import com.ddkolesnik.userservice.model.bitrix.Phone;
 import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
+import com.ddkolesnik.userservice.model.bitrix.ValueType;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -124,7 +125,7 @@ public class BitrixContactService {
   private Email convertEmail(String email) {
     return Email.builder()
         .value(email)
-        .valueType("WORK")
+        .valueType(ValueType.WORK.name())
         .typeId("EMAIL")
         .build();
   }
@@ -132,7 +133,7 @@ public class BitrixContactService {
   private Phone convertPhone(String phone) {
     return Phone.builder()
         .value(phone)
-        .valueType("WORK")
+        .valueType(ValueType.WORK.name())
         .build();
   }
 
