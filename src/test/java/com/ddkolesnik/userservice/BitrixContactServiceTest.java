@@ -3,10 +3,10 @@ package com.ddkolesnik.userservice;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.ddkolesnik.userservice.model.Contact;
-import com.ddkolesnik.userservice.model.ContactList;
-import com.ddkolesnik.userservice.model.DuplicateResult;
-import com.ddkolesnik.userservice.model.UpdateContact;
+import com.ddkolesnik.userservice.model.bitrix.Contact;
+import com.ddkolesnik.userservice.model.bitrix.ContactList;
+import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
+import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
 import com.ddkolesnik.userservice.service.BitrixContactService;
 import java.util.Collections;
 import java.util.Comparator;

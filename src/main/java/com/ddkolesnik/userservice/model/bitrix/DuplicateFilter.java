@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model;
+package com.ddkolesnik.userservice.model.bitrix;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;

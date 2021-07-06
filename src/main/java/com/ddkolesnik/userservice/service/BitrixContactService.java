@@ -1,10 +1,10 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.model.ContactList;
-import com.ddkolesnik.userservice.model.ContactListFilter;
-import com.ddkolesnik.userservice.model.DuplicateFilter;
-import com.ddkolesnik.userservice.model.DuplicateResult;
-import com.ddkolesnik.userservice.model.UpdateContact;
+import com.ddkolesnik.userservice.model.bitrix.ContactList;
+import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
+import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
+import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
+import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

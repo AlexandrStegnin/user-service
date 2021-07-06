@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model;
+package com.ddkolesnik.userservice.model.bitrix;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
