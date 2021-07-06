@@ -17,7 +17,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
  */
 @Configuration
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@PropertySource(value = {"classpath:private.properties", "classpath:application.properties"})
+@PropertySource(value = "classpath:private.properties")
 public class AppConfiguration {
 
   @Value("${bitrix.default.url}")

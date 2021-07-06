@@ -1,12 +1,14 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.model.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -65,8 +67,8 @@ public class BitrixContactService {
     this.contactHttpEntity = new HttpEntity<>(updateContact);
   }
 
-  public DuplicateResult findDuplicatesByPhones(List<String> phones) {
-    duplicateFilter.setValues(phones);
+  public DuplicateResult findDuplicates(UserDTO userDTO) {
+    duplicateFilter.setValues(Collections.singletonList(userDTO.getPhone()));
     ResponseEntity<DuplicateResult> bitrixResult = restTemplate.exchange(BITRIX_CRM_DUPLICATE_FIND_BY_COMM,
         HttpMethod.POST, httpEntity, DuplicateResult.class);
     DuplicateResult duplicate = bitrixResult.getBody();
@@ -74,9 +76,9 @@ public class BitrixContactService {
     return duplicate;
   }
 
-  public ContactList getContactByPhones(List<String> phones) {
+  public ContactList findContacts(UserDTO userDTO) {
     Map<String, String[]> filter = new HashMap<>();
-    filter.put("PHONE", phones.toArray(new String[0]));
+    filter.put("PHONE", Collections.singleton(userDTO.getPhone()).toArray(new String[0]));
     contactListFilter.setFilter(filter);
     ResponseEntity<ContactList> contactList = restTemplate.exchange(BITRIX_CRM_CONTACT_LIST,
         HttpMethod.POST, contactListEntity, ContactList.class);
@@ -85,7 +87,8 @@ public class BitrixContactService {
     return contacts;
   }
 
-  public Object updateContact(UpdateContact contact) {
+  public Object updateContact(UserDTO userDTO) {
+    UpdateContact contact = convert(userDTO);
     this.updateContact.setId(contact.getId());
     this.updateContact.setFields(contact.getFields());
     ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_CONTACT_UPDATE,
@@ -93,6 +96,23 @@ public class BitrixContactService {
     Object updated = update.getBody();
     log.info("Результат обновления контакта {}", updated);
     return updated;
+  }
+
+  private UpdateContact convert(UserDTO userDTO) {
+    return UpdateContact.builder()
+        .id(userDTO.getId())
+        .fields(prepareFields(userDTO))
+        .build();
+  }
+
+  private Map<String, String> prepareFields(UserDTO userDTO) {
+    Map<String, String> fields = new LinkedHashMap<>();
+    fields.put("NAME", userDTO.getName());
+    fields.put("SECOND_NAME", userDTO.getSecondName());
+    fields.put("LAST_NAME", userDTO.getLastName());
+    fields.put("EMAIL", userDTO.getEmail());
+    fields.put("UF_CRM_1625221385", "1");
+    return fields;
   }
 
 }
