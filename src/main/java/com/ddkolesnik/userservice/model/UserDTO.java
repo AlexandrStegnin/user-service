@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AppUser {
+public class UserDTO {
 
   String name;
   String surname;
