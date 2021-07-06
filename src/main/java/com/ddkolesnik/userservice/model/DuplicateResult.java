@@ -13,6 +13,6 @@ import lombok.experimental.FieldDefaults;
 public class DuplicateResult {
 
   @JsonProperty("result")
-  Duplicate result;
+  Object result;
 
 }
