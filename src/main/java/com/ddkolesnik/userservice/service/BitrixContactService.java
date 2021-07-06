@@ -4,6 +4,7 @@ import com.ddkolesnik.userservice.model.ContactList;
 import com.ddkolesnik.userservice.model.ContactListFilter;
 import com.ddkolesnik.userservice.model.DuplicateFilter;
 import com.ddkolesnik.userservice.model.DuplicateResult;
+import com.ddkolesnik.userservice.model.UpdateContact;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,9 @@ public class BitrixContactService {
   @Value("${bitrix.crm.contact.list}")
   String BITRIX_CRM_CONTACT_LIST;
 
+  @Value("${bitrix.crm.contact.update}")
+  String BITRIX_CRM_CONTACT_UPDATE;
+
   final RestTemplate restTemplate;
 
   final HttpEntity<DuplicateFilter> httpEntity;
@@ -57,6 +61,10 @@ public class BitrixContactService {
 
   final HttpEntity<ContactListFilter> contactListEntity;
 
+  HttpEntity<UpdateContact> contactHttpEntity;
+
+  UpdateContact updateContact;
+
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
     HttpHeaders httpHeaders = new HttpHeaders();
@@ -64,8 +72,10 @@ public class BitrixContactService {
     this.restTemplate = restTemplate;
     this.duplicateFilter = new DuplicateFilter();
     this.contactListFilter = new ContactListFilter();
+    this.updateContact = new UpdateContact();
     this.httpEntity = new HttpEntity<>(duplicateFilter, httpHeaders);
     this.contactListEntity = new HttpEntity<>(contactListFilter, httpHeaders);
+    this.contactHttpEntity = new HttpEntity<>(updateContact, httpHeaders);
   }
 
   public DuplicateResult findDuplicatesByPhones(List<String> phones) {
@@ -84,6 +94,15 @@ public class BitrixContactService {
         BITRIX_API_BASE_URL + BITRIX_WEBHOOK_USER_ID + BITRIX_ACCESS_KEY + BITRIX_CRM_CONTACT_LIST,
         HttpMethod.POST, contactListEntity, ContactList.class);
     return contactList.getBody();
+  }
+
+  public Object updateContact(UpdateContact contact) {
+    this.updateContact.setId(contact.getId());
+    this.updateContact.setFields(contact.getFields());
+    ResponseEntity<Object> updated = restTemplate.exchange(
+        BITRIX_API_BASE_URL + BITRIX_WEBHOOK_USER_ID + BITRIX_ACCESS_KEY + BITRIX_CRM_CONTACT_UPDATE,
+        HttpMethod.POST, contactHttpEntity, Object.class);
+    return updated.getBody();
   }
 
 }
