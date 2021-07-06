@@ -61,9 +61,9 @@ public class BitrixContactService {
 
   final HttpEntity<ContactListFilter> contactListEntity;
 
-  HttpEntity<UpdateContact> contactHttpEntity;
+  final HttpEntity<UpdateContact> contactHttpEntity;
 
-  UpdateContact updateContact;
+  final UpdateContact updateContact;
 
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
@@ -83,7 +83,9 @@ public class BitrixContactService {
     ResponseEntity<DuplicateResult> bitrixResult = restTemplate.exchange(
         BITRIX_API_BASE_URL + BITRIX_WEBHOOK_USER_ID + BITRIX_ACCESS_KEY + BITRIX_CRM_DUPLICATE_FIND_BY_COMM,
         HttpMethod.POST, httpEntity, DuplicateResult.class);
-    return bitrixResult.getBody();
+    DuplicateResult duplicate = bitrixResult.getBody();
+    log.info("Результат поиска дубликатов {}", duplicate);
+    return duplicate;
   }
 
   public ContactList getContactByPhones(List<String> phones) {
@@ -93,16 +95,20 @@ public class BitrixContactService {
     ResponseEntity<ContactList> contactList = restTemplate.exchange(
         BITRIX_API_BASE_URL + BITRIX_WEBHOOK_USER_ID + BITRIX_ACCESS_KEY + BITRIX_CRM_CONTACT_LIST,
         HttpMethod.POST, contactListEntity, ContactList.class);
-    return contactList.getBody();
+    ContactList contacts = contactList.getBody();
+    log.info("Результат поиска списка контактов по телефону {}", contacts);
+    return contacts;
   }
 
   public Object updateContact(UpdateContact contact) {
     this.updateContact.setId(contact.getId());
     this.updateContact.setFields(contact.getFields());
-    ResponseEntity<Object> updated = restTemplate.exchange(
+    ResponseEntity<Object> update = restTemplate.exchange(
         BITRIX_API_BASE_URL + BITRIX_WEBHOOK_USER_ID + BITRIX_ACCESS_KEY + BITRIX_CRM_CONTACT_UPDATE,
         HttpMethod.POST, contactHttpEntity, Object.class);
-    return updated.getBody();
+    Object updated = update.getBody();
+    log.info("Результат обновления контакта {}", updated);
+    return updated;
   }
 
 }
