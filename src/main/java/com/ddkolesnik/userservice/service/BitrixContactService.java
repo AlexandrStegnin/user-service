@@ -28,7 +28,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@PropertySource(value = {"classpath:private.properties", "classpath:application.properties"})
+@PropertySource(value = "classpath:application.properties")
 public class BitrixContactService {
 
   @Value("${bitrix.crm.duplicate.findbycomm}")
