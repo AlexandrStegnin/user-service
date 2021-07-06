@@ -1,9 +1,9 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.model.DuplicateResult;
-import com.ddkolesnik.userservice.model.DuplicateFilter;
 import com.ddkolesnik.userservice.model.ContactList;
 import com.ddkolesnik.userservice.model.ContactListFilter;
+import com.ddkolesnik.userservice.model.DuplicateFilter;
+import com.ddkolesnik.userservice.model.DuplicateResult;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@PropertySource(value = "classpath:private.properties")
+@PropertySource(value = {"classpath:private.properties", "classpath:application.properties"})
 public class BitrixContactService {
 
   @Value("${bitrix.default.url}")
