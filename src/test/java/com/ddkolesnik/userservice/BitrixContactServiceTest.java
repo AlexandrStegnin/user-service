@@ -6,10 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.ddkolesnik.userservice.model.Contact;
 import com.ddkolesnik.userservice.model.ContactList;
 import com.ddkolesnik.userservice.model.DuplicateResult;
+import com.ddkolesnik.userservice.model.UpdateContact;
 import com.ddkolesnik.userservice.service.BitrixContactService;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +38,20 @@ public class BitrixContactServiceTest {
         .stream().min(Comparator.comparing(Contact::getId))
         .orElse(null);
     assertNotNull(earlyContact);
+  }
+
+  @Test
+  public void updateContactTest() {
+    Map<String, String> fields = new LinkedHashMap<>();
+    fields.put("LAST_NAME", "Stegnin");
+    fields.put("UF_CRM_1625221385", "1");
+    UpdateContact contact = UpdateContact.builder()
+        .id(2539)
+        .fields(fields)
+        .build();
+
+    Object updated = bitrixContactService.updateContact(contact);
+    assertNotNull(updated);
   }
 
 }
