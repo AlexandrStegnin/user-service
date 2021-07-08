@@ -44,6 +44,22 @@ public class BitrixContactServiceTest {
     assertNotNull(updated);
   }
 
+  @Test
+  public void createContactTest() {
+    Object created = bitrixContactService.createContact(getTestUserDTO());
+    assertNotNull(created);
+  }
+
+  private UserDTO getTestUserDTO() {
+    return UserDTO.builder()
+        .name("Тест")
+        .secondName("Тестович")
+        .lastName("Тестовый")
+        .email("myemail@example.com")
+        .phone("++79998887766")
+        .build();
+  }
+
   private UserDTO getUserDTO() {
     return UserDTO.builder()
         .id(2539)

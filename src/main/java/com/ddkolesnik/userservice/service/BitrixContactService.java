@@ -3,6 +3,7 @@ package com.ddkolesnik.userservice.service;
 import com.ddkolesnik.userservice.model.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
+import com.ddkolesnik.userservice.model.bitrix.CreateContact;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.Email;
@@ -48,6 +49,9 @@ public class BitrixContactService {
   @Value("${bitrix.crm.contact.add}")
   String BITRIX_CRM_CONTACT_ADD;
 
+  @Value("${bitrix.crm.contact.delete}")
+  String BITRIX_CRM_CONTACT_DELETE;
+
   final RestTemplate restTemplate;
 
   final HttpEntity<DuplicateFilter> httpEntity;
@@ -58,9 +62,13 @@ public class BitrixContactService {
 
   final HttpEntity<ContactListFilter> contactListEntity;
 
-  final HttpEntity<UpdateContact> contactHttpEntity;
+  final HttpEntity<UpdateContact> updateContactHttpEntity;
 
   final UpdateContact updateContact;
+
+  final CreateContact createContact;
+
+  final HttpEntity<CreateContact> createContactHttpEntity;
 
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
@@ -68,9 +76,11 @@ public class BitrixContactService {
     this.duplicateFilter = new DuplicateFilter();
     this.contactListFilter = new ContactListFilter();
     this.updateContact = new UpdateContact();
+    this.createContact = new CreateContact();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
-    this.contactHttpEntity = new HttpEntity<>(updateContact);
+    this.updateContactHttpEntity = new HttpEntity<>(updateContact);
+    this.createContactHttpEntity = new HttpEntity<>(createContact);
   }
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
@@ -98,10 +108,26 @@ public class BitrixContactService {
     this.updateContact.setId(contact.getId());
     this.updateContact.setFields(contact.getFields());
     ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_CONTACT_UPDATE,
-        HttpMethod.POST, contactHttpEntity, Object.class);
+        HttpMethod.POST, updateContactHttpEntity, Object.class);
     Object updated = update.getBody();
     log.info("Результат обновления контакта {}", updated);
     return updated;
+  }
+
+  public Object createContact(UserDTO userDTO) {
+    CreateContact contact = convertToCreateContact(userDTO);
+    this.createContact.setFields(contact.getFields());
+    ResponseEntity<Object> create = restTemplate.exchange(BITRIX_CRM_CONTACT_ADD,
+        HttpMethod.POST, createContactHttpEntity, Object.class);
+    Object created = create.getBody();
+    log.info("Результат создания контакта {}", created);
+    return created;
+  }
+
+  private CreateContact convertToCreateContact(UserDTO userDTO) {
+    return CreateContact.builder()
+        .fields(prepareFields(userDTO))
+        .build();
   }
 
   private UpdateContact convert(UserDTO userDTO) {
