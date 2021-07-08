@@ -23,51 +23,53 @@ public class BitrixContactServiceTest {
   @Autowired
   private BitrixContactService bitrixContactService;
 
-  @Test
-  public void findDuplicatesTest() {
-    DuplicateResult duplicateResult = bitrixContactService.findDuplicates(getUserDTO());
-    assertFalse(((LinkedHashMap<?, ?>) duplicateResult.getResult()).isEmpty());
+  public DuplicateResult findDuplicatesTest() {
+    return bitrixContactService.findDuplicates(getTestUserDTO(null));
+  }
+
+  public ContactList getContactListByPhoneNumbersTest() {
+    return bitrixContactService.findContacts(getTestUserDTO(null));
+  }
+
+  public Object updateContactTest(Integer id) {
+    return bitrixContactService.updateContact(getTestUserDTO(id));
+  }
+
+  public Object createContactTest() {
+    return bitrixContactService.createContact(getTestUserDTO(null));
+  }
+
+  public Object deleteContactTest(Integer id) {
+    return bitrixContactService.deleteContact(getTestUserDTO(id));
+
   }
 
   @Test
-  public void getContactListByPhoneNumbersTest() {
-    ContactList contactList = bitrixContactService.findContacts(getUserDTO());
+  public void crudTest() {
+    Object created = createContactTest();
+    assertNotNull(created);
+    Integer id = (Integer) (((LinkedHashMap<?, ?>) created).get("result"));
+    DuplicateResult duplicate = findDuplicatesTest();
+    assertFalse(((LinkedHashMap<?, ?>) duplicate.getResult()).isEmpty());
+    ContactList contactList = getContactListByPhoneNumbersTest();
     Contact earlyContact = contactList.getResult()
         .stream().min(Comparator.comparing(Contact::getId))
         .orElse(null);
     assertNotNull(earlyContact);
-  }
-
-  @Test
-  public void updateContactTest() {
-    Object updated = bitrixContactService.updateContact(getUserDTO());
+    Object updated = updateContactTest(id);
     assertNotNull(updated);
+    Object deleted = deleteContactTest(id);
+    assertNotNull(deleted);
   }
 
-  @Test
-  public void createContactTest() {
-    Object created = bitrixContactService.createContact(getTestUserDTO());
-    assertNotNull(created);
-  }
-
-  private UserDTO getTestUserDTO() {
+  private UserDTO getTestUserDTO(Integer id) {
     return UserDTO.builder()
+        .id(id)
         .name("Тест")
         .secondName("Тестович")
         .lastName("Тестовый")
         .email("myemail@example.com")
-        .phone("++79998887766")
-        .build();
-  }
-
-  private UserDTO getUserDTO() {
-    return UserDTO.builder()
-        .id(2539)
-        .name("Александр")
-        .secondName("Александрович")
-        .lastName("Стегнин")
-        .email("myemail@example.com")
-        .phone("+79224777567")
+        .phone("+79998887766")
         .build();
   }
 

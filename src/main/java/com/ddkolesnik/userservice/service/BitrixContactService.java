@@ -4,6 +4,7 @@ import com.ddkolesnik.userservice.model.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
 import com.ddkolesnik.userservice.model.bitrix.CreateContact;
+import com.ddkolesnik.userservice.model.bitrix.DeleteContact;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.Email;
@@ -70,6 +71,10 @@ public class BitrixContactService {
 
   final HttpEntity<CreateContact> createContactHttpEntity;
 
+  final DeleteContact deleteContact;
+
+  final HttpEntity<DeleteContact> deleteContactHttpEntity;
+
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
@@ -77,10 +82,12 @@ public class BitrixContactService {
     this.contactListFilter = new ContactListFilter();
     this.updateContact = new UpdateContact();
     this.createContact = new CreateContact();
+    this.deleteContact = new DeleteContact();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
     this.updateContactHttpEntity = new HttpEntity<>(updateContact);
     this.createContactHttpEntity = new HttpEntity<>(createContact);
+    this.deleteContactHttpEntity = new HttpEntity<>(deleteContact);
   }
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
@@ -122,6 +129,15 @@ public class BitrixContactService {
     Object created = create.getBody();
     log.info("Результат создания контакта {}", created);
     return created;
+  }
+
+  public Object deleteContact(UserDTO userDTO) {
+    this.deleteContact.setId(userDTO.getId());
+    ResponseEntity<Object> delete = restTemplate.exchange(BITRIX_CRM_CONTACT_DELETE,
+        HttpMethod.POST, deleteContactHttpEntity, Object.class);
+    Object deleted = delete.getBody();
+    log.info("Результат удаления контакта {}", delete);
+    return deleted;
   }
 
   private CreateContact convertToCreateContact(UserDTO userDTO) {
