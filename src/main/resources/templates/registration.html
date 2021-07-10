@@ -8,10 +8,7 @@
 </head>
 <body>
 <div class="container-fluid" style="margin-top: 1%">
-    <H1 style="text-align: center" th:text="${success}"></H1>
-</div>
-<div class="container-fluid" style="margin-top: 1%">
-    <form th:action="@{/registration}" th:method="POST" th:object="${userDTO}">
+    <form th:action="@{/registration}" th:method="POST" th:object="${userDTO}" id="registration">
         <div class="form-group row">
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="lastName">ФАМИЛИЯ</label>
             <div class="col-sm-6">
@@ -59,6 +56,12 @@
             </div>
         </div>
     </form>
+    <div class="container-fluid" style="margin-top: 1%">
+        <h6 style="text-align: center" th:text="${confirm}"></h6>
+    </div>
 </div>
+<script th:src="@{https://code.jquery.com/jquery-3.6.0.slim.min.js}"
+        integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/confirm.js}"></script>
 </body>
 </html>
