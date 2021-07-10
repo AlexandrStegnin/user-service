@@ -22,7 +22,7 @@ public class RegistrationController {
   @PostMapping(path = "registration")
   public String register(@ModelAttribute UserDTO userDTO, Model model) {
     model.addAttribute("userDTO", userDTO);
-    model.addAttribute("success", "Ваши данные отправлены на проверку");
+    model.addAttribute("confirm", "НА ВАШ ТЕЛЕФОН ОТПРАВЛЕН КОД ПРОВЕРКИ. ВВЕДИТЕ ЕГО В ПОЛЕ НИЖЕ");
     return "registration";
   }
 
