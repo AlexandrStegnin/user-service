@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      lang="RU">
+<head>
+    <title>РЕГИСТРАЦИЯ</title>
+    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css}"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 1%">
+    <H1 style="text-align: center" th:text="${success}"></H1>
+</div>
+<div class="container-fluid" style="margin-top: 1%">
+    <form th:action="@{/registration}" th:method="POST" th:object="${userDTO}">
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="lastName">ФАМИЛИЯ</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="text" id="lastName" th:field="*{lastName}" required
+                       oninvalid="this.setCustomValidity('Укажите фамилию')"
+                       oninput="setCustomValidity('')"
+                />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="name">ИМЯ</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="text" id="name" th:field="*{name}" required
+                       oninvalid="this.setCustomValidity('Укажите имя')"
+                       oninput="setCustomValidity('')"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="secondName">ОТЧЕСТВО</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="text" id="secondName" th:field="*{secondName}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="email">EMAIL</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="email" id="email" th:field="*{email}" required
+                       oninvalid="this.setCustomValidity('Укажите корректный EMAIL')"
+                       oninput="setCustomValidity('')"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="phone">ТЕЛЕФОН</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="tel" id="phone" placeholder="+79998887766"
+                       th:field="*{phone}" required
+                       oninvalid="this.setCustomValidity('Укажите телефон в правильном формате +79999999999')"
+                       oninput="setCustomValidity('')"
+                       pattern="\+?[7][0-9]{10}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6 offset-sm-5">
+                <button type="submit" class="btn btn-primary" id="register">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
