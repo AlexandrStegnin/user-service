@@ -18,7 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class RegistrationController {
 
-  @GetMapping(path = "registration")
+  @GetMapping(path = "/")
+  public String home() {
+    return "redirect:/registration";
+  }
+
+  @GetMapping(path = "/registration")
   public String registrationPage(Model model) {
     model.addAttribute("userDTO", new UserDTO());
     return "registration";
