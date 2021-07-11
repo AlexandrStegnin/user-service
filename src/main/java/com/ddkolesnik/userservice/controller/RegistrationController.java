@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.controller;
 
+import com.ddkolesnik.userservice.configuration.Location;
 import com.ddkolesnik.userservice.model.ConfirmPhoneDTO;
 import com.ddkolesnik.userservice.model.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
@@ -20,24 +21,24 @@ public class RegistrationController {
 
   @GetMapping(path = "/")
   public String home() {
-    return "redirect:/registration";
+    return "redirect:" + Location.REGISTRATION_URL;
   }
 
-  @GetMapping(path = "/registration")
+  @GetMapping(path = Location.REGISTRATION_URL)
   public String registrationPage(Model model) {
     model.addAttribute("userDTO", new UserDTO());
-    return "registration";
+    return Location.REGISTRATION_URL;
   }
 
-  @PostMapping(path = "registration")
+  @PostMapping(path = Location.REGISTRATION_URL)
   public String register(@ModelAttribute UserDTO userDTO, Model model) {
     model.addAttribute("userDTO", userDTO);
     model.addAttribute("confirm", "НА ВАШ ТЕЛЕФОН ОТПРАВЛЕН КОД ПРОВЕРКИ. ВВЕДИТЕ ЕГО В ПОЛЕ НИЖЕ");
-    return "registration";
+    return Location.REGISTRATION_URL;
   }
 
   @ResponseBody
-  @PostMapping(path = "confirm", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = Location.CONFIRM_URL, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponse confirm(@RequestBody ConfirmPhoneDTO confirmPhoneDTO) {
     return ApiResponse.builder()
         .message(String.format("Телефон подтверждён %d", confirmPhoneDTO.getConfirmCode()))
