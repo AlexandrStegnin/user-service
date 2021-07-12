@@ -23,5 +23,6 @@ public class UserDTO {
   String lastName;
   String email;
   String phone;
+  String confirmCode;
 
 }
