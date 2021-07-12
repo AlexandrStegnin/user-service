@@ -1,6 +1,5 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.model.ConfirmPhoneDTO;
 import com.ddkolesnik.userservice.model.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
@@ -26,11 +25,18 @@ public class UserService {
 
   BitrixContactService bitrixContactService;
 
-  public void confirmPhone(ConfirmPhoneDTO dto) {
+  public boolean confirmPhone(UserDTO dto) {
     log.info("Функционал в разработке. {}", dto);
+    //TODO сделать подтверждение номера телефона
+    return true;
   }
 
   public ApiResponse update(UserDTO dto) {
+    if (!confirmPhone(dto)) {
+      return ApiResponse.builder()
+          .message("При подтверждении номера телефона произошла ошибка")
+          .build();
+    }
     DuplicateResult duplicate = bitrixContactService.findDuplicates(dto);
     if (Objects.isNull(duplicate)) {
       return createContact(dto);
