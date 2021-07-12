@@ -1,6 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.model.UserDTO;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.response.ApiResponse;
@@ -64,7 +64,7 @@ public class UserService {
   }
 
   private ApiResponse updateContact(UserDTO dto) {
-    Contact contact = bitrixContactService.findContacts(dto);
+    Contact contact = bitrixContactService.findFirstContact(dto);
     if (Objects.isNull(contact)) {
       return ApiResponse.builder()
           .message(String.format("Произошла ошибка. Контакт не найден %s", dto))

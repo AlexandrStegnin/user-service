@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Location {
 
-  public static final String HOME = "/";
+  public static final String HOME_URL = "/";
 
-  public static final String REGISTRATION_VIEW = "registration";
+  public static final String REGISTRATION_URL = "registration";
 
   public static final String CONFIRM_URL = "confirm";
 
+  public static final String SUCCESS_URL = "success";
 }

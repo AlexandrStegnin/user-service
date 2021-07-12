@@ -1,7 +1,7 @@
 package com.ddkolesnik.userservice.controller;
 
 import com.ddkolesnik.userservice.configuration.Location;
-import com.ddkolesnik.userservice.model.UserDTO;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
 import com.ddkolesnik.userservice.service.UserService;
 import lombok.AccessLevel;
@@ -25,10 +25,10 @@ public class RegistrationController {
 
   UserService userService;
 
-  @GetMapping(path = Location.HOME)
+  @GetMapping(path = Location.HOME_URL)
   public String registrationPage(Model model) {
     model.addAttribute("userDTO", new UserDTO());
-    return Location.REGISTRATION_VIEW;
+    return Location.REGISTRATION_URL;
   }
 
   @ResponseBody
@@ -37,11 +37,11 @@ public class RegistrationController {
     return userService.update(dto);
   }
 
-  @GetMapping(path = "success")
+  @GetMapping(path = Location.SUCCESS_URL)
   public String success(Model model) {
-    model.addAttribute("message", "ЗАПРОС ОТПРАВЛЕН АДМИНИСТРАТОРАМ СИСТЕМЫ. " +
+    model.addAttribute("message", "ЗАПРОС ОТПРАВЛЕН АДМИНИСТРАТОРАМ СИСТЕМЫ. \n" +
         "ОЖИДАЙТЕ ИНСТРУКЦИЙ НА АДРЕС ЭЛЕКТРОННОЙ ПОЧТЫ.");
-    return "success";
+    return Location.SUCCESS_URL;
   }
 
 }

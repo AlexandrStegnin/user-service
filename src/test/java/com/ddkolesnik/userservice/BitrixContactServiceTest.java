@@ -3,7 +3,7 @@ package com.ddkolesnik.userservice;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.ddkolesnik.userservice.model.UserDTO;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.service.BitrixContactService;
@@ -26,7 +26,7 @@ public class BitrixContactServiceTest {
   }
 
   public Contact getContactListByPhoneNumbersTest() {
-    return bitrixContactService.findContacts(getTestUserDTO(null));
+    return bitrixContactService.findFirstContact(getTestUserDTO(null));
   }
 
   public Object updateContactTest(Integer id) {

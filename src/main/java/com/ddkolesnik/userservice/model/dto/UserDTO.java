@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model;
+package com.ddkolesnik.userservice.model.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

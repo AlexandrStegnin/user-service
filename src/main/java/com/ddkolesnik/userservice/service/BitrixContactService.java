@@ -1,6 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.model.UserDTO;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
@@ -102,7 +102,7 @@ public class BitrixContactService {
     return duplicate;
   }
 
-  public Contact findContacts(UserDTO userDTO) {
+  public Contact findFirstContact(UserDTO userDTO) {
     Map<String, String[]> filter = new HashMap<>();
     filter.put("PHONE", Collections.singleton(userDTO.getPhone()).toArray(new String[0]));
     contactListFilter.setFilter(filter);
@@ -119,7 +119,7 @@ public class BitrixContactService {
   }
 
   public Object updateContact(UserDTO userDTO) {
-    UpdateContact contact = convert(userDTO);
+    UpdateContact contact = convertToUpdateContact(userDTO);
     this.updateContact.setId(contact.getId());
     this.updateContact.setFields(contact.getFields());
     ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_CONTACT_UPDATE,
@@ -154,7 +154,7 @@ public class BitrixContactService {
         .build();
   }
 
-  private UpdateContact convert(UserDTO userDTO) {
+  private UpdateContact convertToUpdateContact(UserDTO userDTO) {
     return UpdateContact.builder()
         .id(userDTO.getId())
         .fields(prepareFields(userDTO))
