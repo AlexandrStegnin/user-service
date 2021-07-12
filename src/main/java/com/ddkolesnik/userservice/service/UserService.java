@@ -39,8 +39,7 @@ public class UserService {
           .build();
     }
     DuplicateResult duplicate = bitrixContactService.findDuplicates(dto);
-    if (Objects.isNull(duplicate) ||
-        ((ArrayList<?>) duplicate.getResult()).isEmpty()) {
+    if (responseEmpty(duplicate.getResult())) {
       return createContact(dto);
     } else {
       return updateContact(dto);
@@ -89,6 +88,16 @@ public class UserService {
       return (Boolean) (((LinkedHashMap<?, ?>) update).get("result"));
     }
     return false;
+  }
+
+  private boolean responseEmpty(Object result) {
+    boolean isEmpty = false;
+    if (result instanceof ArrayList<?>) {
+      isEmpty = ((ArrayList<?>) result).isEmpty();
+    } else if (result instanceof LinkedHashMap<?, ?>) {
+      isEmpty = ((LinkedHashMap<?, ?>) result).isEmpty();
+    }
+    return isEmpty;
   }
 
 }
