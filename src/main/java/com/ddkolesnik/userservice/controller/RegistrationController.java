@@ -42,4 +42,11 @@ public class RegistrationController {
     return userService.update(dto);
   }
 
+  @GetMapping(path = "success")
+  public String success(Model model) {
+    model.addAttribute("message", "ЗАПРОС ОТПРАВЛЕН АДМИНИСТРАТОРАМ СИСТЕМЫ. " +
+        "ОЖИДАЙТЕ ИНСТРУКЦИЙ НА АДРЕС ЭЛЕКТРОННОЙ ПОЧТЫ.");
+    return "success";
+  }
+
 }

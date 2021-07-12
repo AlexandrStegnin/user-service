@@ -54,7 +54,7 @@ function updateUser(confirmCode) {
         }})
         .done(function (data) {
             confirmModal.modal('hide')
-            console.log("SUCCESS " + data.message)
+            window.location.href="/success"
         })
         .fail(function (jqXHR) {
             console.log(jqXHR.responseText);
@@ -62,5 +62,4 @@ function updateUser(confirmCode) {
         .always(function () {
             console.log("FINISHED")
         })
-
 }
