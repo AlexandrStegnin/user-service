@@ -27,21 +27,26 @@ function onConfirmPhone() {
             console.log("Код не должен быть пустым")
             return false
         }
-        confirmPhone(confirmCode)
+        updateUser(confirmCode)
     })
 }
 
-function confirmPhone(confirmCode) {
+function updateUser(confirmCode) {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
-    let confirmPhoneDTO = {
+    let userDTO = {
+        name: $('#name').val(),
+        secondName: $('#secondName').val(),
+        lastName: $('#lastName').val(),
+        email: $('#email').val(),
+        phone: $('#phone').val(),
         confirmCode: confirmCode
     }
 
     $.post({
         url: "/confirm",
-        data: JSON.stringify(confirmPhoneDTO),
+        data: JSON.stringify(userDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
         beforeSend: function (xhr) {

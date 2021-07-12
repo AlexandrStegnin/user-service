@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container-fluid" style="margin-top: 1%">
-    <form th:action="@{/registration}" th:method="POST" th:object="${userDTO}" id="registration">
+    <form action="#" th:method="POST" th:object="${userDTO}" id="registration">
         <div class="form-group row">
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="lastName">ФАМИЛИЯ</label>
             <div class="col-sm-6">
@@ -48,7 +48,7 @@
                        th:field="*{phone}" required
                        oninvalid="this.setCustomValidity('Укажите телефон в правильном формате +79999999999')"
                        oninput="setCustomValidity('')"
-                       pattern="\+?[7][0-9]{10}"/>
+                       pattern="\+{1,}[7][0-9]{10}"/>
             </div>
         </div>
         <div class="form-group row">
