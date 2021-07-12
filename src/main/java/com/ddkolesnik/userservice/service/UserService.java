@@ -4,6 +4,7 @@ import com.ddkolesnik.userservice.model.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.response.ApiResponse;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -38,7 +39,8 @@ public class UserService {
           .build();
     }
     DuplicateResult duplicate = bitrixContactService.findDuplicates(dto);
-    if (Objects.isNull(duplicate)) {
+    if (Objects.isNull(duplicate) ||
+        ((ArrayList<?>) duplicate.getResult()).isEmpty()) {
       return createContact(dto);
     } else {
       return updateContact(dto);
@@ -47,7 +49,11 @@ public class UserService {
 
   private ApiResponse createContact(UserDTO dto) {
     Object create = bitrixContactService.createContact(dto);
-    boolean created = extractResult(create);
+    boolean created = false;
+    if (create instanceof LinkedHashMap) {
+      Integer id = (Integer) (((LinkedHashMap<?, ?>) create).get("result"));
+      created = Objects.nonNull(id);
+    }
     if (created) {
       return ApiResponse.builder()
           .message(String.format(MESSAGE_TEMPLATE, "создан", dto))

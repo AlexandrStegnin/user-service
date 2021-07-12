@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
 function onSubmitRegistration() {
     registration.on('submit', function (event) {
         event.preventDefault()
-        confirmModal.modal('show')
+        updateUser(1111)
     })
 }
 
@@ -53,7 +53,7 @@ function updateUser(confirmCode) {
             xhr.setRequestHeader(header, token);
         }})
         .done(function (data) {
-            confirmModal.modal('hide')
+            // confirmModal.modal('hide')
             window.location.href="/success"
         })
         .fail(function (jqXHR) {
