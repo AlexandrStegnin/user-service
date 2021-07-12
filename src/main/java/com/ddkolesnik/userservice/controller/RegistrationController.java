@@ -25,15 +25,10 @@ public class RegistrationController {
 
   UserService userService;
 
-  @GetMapping(path = "/")
-  public String home() {
-    return "redirect:" + Location.REGISTRATION_URL;
-  }
-
-  @GetMapping(path = Location.REGISTRATION_URL)
+  @GetMapping(path = Location.HOME)
   public String registrationPage(Model model) {
     model.addAttribute("userDTO", new UserDTO());
-    return Location.REGISTRATION_URL;
+    return Location.REGISTRATION_VIEW;
   }
 
   @ResponseBody
