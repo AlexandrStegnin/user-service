@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.model.UserDTO;
+import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
 import com.ddkolesnik.userservice.model.bitrix.CreateContact;
@@ -12,9 +13,11 @@ import com.ddkolesnik.userservice.model.bitrix.Phone;
 import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
 import com.ddkolesnik.userservice.model.bitrix.ValueType;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -99,7 +102,7 @@ public class BitrixContactService {
     return duplicate;
   }
 
-  public ContactList findContacts(UserDTO userDTO) {
+  public Contact findContacts(UserDTO userDTO) {
     Map<String, String[]> filter = new HashMap<>();
     filter.put("PHONE", Collections.singleton(userDTO.getPhone()).toArray(new String[0]));
     contactListFilter.setFilter(filter);
@@ -107,7 +110,12 @@ public class BitrixContactService {
         HttpMethod.POST, contactListEntity, ContactList.class);
     ContactList contacts = contactList.getBody();
     log.info("Результат поиска списка контактов по телефону {}", contacts);
-    return contacts;
+    if (Objects.nonNull(contacts)) {
+      return contacts.getResult()
+          .stream().min(Comparator.comparing(Contact::getId))
+          .orElse(null);
+    }
+    return null;
   }
 
   public Object updateContact(UserDTO userDTO) {

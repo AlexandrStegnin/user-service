@@ -5,10 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.ddkolesnik.userservice.model.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
-import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.service.BitrixContactService;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ public class BitrixContactServiceTest {
     return bitrixContactService.findDuplicates(getTestUserDTO(null));
   }
 
-  public ContactList getContactListByPhoneNumbersTest() {
+  public Contact getContactListByPhoneNumbersTest() {
     return bitrixContactService.findContacts(getTestUserDTO(null));
   }
 
@@ -51,10 +49,7 @@ public class BitrixContactServiceTest {
     Integer id = (Integer) (((LinkedHashMap<?, ?>) created).get("result"));
     DuplicateResult duplicate = findDuplicatesTest();
     assertFalse(((LinkedHashMap<?, ?>) duplicate.getResult()).isEmpty());
-    ContactList contactList = getContactListByPhoneNumbersTest();
-    Contact earlyContact = contactList.getResult()
-        .stream().min(Comparator.comparing(Contact::getId))
-        .orElse(null);
+    Contact earlyContact = getContactListByPhoneNumbersTest();
     assertNotNull(earlyContact);
     Object updated = updateContactTest(id);
     assertNotNull(updated);
