@@ -25,6 +25,7 @@ public class AppUserController {
   public String profile(Model model) {
     AppUser user = appUserService.findByPhone(SecurityUtils.getCurrentUserPhone());
     model.addAttribute("userDTO", convert(user));
+    model.addAttribute("login", user.getLogin());
     return "profile";
   }
 

@@ -37,6 +37,8 @@ public class AppUser implements UserDetails {
 
   String phone;
 
+  String login;
+
   String password;
 
   @Override
