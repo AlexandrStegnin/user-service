@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.model.dto;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +22,6 @@ public class PassportDTO {
   String number;
   String departmentCode;
   String issuedBy;
+  List<String> scans;
 
 }

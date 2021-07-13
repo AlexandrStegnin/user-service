@@ -54,7 +54,8 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="serial">ПАСПОРТ СЕРИЯ</label>
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="serial">ПАСПОРТ</label>
+            <label class="col-sm-1 col-form-label-sm">СЕРИЯ</label>
             <div class="col-sm-1">
                 <input class="form-control input-sm" type="text" id="serial" th:field="*{passport.serial}"/>
             </div>
@@ -62,9 +63,49 @@
             <div class="col-sm-1">
                 <input class="form-control input-sm" type="text" id="number" th:field="*{passport.number}"/>
             </div>
-            <label class="col-sm-2 col-form-label-sm" for="departmentCode">КОД ПОДРАЗДЕЛЕНИЯ</label>
+            <label class="col-sm-1 col-form-label-sm" for="departmentCode">ПОДРАЗДЕЛЕНИЕ</label>
             <div class="col-sm-1">
                 <input class="form-control input-sm" type="text" id="departmentCode" th:field="*{passport.departmentCode}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="issuedBy">КЕМ ВЫДАН</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="text" id="issuedBy" th:field="*{passport.issuedBy}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="city">ГОРОД</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="text" id="city" th:field="*{address.city}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="street">АДРЕС</label>
+            <label class="col-sm-1 col-form-label-sm">УЛИЦА</label>
+            <div class="col-sm-5">
+                <input class="form-control input-sm" type="text" id="street" th:field="*{address.street}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="house"></label>
+            <label class="col-sm-1 col-form-label-sm" for="house">ДОМ</label>
+            <div class="col-sm-1">
+                <input class="form-control input-sm" type="text" id="house" th:field="*{address.house}"/>
+            </div>
+            <label class="col-sm-1 col-form-label-sm" for="building">СТРОЕНИЕ</label>
+            <div class="col-sm-1">
+                <input class="form-control input-sm" type="text" id="building" th:field="*{address.building}"/>
+            </div>
+            <label class="col-sm-1 col-form-label-sm" for="office">КВАРТИРА</label>
+            <div class="col-sm-1">
+                <input class="form-control input-sm" type="text" id="office" th:field="*{address.office}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="scans">СКАНЫ</label>
+            <div class="col-sm-6">
+                <input class="form-control-file input-sm" type="file" multiple id="scans" th:field="*{passport.scans}"/>
             </div>
         </div>
         <div class="form-group row">
