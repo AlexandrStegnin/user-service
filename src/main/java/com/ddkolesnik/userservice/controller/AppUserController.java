@@ -3,12 +3,10 @@ package com.ddkolesnik.userservice.controller;
 import com.ddkolesnik.userservice.model.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.service.AppUserService;
-import java.util.Objects;
+import com.ddkolesnik.userservice.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +23,7 @@ public class AppUserController {
 
   @GetMapping(path = "profile")
   public String profile(Model model) {
-    String phone = getAuthenticatedUserPhone();
-    AppUser user = appUserService.findByPhone(phone);
+    AppUser user = appUserService.findByPhone(SecurityUtils.getCurrentUserPhone());
     model.addAttribute("userDTO", convert(user));
     return "profile";
   }
@@ -34,14 +31,6 @@ public class AppUserController {
   @GetMapping(path = "login")
   public String login() {
     return "login";
-  }
-
-  private String getAuthenticatedUserPhone() {
-    final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (Objects.nonNull(authentication)) {
-      return authentication.getName();
-    }
-    return null;
   }
 
   private UserDTO convert(AppUser entity) {
