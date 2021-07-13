@@ -66,6 +66,9 @@ public class BitrixContactService {
   @Value("${bitrix.crm.requisite.list}")
   String BITRIX_CRM_REQUISITE_LIST;
 
+  @Value("${bitrix.crm.requisite.update}")
+  String BITRIX_CRM_REQUISITE_UPDATE;
+
   final RestTemplate restTemplate;
 
   final HttpEntity<DuplicateFilter> httpEntity;
