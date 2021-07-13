@@ -3,8 +3,8 @@ package com.ddkolesnik.userservice.service;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
-import com.ddkolesnik.userservice.model.bitrix.CreateContact;
-import com.ddkolesnik.userservice.model.bitrix.DeleteContact;
+import com.ddkolesnik.userservice.model.bitrix.ContactCreate;
+import com.ddkolesnik.userservice.model.bitrix.ContactDelete;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.Email;
@@ -12,7 +12,7 @@ import com.ddkolesnik.userservice.model.bitrix.Phone;
 import com.ddkolesnik.userservice.model.bitrix.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.RequisiteFilter;
 import com.ddkolesnik.userservice.model.bitrix.RequisiteResult;
-import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
+import com.ddkolesnik.userservice.model.bitrix.ContactUpdate;
 import com.ddkolesnik.userservice.model.bitrix.ValueType;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -79,17 +79,17 @@ public class BitrixContactService {
 
   final HttpEntity<ContactListFilter> contactListEntity;
 
-  final HttpEntity<UpdateContact> updateContactHttpEntity;
+  final HttpEntity<ContactUpdate> updateContactHttpEntity;
 
-  final UpdateContact updateContact;
+  final ContactUpdate contactUpdate;
 
-  final CreateContact createContact;
+  final ContactCreate contactCreate;
 
-  final HttpEntity<CreateContact> createContactHttpEntity;
+  final HttpEntity<ContactCreate> createContactHttpEntity;
 
-  final DeleteContact deleteContact;
+  final ContactDelete contactDelete;
 
-  final HttpEntity<DeleteContact> deleteContactHttpEntity;
+  final HttpEntity<ContactDelete> deleteContactHttpEntity;
 
   final RequisiteFilter requisiteFilter;
 
@@ -100,15 +100,15 @@ public class BitrixContactService {
     this.restTemplate = restTemplate;
     this.duplicateFilter = new DuplicateFilter();
     this.contactListFilter = new ContactListFilter();
-    this.updateContact = new UpdateContact();
-    this.createContact = new CreateContact();
-    this.deleteContact = new DeleteContact();
+    this.contactUpdate = new ContactUpdate();
+    this.contactCreate = new ContactCreate();
+    this.contactDelete = new ContactDelete();
     this.requisiteFilter = new RequisiteFilter();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
-    this.updateContactHttpEntity = new HttpEntity<>(updateContact);
-    this.createContactHttpEntity = new HttpEntity<>(createContact);
-    this.deleteContactHttpEntity = new HttpEntity<>(deleteContact);
+    this.updateContactHttpEntity = new HttpEntity<>(contactUpdate);
+    this.createContactHttpEntity = new HttpEntity<>(contactCreate);
+    this.deleteContactHttpEntity = new HttpEntity<>(contactDelete);
     this.requisiteHttpEntity = new HttpEntity<>(requisiteFilter);
   }
 
@@ -138,9 +138,9 @@ public class BitrixContactService {
   }
 
   public Object updateContact(UserDTO userDTO) {
-    UpdateContact contact = convertToUpdateContact(userDTO);
-    this.updateContact.setId(contact.getId());
-    this.updateContact.setFields(contact.getFields());
+    ContactUpdate contact = convertToUpdateContact(userDTO);
+    this.contactUpdate.setId(contact.getId());
+    this.contactUpdate.setFields(contact.getFields());
     ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_CONTACT_UPDATE,
         HttpMethod.POST, updateContactHttpEntity, Object.class);
     Object updated = update.getBody();
@@ -149,8 +149,8 @@ public class BitrixContactService {
   }
 
   public Object createContact(UserDTO userDTO) {
-    CreateContact contact = convertToCreateContact(userDTO);
-    this.createContact.setFields(contact.getFields());
+    ContactCreate contact = convertToCreateContact(userDTO);
+    this.contactCreate.setFields(contact.getFields());
     ResponseEntity<Object> create = restTemplate.exchange(BITRIX_CRM_CONTACT_ADD,
         HttpMethod.POST, createContactHttpEntity, Object.class);
     Object created = create.getBody();
@@ -159,7 +159,7 @@ public class BitrixContactService {
   }
 
   public Object deleteContact(UserDTO userDTO) {
-    this.deleteContact.setId(userDTO.getId());
+    this.contactDelete.setId(userDTO.getId());
     ResponseEntity<Object> delete = restTemplate.exchange(BITRIX_CRM_CONTACT_DELETE,
         HttpMethod.POST, deleteContactHttpEntity, Object.class);
     Object deleted = delete.getBody();
@@ -186,14 +186,14 @@ public class BitrixContactService {
     return requisites.get(0);
   }
 
-  private CreateContact convertToCreateContact(UserDTO userDTO) {
-    return CreateContact.builder()
+  private ContactCreate convertToCreateContact(UserDTO userDTO) {
+    return ContactCreate.builder()
         .fields(prepareFields(userDTO))
         .build();
   }
 
-  private UpdateContact convertToUpdateContact(UserDTO userDTO) {
-    return UpdateContact.builder()
+  private ContactUpdate convertToUpdateContact(UserDTO userDTO) {
+    return ContactUpdate.builder()
         .id(userDTO.getId())
         .fields(prepareFields(userDTO))
         .build();
