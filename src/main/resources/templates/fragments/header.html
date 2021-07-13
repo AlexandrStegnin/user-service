@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="RU" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+
+</head>
+<body>
+<div class="navbar navbar-expand-md navbar-light sticky-top" style="background-color: white;" th:fragment="header">
+    <a href="#" class="navbar-brand">
+        <img src="" th:src="@{/img/logo.png}" height="56" alt="ДД Колесникъ">
+    </a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ml-auto">
+            <ul class="nav navbar-nav">
+                <li class="nav-item mr-2">
+                    <a id="profile" th:href="@{/profile}" class="nav-link" style="color: #0D345D;">
+                        <span class="fas fa-lock" style="color: #0D345D;"></span>
+                        Личный кабинет / <b th:text="${login}"></b>
+                    </a>
+                </li>
+            </ul>
+            <div sec:authorize="hasAnyRole('INVESTOR', 'ADMIN')">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item mr-2">
+                        <a id="closed-projects" th:href="@{/#}" class="nav-link" style="color: #0D345D;">
+                            <span class="fas fa-archive" style="color: #0D345D;"></span>
+                            Реализованные проекты
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="nav-item mr-2">
+                    <a id="home" th:href="@{/profile}" class="nav-link" style="color: #0D345D;">
+                        <span class="fas fa-home" style="color: #0D345D;"></span>
+                        На главную
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="nav-item mr-2">
+                    <a id="exit" th:href="@{/logout}" class="nav-link" style="color: #0D345D;">
+                        <span class="fas fa-sign-out-alt" style="color: #0D345D;"></span>
+                        Выйти
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>

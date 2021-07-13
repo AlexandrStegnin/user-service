@@ -8,6 +8,7 @@
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 <body>
+<div th:replace="~{/fragments/header :: header}"></div>
 <div class="container-fluid" style="margin-top: 1%">
     <form action="#" th:method="POST" th:object="${userDTO}" id="details">
         <div class="form-group row">
@@ -53,5 +54,6 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 <script type="text/javascript" th:src="@{/js/registration.js}"></script>
+<script th:src="@{https://kit.fontawesome.com/2b84e2f58d.js}" crossorigin="anonymous"></script>
 </body>
 </html>
