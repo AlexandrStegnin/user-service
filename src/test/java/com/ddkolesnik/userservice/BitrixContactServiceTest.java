@@ -2,10 +2,12 @@ package com.ddkolesnik.userservice;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
+import com.ddkolesnik.userservice.model.bitrix.Requisite;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.service.BitrixContactService;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
@@ -39,7 +41,12 @@ public class BitrixContactServiceTest {
 
   public Object deleteContactTest(Integer id) {
     return bitrixContactService.deleteContact(getTestUserDTO(id));
+  }
 
+  @Test
+  public void findRequisite() {
+    Requisite requisite = bitrixContactService.findRequisite(getTestUserDTO(777555));
+    assertNull(requisite);
   }
 
   @Test

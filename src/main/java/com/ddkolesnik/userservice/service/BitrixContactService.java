@@ -1,6 +1,5 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.Contact;
 import com.ddkolesnik.userservice.model.bitrix.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.ContactListFilter;
@@ -10,12 +9,18 @@ import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.Email;
 import com.ddkolesnik.userservice.model.bitrix.Phone;
+import com.ddkolesnik.userservice.model.bitrix.Requisite;
+import com.ddkolesnik.userservice.model.bitrix.RequisiteFilter;
+import com.ddkolesnik.userservice.model.bitrix.RequisiteResult;
 import com.ddkolesnik.userservice.model.bitrix.UpdateContact;
 import com.ddkolesnik.userservice.model.bitrix.ValueType;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -41,6 +46,8 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource(value = "classpath:application.properties")
 public class BitrixContactService {
 
+  ObjectMapper mapper;
+
   @Value("${bitrix.crm.duplicate.findbycomm}")
   String BITRIX_CRM_DUPLICATE_FIND_BY_COMM;
 
@@ -55,6 +62,9 @@ public class BitrixContactService {
 
   @Value("${bitrix.crm.contact.delete}")
   String BITRIX_CRM_CONTACT_DELETE;
+
+  @Value("${bitrix.crm.requisite.list}")
+  String BITRIX_CRM_REQUISITE_LIST;
 
   final RestTemplate restTemplate;
 
@@ -78,6 +88,10 @@ public class BitrixContactService {
 
   final HttpEntity<DeleteContact> deleteContactHttpEntity;
 
+  final RequisiteFilter requisiteFilter;
+
+  final HttpEntity<RequisiteFilter> requisiteHttpEntity;
+
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
@@ -86,11 +100,13 @@ public class BitrixContactService {
     this.updateContact = new UpdateContact();
     this.createContact = new CreateContact();
     this.deleteContact = new DeleteContact();
+    this.requisiteFilter = new RequisiteFilter();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
     this.updateContactHttpEntity = new HttpEntity<>(updateContact);
     this.createContactHttpEntity = new HttpEntity<>(createContact);
     this.deleteContactHttpEntity = new HttpEntity<>(deleteContact);
+    this.requisiteHttpEntity = new HttpEntity<>(requisiteFilter);
   }
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
@@ -146,6 +162,25 @@ public class BitrixContactService {
     Object deleted = delete.getBody();
     log.info("Результат удаления контакта {}", delete);
     return deleted;
+  }
+
+  public Requisite findRequisite(UserDTO dto) {
+    LinkedHashMap<String, String> filter = new LinkedHashMap<>();
+    filter.put("ENTITY_TYPE_ID", "3");
+    filter.put("ENTITY_ID", dto.getId().toString());
+    this.requisiteFilter.setFilter(filter);
+    ResponseEntity<RequisiteResult> requisite = restTemplate.exchange(BITRIX_CRM_REQUISITE_LIST,
+        HttpMethod.POST, requisiteHttpEntity, RequisiteResult.class);
+    log.info("Результат поиска реквизита {}", requisite);
+    RequisiteResult response = requisite.getBody();
+    if (Objects.isNull(response) || response.getTotal() == 0) {
+      return null;
+    }
+    List<Requisite> requisites = response.getResult();
+    if (requisites.isEmpty()) {
+      return null;
+    }
+    return requisites.get(0);
   }
 
   private CreateContact convertToCreateContact(UserDTO userDTO) {
