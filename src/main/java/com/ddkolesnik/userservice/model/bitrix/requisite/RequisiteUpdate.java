@@ -1,26 +1,26 @@
-package com.ddkolesnik.userservice.model.bitrix;
+package com.ddkolesnik.userservice.model.bitrix.requisite;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 /**
  * @author Aleksandr Stegnin on 14.07.2021
  */
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RequisiteResult {
-
-  ArrayList<Requisite> result;
-  Integer total;
-  LinkedHashMap<?, ?> time;
-
+public class RequisiteUpdate {
+  Integer id;
+  @Builder.Default
+  Map<String, Object> fields = new LinkedHashMap<>();
 }

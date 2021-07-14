@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model.bitrix;
+package com.ddkolesnik.userservice.model.bitrix.requisite;
 
 import java.util.LinkedHashMap;
 import lombok.AccessLevel;

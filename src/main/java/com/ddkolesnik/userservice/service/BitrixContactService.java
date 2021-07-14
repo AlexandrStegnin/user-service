@@ -9,10 +9,12 @@ import com.ddkolesnik.userservice.model.bitrix.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.Email;
 import com.ddkolesnik.userservice.model.bitrix.Phone;
-import com.ddkolesnik.userservice.model.bitrix.Requisite;
-import com.ddkolesnik.userservice.model.bitrix.RequisiteFilter;
-import com.ddkolesnik.userservice.model.bitrix.RequisiteResult;
+import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
+import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteCreate;
+import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteFilter;
+import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteResult;
 import com.ddkolesnik.userservice.model.bitrix.ContactUpdate;
+import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteUpdate;
 import com.ddkolesnik.userservice.model.bitrix.ValueType;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,6 +71,9 @@ public class BitrixContactService {
   @Value("${bitrix.crm.requisite.update}")
   String BITRIX_CRM_REQUISITE_UPDATE;
 
+  @Value("${bitrix.crm.requisite.add}")
+  String BITRIX_CRM_REQUISITE_ADD;
+
   final RestTemplate restTemplate;
 
   final HttpEntity<DuplicateFilter> httpEntity;
@@ -95,6 +100,14 @@ public class BitrixContactService {
 
   final HttpEntity<RequisiteFilter> requisiteHttpEntity;
 
+  final RequisiteUpdate requisiteUpdate;
+
+  final HttpEntity<RequisiteUpdate> requisiteUpdateHttpEntity;
+
+  final RequisiteCreate requisiteCreate;
+
+  final HttpEntity<RequisiteCreate> requisiteCreateHttpEntity;
+
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
@@ -104,12 +117,16 @@ public class BitrixContactService {
     this.contactCreate = new ContactCreate();
     this.contactDelete = new ContactDelete();
     this.requisiteFilter = new RequisiteFilter();
+    this.requisiteUpdate = new RequisiteUpdate();
+    this.requisiteCreate = new RequisiteCreate();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
     this.updateContactHttpEntity = new HttpEntity<>(contactUpdate);
     this.createContactHttpEntity = new HttpEntity<>(contactCreate);
     this.deleteContactHttpEntity = new HttpEntity<>(contactDelete);
     this.requisiteHttpEntity = new HttpEntity<>(requisiteFilter);
+    this.requisiteUpdateHttpEntity = new HttpEntity<>(requisiteUpdate);
+    this.requisiteCreateHttpEntity = new HttpEntity<>(requisiteCreate);
   }
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
@@ -186,6 +203,32 @@ public class BitrixContactService {
     return requisites.get(0);
   }
 
+  public Object createRequisite(UserDTO dto) {
+    RequisiteCreate requisiteCreate = RequisiteCreate.builder()
+        .fields(prepareRequisiteFields(dto))
+        .build();
+    this.requisiteCreate.setFields(requisiteCreate.getFields());
+    ResponseEntity<Object> create = restTemplate.exchange(BITRIX_CRM_REQUISITE_ADD,
+        HttpMethod.POST, requisiteCreateHttpEntity, Object.class);
+    Object created = create.getBody();
+    log.info("Результат создания реквизита {}", created);
+    return created;
+  }
+
+  public Object updateRequisite(Requisite requisite, UserDTO dto) {
+    RequisiteUpdate requisiteUpdate = RequisiteUpdate.builder()
+        .id(Integer.parseInt(requisite.getId()))
+        .fields(prepareRequisiteFields(dto))
+        .build();
+    this.requisiteUpdate.setId(requisiteUpdate.getId());
+    this.requisiteUpdate.setFields(requisiteUpdate.getFields());
+    ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_REQUISITE_UPDATE,
+        HttpMethod.POST, requisiteUpdateHttpEntity, Object.class);
+    Object updated = update.getBody();
+    log.info("Результат обновления реквизита {}", updated);
+    return updated;
+  }
+
   private ContactCreate convertToCreateContact(UserDTO userDTO) {
     return ContactCreate.builder()
         .fields(prepareFields(userDTO))
@@ -207,6 +250,21 @@ public class BitrixContactService {
     fields.put("EMAIL", Collections.singletonList(convertEmail(userDTO.getEmail())));
     fields.put("PHONE", Collections.singletonList(convertPhone(userDTO.getPhone())));
     fields.put("UF_CRM_1625221385", "1");
+    return fields;
+  }
+
+  private Map<String, Object> prepareRequisiteFields(UserDTO userDTO) {
+    Map<String, Object> fields = new LinkedHashMap<>();
+    fields.put("RQ_INN", userDTO.getInn());
+    fields.put("UF_CRM_1569583111", userDTO.getSnils());
+    fields.put("RQ_IDENT_DOC_SER", userDTO.getPassport().getSerial());
+    fields.put("RQ_IDENT_DOC_NUM", userDTO.getPassport().getNumber());
+    fields.put("RQ_IDENT_DOC_DEP_CODE", userDTO.getPassport().getDepartmentCode());
+    fields.put("RQ_IDENT_DOC_ISSUED_BY", userDTO.getPassport().getIssuedBy());
+    fields.put("ENTITY_TYPE_ID", "3");
+    fields.put("PRESET_ID", "5");
+    fields.put("ENTITY_ID", userDTO.getId().toString());
+    fields.put("NAME", "Реквизит");
     return fields;
   }
 

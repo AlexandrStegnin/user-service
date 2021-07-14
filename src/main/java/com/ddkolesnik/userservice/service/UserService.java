@@ -83,6 +83,18 @@ public class UserService {
         .build();
   }
 
+  public ApiResponse updateAdditionalFields(UserDTO dto) {
+    Contact contact = bitrixContactService.findFirstContact(dto);
+    if (Objects.isNull(contact)) {
+      String message = String.format("Контакт не найден %s", dto.getPhone());
+      log.error(message);
+      return ApiResponse.builder()
+          .message(message)
+          .build();
+    }
+    return null;
+  }
+
   private boolean extractResult(Object update) {
     if (update instanceof LinkedHashMap) {
       return (Boolean) (((LinkedHashMap<?, ?>) update).get("result"));
