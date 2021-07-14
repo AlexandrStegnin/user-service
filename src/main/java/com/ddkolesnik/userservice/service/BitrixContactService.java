@@ -139,8 +139,12 @@ public class BitrixContactService {
   }
 
   public Contact findFirstContact(UserDTO userDTO) {
+    return findFirstContact(userDTO.getPhone());
+  }
+
+  public Contact findFirstContact(String phone) {
     Map<String, String[]> filter = new HashMap<>();
-    filter.put("PHONE", Collections.singleton(userDTO.getPhone()).toArray(new String[0]));
+    filter.put("PHONE", Collections.singleton(phone).toArray(new String[0]));
     contactListFilter.setFilter(filter);
     ResponseEntity<ContactList> contactList = restTemplate.exchange(BITRIX_CRM_CONTACT_LIST,
         HttpMethod.POST, contactListEntity, ContactList.class);

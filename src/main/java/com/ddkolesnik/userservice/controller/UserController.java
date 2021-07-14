@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -21,9 +20,9 @@ public class UserController {
   UserService userService;
 
   @PostMapping(path = "update")
-  public String update(@ModelAttribute UserDTO dto, Model model) {
-
-    return "profile";
+  public String update(@ModelAttribute UserDTO dto) {
+    userService.updateAdditionalFields(dto);
+    return "redirect:/profile";
   }
 
 }

@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
@@ -92,7 +93,16 @@ public class UserService {
           .message(message)
           .build();
     }
-    return null;
+    dto.setId(contact.getId());
+    Requisite requisite = bitrixContactService.findRequisite(dto);
+    if (Objects.isNull(requisite)) {
+      bitrixContactService.createRequisite(dto);
+    } else {
+      bitrixContactService.updateRequisite(requisite, dto);
+    }
+    return ApiResponse.builder()
+        .message("Реквизит успешно создан")
+        .build();
   }
 
   private boolean extractResult(Object update) {
