@@ -1,21 +1,22 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactList;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactListFilter;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactCreate;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactDelete;
+import com.ddkolesnik.userservice.model.bitrix.contact.ContactList;
+import com.ddkolesnik.userservice.model.bitrix.contact.ContactListFilter;
+import com.ddkolesnik.userservice.model.bitrix.contact.ContactUpdate;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
-import com.ddkolesnik.userservice.model.bitrix.utils.Email;
-import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteCreate;
 import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteFilter;
 import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteResult;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactUpdate;
 import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteUpdate;
+import com.ddkolesnik.userservice.model.bitrix.utils.Email;
+import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.utils.ValueType;
+import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
@@ -188,10 +189,10 @@ public class BitrixContactService {
     return deleted;
   }
 
-  public Requisite findRequisite(UserDTO dto) {
+  public Requisite findRequisite(String entityId) {
     LinkedHashMap<String, String> filter = new LinkedHashMap<>();
     filter.put("ENTITY_TYPE_ID", "3");
-    filter.put("ENTITY_ID", dto.getId().toString());
+    filter.put("ENTITY_ID", entityId);
     this.requisiteFilter.setFilter(filter);
     ResponseEntity<RequisiteResult> requisite = restTemplate.exchange(BITRIX_CRM_REQUISITE_LIST,
         HttpMethod.POST, requisiteHttpEntity, RequisiteResult.class);
@@ -205,6 +206,10 @@ public class BitrixContactService {
       return null;
     }
     return requisites.get(0);
+  }
+
+  public Requisite findRequisite(UserDTO dto) {
+    return findRequisite(dto.getId().toString());
   }
 
   public Object createRequisite(UserDTO dto) {
@@ -231,6 +236,35 @@ public class BitrixContactService {
     Object updated = update.getBody();
     log.info("Результат обновления реквизита {}", updated);
     return updated;
+  }
+
+  public UserDTO getBitrixContact(String phone) {
+    UserDTO dto = new UserDTO();
+    Contact contact = findFirstContact(phone);
+    if (Objects.nonNull(contact)) {
+      dto.setId(contact.getId());
+      dto.setPhone(phone);
+      if (!contact.getEmails().isEmpty()) {
+        contact.getEmails().stream().findAny().ifPresent(email -> dto.setEmail(email.getValue()));
+      }
+      dto.setName(contact.getName());
+      dto.setSecondName(contact.getSecondName());
+      dto.setLastName(contact.getLastName());
+    }
+    Requisite requisite = findRequisite(contact.getId().toString());
+    if (Objects.nonNull(requisite)) {
+      dto.setInn(requisite.getInn());
+      dto.setSnils(requisite.getSnils());
+      PassportDTO passportDTO = PassportDTO.builder()
+          .serial(requisite.getSerial())
+          .issuedBy(requisite.getIssuedBy())
+          .departmentCode(requisite.getDepartmentCode())
+          .number(requisite.getNumber())
+          .build();
+      dto.setPassport(passportDTO);
+
+    }
+    return dto;
   }
 
   private ContactCreate convertToCreateContact(UserDTO userDTO) {

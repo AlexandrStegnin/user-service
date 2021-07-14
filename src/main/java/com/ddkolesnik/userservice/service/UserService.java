@@ -84,14 +84,11 @@ public class UserService {
         .build();
   }
 
-  public ApiResponse updateAdditionalFields(UserDTO dto) {
+  public void updateAdditionalFields(UserDTO dto) {
     Contact contact = bitrixContactService.findFirstContact(dto);
     if (Objects.isNull(contact)) {
       String message = String.format("Контакт не найден %s", dto.getPhone());
       log.error(message);
-      return ApiResponse.builder()
-          .message(message)
-          .build();
     }
     dto.setId(contact.getId());
     Requisite requisite = bitrixContactService.findRequisite(dto);
@@ -100,9 +97,7 @@ public class UserService {
     } else {
       bitrixContactService.updateRequisite(requisite, dto);
     }
-    return ApiResponse.builder()
-        .message("Реквизит успешно создан")
-        .build();
+    log.info("Реквизит успешно создан/обновлен {}", requisite);
   }
 
   private boolean extractResult(Object update) {
