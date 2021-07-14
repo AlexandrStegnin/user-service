@@ -1,6 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.model.AppUser;
+import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

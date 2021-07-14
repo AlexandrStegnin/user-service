@@ -1,7 +1,5 @@
-package com.ddkolesnik.userservice.model.bitrix;
+package com.ddkolesnik.userservice.model.bitrix.contact;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +15,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ContactCreate {
+public class ContactDelete {
 
-  @Builder.Default
-  Map<String, Object> fields = new LinkedHashMap<>();
+  Integer id;
 
 }

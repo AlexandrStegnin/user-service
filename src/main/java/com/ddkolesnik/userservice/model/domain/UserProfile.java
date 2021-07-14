@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model;
+package com.ddkolesnik.userservice.model.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model.bitrix;
+package com.ddkolesnik.userservice.model.bitrix.duplicate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;

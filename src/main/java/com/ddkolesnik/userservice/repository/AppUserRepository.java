@@ -1,6 +1,6 @@
 package com.ddkolesnik.userservice.repository;
 
-import com.ddkolesnik.userservice.model.AppUser;
+import com.ddkolesnik.userservice.model.domain.AppUser;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

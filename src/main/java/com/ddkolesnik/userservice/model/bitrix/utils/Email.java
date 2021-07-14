@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model.bitrix;
+package com.ddkolesnik.userservice.model.bitrix.utils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 /**
- * @author Aleksandr Stegnin on 06.07.2021
+ * @author Aleksandr Stegnin on 05.07.2021
  */
 @Data
 @Builder
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Phone {
+public class Email {
 
   @JsonProperty("VALUE_TYPE")
   String valueType;
@@ -25,11 +25,16 @@ public class Phone {
   @JsonProperty("VALUE")
   String value;
 
+  @JsonProperty("TYPE_ID")
+  String typeId;
+
   @JsonCreator
-  public Phone(@JsonProperty("VALUE_TYPE") String valueType,
-               @JsonProperty("VALUE") String value) {
+  public Email(@JsonProperty("VALUE_TYPE") String valueType,
+               @JsonProperty("VALUE") String value,
+               @JsonProperty("TYPE_ID") String typeId) {
     this.valueType = valueType;
     this.value = value;
+    this.typeId = typeId;
   }
 
 }

@@ -1,6 +1,6 @@
 package com.ddkolesnik.userservice.controller;
 
-import com.ddkolesnik.userservice.model.AppUser;
+import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.service.AppUserService;
 import com.ddkolesnik.userservice.utils.SecurityUtils;

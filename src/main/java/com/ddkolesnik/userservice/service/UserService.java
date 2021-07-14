@@ -1,8 +1,8 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.model.dto.UserDTO;
-import com.ddkolesnik.userservice.model.bitrix.Contact;
-import com.ddkolesnik.userservice.model.bitrix.DuplicateResult;
+import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
+import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.response.ApiResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model;
+package com.ddkolesnik.userservice.model.domain;
 
 import java.util.Collection;
 import java.util.List;
