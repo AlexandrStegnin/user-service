@@ -1,5 +1,10 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.model.bitrix.address.Address;
+import com.ddkolesnik.userservice.model.bitrix.address.AddressCreate;
+import com.ddkolesnik.userservice.model.bitrix.address.AddressFilter;
+import com.ddkolesnik.userservice.model.bitrix.address.AddressResult;
+import com.ddkolesnik.userservice.model.bitrix.address.AddressUpdate;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactCreate;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactDelete;
@@ -75,6 +80,15 @@ public class BitrixContactService {
   @Value("${bitrix.crm.requisite.add}")
   String BITRIX_CRM_REQUISITE_ADD;
 
+  @Value("${bitrix.crm.address.list}")
+  String BITRIX_CRM_ADDRESS_LIST;
+
+  @Value("${bitrix.crm.address.update}")
+  String BITRIX_CRM_ADDRESS_UPDATE;
+
+  @Value("${bitrix.crm.address.add}")
+  String BITRIX_CRM_ADDRESS_ADD;
+
   final RestTemplate restTemplate;
 
   final HttpEntity<DuplicateFilter> httpEntity;
@@ -109,6 +123,18 @@ public class BitrixContactService {
 
   final HttpEntity<RequisiteCreate> requisiteCreateHttpEntity;
 
+  final AddressFilter addressFilter;
+
+  final HttpEntity<AddressFilter> addressFilterHttpEntity;
+
+  final AddressCreate addressCreate;
+
+  final HttpEntity<AddressCreate> addressCreateHttpEntity;
+
+  final AddressUpdate addressUpdate;
+
+  final HttpEntity<AddressUpdate> addressUpdateHttpEntity;
+
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
@@ -120,6 +146,9 @@ public class BitrixContactService {
     this.requisiteFilter = new RequisiteFilter();
     this.requisiteUpdate = new RequisiteUpdate();
     this.requisiteCreate = new RequisiteCreate();
+    this.addressFilter = new AddressFilter();
+    this.addressCreate = new AddressCreate();
+    this.addressUpdate = new AddressUpdate();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
     this.updateContactHttpEntity = new HttpEntity<>(contactUpdate);
@@ -128,6 +157,9 @@ public class BitrixContactService {
     this.requisiteHttpEntity = new HttpEntity<>(requisiteFilter);
     this.requisiteUpdateHttpEntity = new HttpEntity<>(requisiteUpdate);
     this.requisiteCreateHttpEntity = new HttpEntity<>(requisiteCreate);
+    this.addressFilterHttpEntity = new HttpEntity<>(addressFilter);
+    this.addressCreateHttpEntity = new HttpEntity<>(addressCreate);
+    this.addressUpdateHttpEntity = new HttpEntity<>(addressUpdate);
   }
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
@@ -238,6 +270,50 @@ public class BitrixContactService {
     return updated;
   }
 
+  public Address findAddress(UserDTO dto) {
+    LinkedHashMap<String, String> filter = new LinkedHashMap<>();
+    filter.put("ENTITY_TYPE_ID", "8");
+    filter.put("TYPE_ID", "1");
+    filter.put("ENTITY_ID", dto.getId().toString());
+    this.addressFilter.setFilter(filter);
+    ResponseEntity<AddressResult> address = restTemplate.exchange(BITRIX_CRM_ADDRESS_LIST,
+        HttpMethod.POST, addressFilterHttpEntity, AddressResult.class);
+    log.info("Результат поиска адресов {}", address);
+    AddressResult response = address.getBody();
+    if (Objects.isNull(response) || response.getTotal() == 0) {
+      return null;
+    }
+    List<Address> addresses = response.getResult();
+    if (addresses.isEmpty()) {
+      return null;
+    }
+    return addresses.get(0);
+  }
+
+  public Object createAddress(UserDTO dto) {
+    AddressCreate addressCreate = AddressCreate.builder()
+        .fields(prepareAddressFields(dto))
+        .build();
+    this.addressCreate.setFields(addressCreate.getFields());
+    ResponseEntity<Object> create = restTemplate.exchange(BITRIX_CRM_ADDRESS_ADD,
+        HttpMethod.POST, addressCreateHttpEntity, Object.class);
+    Object created = create.getBody();
+    log.info("Результат создания адреса {}", created);
+    return created;
+  }
+
+  public Object updateAddress(UserDTO dto) {
+    AddressUpdate addressUpdate = AddressUpdate.builder()
+        .fields(prepareAddressFields(dto))
+        .build();
+    this.addressUpdate.setFields(addressUpdate.getFields());
+    ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_ADDRESS_UPDATE,
+        HttpMethod.POST, addressUpdateHttpEntity, Object.class);
+    Object updated = update.getBody();
+    log.info("Результат обновления адреса {}", updated);
+    return updated;
+  }
+
   public UserDTO getBitrixContact(String phone) {
     UserDTO dto = new UserDTO();
     Contact contact = findFirstContact(phone);
@@ -306,6 +382,17 @@ public class BitrixContactService {
     return fields;
   }
 
+  private Map<String, Object> prepareAddressFields(UserDTO userDTO) {
+    Map<String, Object> fields = new LinkedHashMap<>();
+    fields.put("TYPE_ID", 1);
+    fields.put("ENTITY_TYPE_ID", 8);
+    fields.put("ENTITY_ID", userDTO.getId().toString());
+    fields.put("CITY", userDTO.getAddress().getCity());
+    fields.put("ADDRESS_1", getAddress1(userDTO));
+    fields.put("ADDRESS_2", getAddress2(userDTO));
+    return fields;
+  }
+
   private Email convertEmail(String email) {
     return Email.builder()
         .value(email)
@@ -319,6 +406,30 @@ public class BitrixContactService {
         .value(phone)
         .valueType(ValueType.WORK.name())
         .build();
+  }
+
+  private String getAddress1(UserDTO dto) {
+    String address = "";
+    if (Objects.nonNull(dto.getAddress().getStreet())) {
+      address += dto.getAddress().getStreet();
+    }
+    if (Objects.nonNull(dto.getAddress().getHouse())) {
+      if (!address.isBlank()) {
+        address += " ";
+      }
+      address += dto.getAddress().getHouse();
+    }
+    return address;
+  }
+
+  private String getAddress2(UserDTO dto) {
+    if (Objects.nonNull(dto.getAddress().getBuilding())) {
+      return dto.getAddress().getBuilding();
+    }
+    if (Objects.nonNull(dto.getAddress().getOffice())) {
+      return dto.getAddress().getOffice();
+    }
+    return "";
   }
 
 }

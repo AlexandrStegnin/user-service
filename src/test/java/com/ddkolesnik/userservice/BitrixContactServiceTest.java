@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
+import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.service.BitrixContactService;
@@ -69,6 +71,34 @@ public class BitrixContactServiceTest {
   }
 
   @Test
+  public void findAddressTest() {
+    UserDTO dto = getTestRequisiteUserDTO(2735);
+    Address address = bitrixContactService.findAddress(dto);
+    assertNull(address);
+  }
+
+  @Test
+  public void createAddressTest() {
+    UserDTO dto = getTestRequisiteUserDTO(2735);
+    dto.setAddress(getAddressDTO());
+    Address address = bitrixContactService.findAddress(dto);
+    assertNull(address);
+    Object create = bitrixContactService.createAddress(dto);
+    assertNotNull(create);
+  }
+
+  @Test
+  public void updateAddressTest() {
+    UserDTO dto = getTestRequisiteUserDTO(2735);
+    dto.setAddress(getAddressDTO());
+    dto.getAddress().setBuilding("777");
+    Address address = bitrixContactService.findAddress(dto);
+    assertNotNull(address);
+    Object update = bitrixContactService.updateAddress(dto);
+    assertNotNull(update);
+  }
+
+  @Test
   public void crudTest() {
     Object created = createContactTest();
     assertNotNull(created);
@@ -113,6 +143,15 @@ public class BitrixContactServiceTest {
         .number("888888")
         .departmentCode("720-021")
         .issuedBy("УФМС России")
+        .build();
+  }
+
+  private AddressDTO getAddressDTO() {
+    return AddressDTO.builder()
+        .city("Тюмень")
+        .street("Республики")
+        .house("1")
+        .building("111")
         .build();
   }
 
