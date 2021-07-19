@@ -15,6 +15,7 @@ import com.ddkolesnik.userservice.model.bitrix.contact.ContactListFilter;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactUpdate;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
+import com.ddkolesnik.userservice.model.bitrix.file.FileData;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteCreate;
 import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteFilter;
@@ -27,6 +28,8 @@ import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -45,7 +48,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Aleksandr Stegnin on 05.07.2021
@@ -405,6 +410,9 @@ public class BitrixContactService {
     fields.put("EMAIL", Collections.singletonList(convertEmail(userDTO.getEmail())));
     fields.put("PHONE", Collections.singletonList(convertPhone(userDTO.getPhone())));
     fields.put("UF_CRM_1625221385", "1");
+    fields.put("BIRTHDATE", userDTO.getBirthdate());
+    fields.put("UF_CRM_1554359872664", userDTO.getGender().getId());
+    fields.put("UF_CRM_1625469293802", convertScans(userDTO));
     return fields;
   }
 
@@ -462,6 +470,23 @@ public class BitrixContactService {
       return dto.getAddress().getOffice();
     }
     return "";
+  }
+
+  private List<FileData> convertScans(UserDTO dto) {
+    MultipartFile[] files = dto.getPassport().getScans();
+    List<FileData> fileDataList = new ArrayList<>();
+    for (MultipartFile file : files) {
+      try {
+        byte[] content = file.getBytes();
+        String imageString = Base64Utils.encodeToString(content);
+        FileData fileData = new FileData();
+        fileData.setFileData(new String[] {file.getOriginalFilename(), imageString});
+        fileDataList.add(fileData);
+      } catch (IOException e) {
+        log.error("Произошла ошибка {}", e.getMessage());
+      }
+    }
+    return fileDataList;
   }
 
 }

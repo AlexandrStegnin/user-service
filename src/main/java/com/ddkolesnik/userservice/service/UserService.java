@@ -106,6 +106,7 @@ public class UserService {
     } else {
       bitrixContactService.updateAddress(dto);
     }
+    bitrixContactService.updateContact(dto);
   }
 
   private boolean extractResult(Object update) {
