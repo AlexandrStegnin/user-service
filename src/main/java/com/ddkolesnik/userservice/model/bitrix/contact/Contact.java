@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.model.bitrix.contact;
 
+import com.ddkolesnik.userservice.model.bitrix.file.Scan;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -40,6 +41,9 @@ public class Contact {
   @JsonProperty("BIRTHDATE")
   String birthdate;
 
+  @JsonProperty("UF_CRM_1625469293802")
+  List<Scan> scans;
+
   @JsonCreator
   public Contact(@JsonProperty("ID") Integer id,
                  @JsonProperty("NAME") String name,
@@ -47,7 +51,8 @@ public class Contact {
                  @JsonProperty("LAST_NAME") String lastName,
                  @JsonProperty("EMAIL") List<Email> email,
                  @JsonProperty("UF_CRM_1554359872664") String gender,
-                 @JsonProperty("BIRTHDATE") String birthdate) {
+                 @JsonProperty("BIRTHDATE") String birthdate,
+                 @JsonProperty("UF_CRM_1625469293802") List<Scan> scans) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
@@ -55,6 +60,7 @@ public class Contact {
     this.emails = email;
     this.gender = gender;
     this.birthdate = birthdate;
+    this.scans = scans;
   }
 
 }
