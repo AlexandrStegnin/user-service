@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model.dto;
+package com.ddkolesnik.userservice.model.bitrix.contact;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,17 +8,15 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 /**
- * @author Aleksandr Stegnin on 13.07.2021
+ * @author Aleksandr Stegnin on 19.07.2021
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AddressDTO {
+public class ContactGet {
 
-  String city;
-  String streetAndHouse;
-  String office;
+  String id;
 
 }

@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.model.dto;
 
+import com.ddkolesnik.userservice.enums.Gender;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,5 +29,6 @@ public class UserDTO {
   String snils;
   PassportDTO passport;
   AddressDTO address;
+  Gender gender;
 
 }

@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.enums.Gender;
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.address.AddressCreate;
 import com.ddkolesnik.userservice.model.bitrix.address.AddressFilter;
@@ -8,6 +9,7 @@ import com.ddkolesnik.userservice.model.bitrix.address.AddressUpdate;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactCreate;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactDelete;
+import com.ddkolesnik.userservice.model.bitrix.contact.ContactGet;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactList;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactListFilter;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactUpdate;
@@ -21,6 +23,7 @@ import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteUpdate;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.utils.ValueType;
+import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,6 +73,9 @@ public class BitrixContactService {
 
   @Value("${bitrix.crm.contact.delete}")
   String BITRIX_CRM_CONTACT_DELETE;
+
+  @Value("${bitrix.crm.contact.get}")
+  String BITRIX_CRM_CONTACT_GET;
 
   @Value("${bitrix.crm.requisite.list}")
   String BITRIX_CRM_REQUISITE_LIST;
@@ -135,6 +141,12 @@ public class BitrixContactService {
 
   final HttpEntity<AddressUpdate> addressUpdateHttpEntity;
 
+  final ContactGet contactGet;
+
+  final HttpEntity<ContactGet> contactGetHttpEntity;
+
+  final ObjectMapper objectMapper;
+
   @Autowired
   public BitrixContactService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
@@ -149,6 +161,7 @@ public class BitrixContactService {
     this.addressFilter = new AddressFilter();
     this.addressCreate = new AddressCreate();
     this.addressUpdate = new AddressUpdate();
+    this.contactGet = new ContactGet();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
     this.updateContactHttpEntity = new HttpEntity<>(contactUpdate);
@@ -160,6 +173,8 @@ public class BitrixContactService {
     this.addressFilterHttpEntity = new HttpEntity<>(addressFilter);
     this.addressCreateHttpEntity = new HttpEntity<>(addressCreate);
     this.addressUpdateHttpEntity = new HttpEntity<>(addressUpdate);
+    this.contactGetHttpEntity = new HttpEntity<>(contactGet);
+    this.objectMapper = new ObjectMapper();
   }
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
@@ -200,6 +215,20 @@ public class BitrixContactService {
     Object updated = update.getBody();
     log.info("Результат обновления контакта {}", updated);
     return updated;
+  }
+
+  public Contact getById(String id) {
+    this.contactGet.setId(id);
+    Contact contact = null;
+    ResponseEntity<Object> contactResponseEntity = restTemplate.exchange(BITRIX_CRM_CONTACT_GET,
+        HttpMethod.POST, contactGetHttpEntity, Object.class);
+    Object contactObject = contactResponseEntity.getBody();
+    if (contactObject instanceof LinkedHashMap) {
+      Object result = ((LinkedHashMap<?, ?>) contactObject).get("result");
+      contact = objectMapper.convertValue(result, Contact.class);
+    }
+    log.info("Результат получения контакта {}", contact);
+    return contact;
   }
 
   public Object createContact(UserDTO userDTO) {
@@ -326,6 +355,10 @@ public class BitrixContactService {
       dto.setName(contact.getName());
       dto.setSecondName(contact.getSecondName());
       dto.setLastName(contact.getLastName());
+      contact = getById(contact.getId().toString());
+      if (Objects.nonNull(contact) && Objects.nonNull(contact.getGender())) {
+        dto.setGender(Gender.fromId(Integer.parseInt(contact.getGender())));
+      }
     }
     Requisite requisite = findRequisite(contact.getId().toString());
     if (Objects.nonNull(requisite)) {
@@ -338,7 +371,15 @@ public class BitrixContactService {
           .number(requisite.getNumber())
           .build();
       dto.setPassport(passportDTO);
-
+    }
+    Address address = findAddress(dto);
+    if (Objects.nonNull(address)) {
+      AddressDTO addressDTO = AddressDTO.builder()
+          .city(address.getCity())
+          .streetAndHouse(address.getAddress1())
+          .office(address.getAddress2())
+          .build();
+      dto.setAddress(addressDTO);
     }
     return dto;
   }
@@ -410,22 +451,13 @@ public class BitrixContactService {
 
   private String getAddress1(UserDTO dto) {
     String address = "";
-    if (Objects.nonNull(dto.getAddress().getStreet())) {
-      address += dto.getAddress().getStreet();
-    }
-    if (Objects.nonNull(dto.getAddress().getHouse())) {
-      if (!address.isBlank()) {
-        address += " ";
-      }
-      address += dto.getAddress().getHouse();
+    if (Objects.nonNull(dto.getAddress().getStreetAndHouse())) {
+      address += dto.getAddress().getStreetAndHouse();
     }
     return address;
   }
 
   private String getAddress2(UserDTO dto) {
-    if (Objects.nonNull(dto.getAddress().getBuilding())) {
-      return dto.getAddress().getBuilding();
-    }
     if (Objects.nonNull(dto.getAddress().getOffice())) {
       return dto.getAddress().getOffice();
     }

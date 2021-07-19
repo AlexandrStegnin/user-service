@@ -34,17 +34,22 @@ public class Contact {
   @JsonProperty("EMAIL")
   List<Email> emails;
 
+  @JsonProperty("UF_CRM_1554359872664")
+  String gender;
+
   @JsonCreator
   public Contact(@JsonProperty("ID") Integer id,
                  @JsonProperty("NAME") String name,
                  @JsonProperty("SECOND_NAME") String secondName,
                  @JsonProperty("LAST_NAME") String lastName,
-                 @JsonProperty("EMAIL") List<Email> email) {
+                 @JsonProperty("EMAIL") List<Email> email,
+                 @JsonProperty("UF_CRM_1554359872664") String gender) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
     this.lastName = lastName;
     this.emails = email;
+    this.gender = gender;
   }
 
 }

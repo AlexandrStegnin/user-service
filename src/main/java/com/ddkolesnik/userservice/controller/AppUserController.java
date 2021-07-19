@@ -22,8 +22,7 @@ public class AppUserController {
 
   @GetMapping(path = "profile")
   public String profile(Model model) {
-    String phone = SecurityUtils.getCurrentUserPhone();
-    UserDTO userDTO = bitrixContactService.getBitrixContact(phone);
+    UserDTO userDTO = bitrixContactService.getBitrixContact(SecurityUtils.getCurrentUserPhone());
     model.addAttribute("userDTO", userDTO);
     model.addAttribute("login", userDTO.getPhone());
     return "profile";

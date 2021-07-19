@@ -91,7 +91,6 @@ public class BitrixContactServiceTest {
   public void updateAddressTest() {
     UserDTO dto = getTestRequisiteUserDTO(2735);
     dto.setAddress(getAddressDTO());
-    dto.getAddress().setBuilding("777");
     Address address = bitrixContactService.findAddress(dto);
     assertNotNull(address);
     Object update = bitrixContactService.updateAddress(dto);
@@ -149,9 +148,7 @@ public class BitrixContactServiceTest {
   private AddressDTO getAddressDTO() {
     return AddressDTO.builder()
         .city("Тюмень")
-        .street("Республики")
-        .house("1")
-        .building("111")
+        .streetAndHouse("Республики")
         .build();
   }
 

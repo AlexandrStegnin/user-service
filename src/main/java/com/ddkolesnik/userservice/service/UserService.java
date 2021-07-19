@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
@@ -8,6 +9,7 @@ import com.ddkolesnik.userservice.response.ApiResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Objects;
+import javax.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -89,6 +91,7 @@ public class UserService {
     if (Objects.isNull(contact)) {
       String message = String.format("Контакт не найден %s", dto.getPhone());
       log.error(message);
+      throw new EntityNotFoundException(message);
     }
     dto.setId(contact.getId());
     Requisite requisite = bitrixContactService.findRequisite(dto);
@@ -97,7 +100,12 @@ public class UserService {
     } else {
       bitrixContactService.updateRequisite(requisite, dto);
     }
-    log.info("Реквизит успешно создан/обновлен {}", requisite);
+    Address address = bitrixContactService.findAddress(dto);
+    if (Objects.isNull(address)) {
+      bitrixContactService.createAddress(dto);
+    } else {
+      bitrixContactService.updateAddress(dto);
+    }
   }
 
   private boolean extractResult(Object update) {
