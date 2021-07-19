@@ -30,5 +30,6 @@ public class UserDTO {
   PassportDTO passport;
   AddressDTO address;
   Gender gender;
+  String birthdate;
 
 }
