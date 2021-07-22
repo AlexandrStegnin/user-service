@@ -41,7 +41,13 @@ function updateUser(confirmCode) {
         lastName: $('#lastName').val(),
         email: $('#email').val(),
         phone: $('#phone').val(),
-        confirmCode: confirmCode
+        confirmCode: confirmCode,
+        password: $('#password').val(),
+        confirmPassword: $('#confirmPassword').val(),
+        individual: $('#individual').val(),
+        selfEmployed: $('#self-employed').val(),
+        agreementPersonalData: $('#agreement-personal-data').val(),
+        agreementRules: $('#agreement-rules').val()
     }
 
     $.post({

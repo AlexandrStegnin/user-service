@@ -46,14 +46,66 @@
             <div class="col-sm-6">
                 <input class="form-control input-sm" type="tel" id="phone" placeholder="+79998887766"
                        th:field="*{phone}" required
-                       oninvalid="this.setCustomValidity('Укажите телефон в правильном формате +79999999999')"
+                       oninvalid="this.setCustomValidity('Укажите телефон в правильном формате +79998887766')"
                        oninput="setCustomValidity('')"
                        pattern="\+{1,}[7][0-9]{10}"/>
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-6 offset-sm-5">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="password">ПАРОЛЬ</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="password" id="password"
+                       th:field="*{password}" required
+                       oninvalid="this.setCustomValidity('Необходимо задать пароль')"
+                       oninput="setCustomValidity('')"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="confirmPassword">ПОВТОРИТЕ ПАРОЛЬ</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="password" id="confirmPassword"
+                       th:field="*{confirmPassword}" required
+                       oninvalid="this.setCustomValidity('Пароли не совпадают')"
+                       oninput="setCustomValidity('')"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2 offset-sm-2 col-form-label-sm">
+                <input class="form-control input-sm" type="checkbox" id="individual" th:field="*{individual}" th:value="*{individual}">
+            </div>
+            <label class="col-sm-6 col-form-label-sm" for="individual">ИМЕЮ СТАТУС ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ</label>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2 offset-sm-2 col-form-label-sm">
+                <input class="form-control input-sm" type="checkbox" value="2" id="self-employed" th:field="*{selfEmployed}">
+            </div>
+            <label class="col-sm-6 col-form-label-sm" for="self-employed">ИМЕЮ СТАТУС САМОЗАНЯТЫЙ</label>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2 offset-sm-2 col-form-label-sm">
+                <input class="form-control input-sm" type="checkbox" value="" id="agreement-personal-data" th:field="*{agreementPersonalData}">
+            </div>
+            <label class="col-sm-6 col-form-label-sm" for="agreement-personal-data">
+                СОГЛАСЕН НА ОБРАБОТКУ И ХРАНЕНИЕ ПЕРСОНАЛЬНЫХ ДАННЫХ
+            </label>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2 offset-sm-2 col-form-label-sm">
+                <input class="form-control input-sm" type="checkbox" value="" id="agreement-rules" th:field="*{agreementRules}">
+            </div>
+            <label class="col-sm-6 col-form-label-sm" for="agreement-rules">
+                ПРИНИМАЮ ПРАВИЛА ПЛАТФОРМЫ И ДЕКЛАРАЦИЮ О РИСКАХ
+            </label>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-6 offset-sm-5 pull-left">
                 <button type="submit" class="btn btn-primary" id="submit">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6 offset-sm-5">
+                <button type="reset" class="btn btn-warning" id="cancel">ОТМЕНИТЬ</button>
             </div>
         </div>
     </form>

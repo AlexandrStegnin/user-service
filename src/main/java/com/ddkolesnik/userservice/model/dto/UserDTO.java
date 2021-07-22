@@ -31,5 +31,11 @@ public class UserDTO {
   AddressDTO address;
   Gender gender;
   String birthdate;
+  String password;
+  String confirmPassword;
+  boolean individual;
+  boolean selfEmployed;
+  boolean agreementPersonalData;
+  boolean agreementRules;
 
 }
