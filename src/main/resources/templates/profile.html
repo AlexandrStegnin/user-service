@@ -70,6 +70,12 @@
             </div>
         </div>
         <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="place-of-birth">МЕСТО РОЖДЕНИЯ</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="text" id="place-of-birth" th:field="*{placeOfBirth}"/>
+            </div>
+        </div>
+        <div class="form-group row">
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="serial">ПАСПОРТ</label>
             <label class="col-sm-1 col-form-label-sm">СЕРИЯ</label>
             <div class="col-sm-1">
@@ -88,6 +94,12 @@
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="issuedBy">КЕМ ВЫДАН</label>
             <div class="col-sm-6">
                 <input class="form-control input-sm" type="text" id="issuedBy" th:field="*{passport.issuedBy}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="issuedAt">КОГДА ВЫДАН</label>
+            <div class="col-sm-6">
+                <input class="form-control input-sm" type="date" id="issuedAt" th:field="*{passport.issuedAt}"/>
             </div>
         </div>
         <div class="form-group row">

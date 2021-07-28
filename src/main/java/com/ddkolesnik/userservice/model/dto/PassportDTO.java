@@ -23,5 +23,6 @@ public class PassportDTO {
   String departmentCode;
   String issuedBy;
   MultipartFile[] scans;
+  String issuedAt;
 
 }

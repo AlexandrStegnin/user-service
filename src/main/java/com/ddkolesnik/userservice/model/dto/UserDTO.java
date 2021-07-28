@@ -37,5 +37,6 @@ public class UserDTO {
   boolean selfEmployed;
   boolean agreementPersonalData;
   boolean agreementRules;
+  String placeOfBirth;
 
 }

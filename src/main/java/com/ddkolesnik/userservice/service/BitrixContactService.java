@@ -411,8 +411,12 @@ public class BitrixContactService {
     fields.put("PHONE", Collections.singletonList(convertPhone(userDTO.getPhone())));
     fields.put("UF_CRM_1625221385", "1");
     fields.put("BIRTHDATE", userDTO.getBirthdate());
-    fields.put("UF_CRM_1554359872664", userDTO.getGender().getId());
-    fields.put("UF_CRM_1625469293802", convertScans(userDTO));
+    if (Objects.nonNull(userDTO.getGender())) {
+      fields.put("UF_CRM_1554359872664", userDTO.getGender().getId());
+    }
+    if (Objects.nonNull(userDTO.getPassport())) {
+      fields.put("UF_CRM_1625469293802", convertScans(userDTO));
+    }
     return fields;
   }
 
