@@ -361,7 +361,8 @@ public class BitrixContactService {
       dto.setSecondName(contact.getSecondName());
       dto.setLastName(contact.getLastName());
       contact = getById(contact.getId().toString());
-      if (Objects.nonNull(contact) && Objects.nonNull(contact.getGender())) {
+      if (Objects.nonNull(contact) && Objects.nonNull(contact.getGender()) &&
+          !contact.getGender().isEmpty()) {
         dto.setGender(Gender.fromId(Integer.parseInt(contact.getGender())));
       }
     }
