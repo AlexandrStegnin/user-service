@@ -378,6 +378,7 @@ public class BitrixContactService {
           .issuedBy(requisite.getIssuedBy())
           .departmentCode(requisite.getDepartmentCode())
           .number(requisite.getNumber())
+          .issuedAt(requisite.getIssuedAt())
           .build();
       dto.setPassport(passportDTO);
     }
@@ -422,7 +423,8 @@ public class BitrixContactService {
       fields.put("UF_CRM_1625469293802", convertScans(userDTO));
     }
     fields.put("UF_CRM_1623241366", userDTO.getPlaceOfBirth());
-    fields.put("RQ_IDENT_DOC", "Паспорт");
+    fields.put("UF_CRM_1623241031", userDTO.isIndividual() ? "Y" : "N");
+    fields.put("UF_CRM_1623241054", userDTO.isSelfEmployed() ? "Y" : "N");
     return fields;
   }
 
@@ -438,6 +440,8 @@ public class BitrixContactService {
     fields.put("PRESET_ID", "5");
     fields.put("ENTITY_ID", userDTO.getId().toString());
     fields.put("NAME", "Реквизит");
+    fields.put("RQ_IDENT_DOC_DATE", userDTO.getPassport().getIssuedAt());
+    fields.put("RQ_IDENT_DOC", "Паспорт");
     return fields;
   }
 

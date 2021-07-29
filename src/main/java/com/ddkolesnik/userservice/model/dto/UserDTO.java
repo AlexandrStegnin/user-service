@@ -33,10 +33,10 @@ public class UserDTO {
   String birthdate;
   String password;
   String confirmPassword;
-  boolean individual;
-  boolean selfEmployed;
-  boolean agreementPersonalData;
-  boolean agreementRules;
+  boolean individual = false;
+  boolean selfEmployed = false;
+  boolean agreementPersonalData = false;
+  boolean agreementRules = false;
   String placeOfBirth;
 
 }

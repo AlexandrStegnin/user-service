@@ -49,6 +49,9 @@ public class Requisite {
   @JsonProperty("PRESET_ID")
   String presetId = "5";
 
+  @JsonProperty("RQ_IDENT_DOC_DATE")
+  String issuedAt;
+
   @JsonCreator
   public Requisite(@JsonProperty("ID") String id,
                    @JsonProperty("UF_CRM_1569583111") String snils,
@@ -58,7 +61,8 @@ public class Requisite {
                    @JsonProperty("RQ_IDENT_DOC_ISSUED_BY") String issuedBy,
                    @JsonProperty("ENTITY_TYPE_ID") String entityTypeId,
                    @JsonProperty("ENTITY_ID") String contactId,
-                   @JsonProperty("PRESET_ID") String presetId) {
+                   @JsonProperty("PRESET_ID") String presetId,
+                   @JsonProperty("RQ_IDENT_DOC_DATE") String issuedAt) {
     this.id = id;
     this.snils = snils;
     this.serial = serial;
@@ -68,6 +72,7 @@ public class Requisite {
     this.entityTypeId = entityTypeId;
     this.contactId = contactId;
     this.presetId = presetId;
+    this.issuedAt = issuedAt;
   }
 
 }
