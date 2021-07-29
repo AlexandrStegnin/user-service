@@ -415,7 +415,7 @@ public class BitrixContactService {
     if (Objects.nonNull(userDTO.getGender())) {
       fields.put("UF_CRM_1554359872664", userDTO.getGender().getId());
     }
-    if (Objects.nonNull(userDTO.getPassport())) {
+    if (isScansAvailable(userDTO.getPassport())) {
       fields.put("UF_CRM_1625469293802", convertScans(userDTO));
     }
     return fields;
@@ -492,6 +492,12 @@ public class BitrixContactService {
       }
     }
     return fileDataList;
+  }
+
+  private boolean isScansAvailable(PassportDTO dto) {
+    return Objects.nonNull(dto)
+        && Objects.nonNull(dto.getScans())
+        && (dto.getScans().length > 0);
   }
 
 }
