@@ -363,6 +363,7 @@ public class BitrixContactService {
       dto.setSecondName(contact.getSecondName());
       dto.setLastName(contact.getLastName());
       dto.setBirthdate(parseBirthdate(contact.getBirthdate()));
+      dto.setPlaceOfBirth(contact.getPlaceOfBirth());
       contact = getById(contact.getId().toString());
       if (isGenderAvailable(contact)) {
         dto.setGender(Gender.fromId(Integer.parseInt(contact.getGender())));
@@ -420,6 +421,8 @@ public class BitrixContactService {
     if (isScansAvailable(userDTO.getPassport())) {
       fields.put("UF_CRM_1625469293802", convertScans(userDTO));
     }
+    fields.put("UF_CRM_1623241366", userDTO.getPlaceOfBirth());
+    fields.put("RQ_IDENT_DOC", "Паспорт");
     return fields;
   }
 

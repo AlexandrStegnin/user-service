@@ -44,6 +44,9 @@ public class Contact {
   @JsonProperty("UF_CRM_1625469293802")
   List<Scan> scans;
 
+  @JsonProperty("UF_CRM_1623241366")
+  String placeOfBirth;
+
   @JsonCreator
   public Contact(@JsonProperty("ID") Integer id,
                  @JsonProperty("NAME") String name,
@@ -52,7 +55,8 @@ public class Contact {
                  @JsonProperty("EMAIL") List<Email> email,
                  @JsonProperty("UF_CRM_1554359872664") String gender,
                  @JsonProperty("BIRTHDATE") String birthdate,
-                 @JsonProperty("UF_CRM_1625469293802") List<Scan> scans) {
+                 @JsonProperty("UF_CRM_1625469293802") List<Scan> scans,
+                 @JsonProperty("UF_CRM_1623241366") String placeOfBirth) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
@@ -61,6 +65,7 @@ public class Contact {
     this.gender = gender;
     this.birthdate = birthdate;
     this.scans = scans;
+    this.placeOfBirth = placeOfBirth;
   }
 
 }
