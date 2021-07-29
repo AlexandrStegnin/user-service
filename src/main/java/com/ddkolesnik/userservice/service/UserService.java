@@ -1,10 +1,12 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
-import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
-import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
+import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
+import com.ddkolesnik.userservice.model.domain.AppUser;
+import com.ddkolesnik.userservice.model.domain.UserProfile;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,6 +16,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,6 +36,9 @@ public class UserService {
   static String MESSAGE_TEMPLATE = "Инвестор успешно %s %s";
 
   BitrixContactService bitrixContactService;
+  AuthenticationManager authenticationManager;
+  AppUserService appUserService;
+  PasswordEncoder passwordEncoder;
 
   public boolean confirmPhone(UserDTO dto) {
     log.info("Функционал в разработке. {}", dto);
@@ -35,35 +46,45 @@ public class UserService {
     return true;
   }
 
-  public ApiResponse update(UserDTO dto) {
+  public UserDTO update(UserDTO dto) {
     if (!confirmPhone(dto)) {
-      return ApiResponse.builder()
-          .message("При подтверждении номера телефона произошла ошибка")
-          .build();
+      throw new RuntimeException("При подтверждении номера телефона произошла ошибка");
     }
     DuplicateResult duplicate = bitrixContactService.findDuplicates(dto);
     if (responseEmpty(duplicate.getResult())) {
-      return createContact(dto);
+      if (createContact(dto)) {
+        createAppUser(dto);
+        return dto;
+      } else {
+        throw new RuntimeException("Пользователь не создан");
+      }
     } else {
-      return updateContact(dto);
+      updateContact(dto);
+      return dto;
     }
   }
 
-  private ApiResponse createContact(UserDTO dto) {
+  private void createAppUser(UserDTO dto) {
+    AppUser appUser = AppUser.builder()
+        .phone(dto.getPhone())
+        .login(dto.getPhone())
+        .password(passwordEncoder.encode(dto.getPassword()))
+        .profile(
+            UserProfile.builder()
+                .email(dto.getEmail())
+                .build())
+        .build();
+    appUserService.create(appUser);
+  }
+
+  private boolean createContact(UserDTO dto) {
     Object create = bitrixContactService.createContact(dto);
     boolean created = false;
     if (create instanceof LinkedHashMap) {
       Integer id = (Integer) (((LinkedHashMap<?, ?>) create).get("result"));
       created = Objects.nonNull(id);
     }
-    if (created) {
-      return ApiResponse.builder()
-          .message(String.format(MESSAGE_TEMPLATE, "создан", dto))
-          .build();
-    }
-    return ApiResponse.builder()
-        .message("Произошла ошибка. Контакт не обновлён.")
-        .build();
+    return created;
   }
 
   private ApiResponse updateContact(UserDTO dto) {
@@ -124,6 +145,14 @@ public class UserService {
       isEmpty = ((LinkedHashMap<?, ?>) result).isEmpty();
     }
     return isEmpty;
+  }
+
+  public void authenticateUser(String phone, String password) {
+    UsernamePasswordAuthenticationToken authReq
+        = new UsernamePasswordAuthenticationToken(phone, password);
+    Authentication auth = authenticationManager.authenticate(authReq);
+    SecurityContext sc = SecurityContextHolder.getContext();
+    sc.setAuthentication(auth);
   }
 
 }

@@ -351,9 +351,10 @@ public class BitrixContactService {
   }
 
   public UserDTO getBitrixContact(String phone) {
-    UserDTO dto = new UserDTO();
+
     Contact contact = findFirstContact(phone);
     if (Objects.nonNull(contact)) {
+      UserDTO dto = new UserDTO();
       dto.setId(contact.getId());
       dto.setPhone(phone);
       if (!contact.getEmails().isEmpty()) {
@@ -368,30 +369,32 @@ public class BitrixContactService {
       if (isGenderAvailable(contact)) {
         dto.setGender(Gender.fromId(Integer.parseInt(contact.getGender())));
       }
+
+      Requisite requisite = findRequisite(contact.getId().toString());
+      if (Objects.nonNull(requisite)) {
+        dto.setInn(requisite.getInn());
+        dto.setSnils(requisite.getSnils());
+        PassportDTO passportDTO = PassportDTO.builder()
+            .serial(requisite.getSerial())
+            .issuedBy(requisite.getIssuedBy())
+            .departmentCode(requisite.getDepartmentCode())
+            .number(requisite.getNumber())
+            .issuedAt(requisite.getIssuedAt())
+            .build();
+        dto.setPassport(passportDTO);
+      }
+      Address address = findAddress(dto);
+      if (Objects.nonNull(address)) {
+        AddressDTO addressDTO = AddressDTO.builder()
+            .city(address.getCity())
+            .streetAndHouse(address.getAddress1())
+            .office(address.getAddress2())
+            .build();
+        dto.setAddress(addressDTO);
+      }
+      return dto;
     }
-    Requisite requisite = findRequisite(contact.getId().toString());
-    if (Objects.nonNull(requisite)) {
-      dto.setInn(requisite.getInn());
-      dto.setSnils(requisite.getSnils());
-      PassportDTO passportDTO = PassportDTO.builder()
-          .serial(requisite.getSerial())
-          .issuedBy(requisite.getIssuedBy())
-          .departmentCode(requisite.getDepartmentCode())
-          .number(requisite.getNumber())
-          .issuedAt(requisite.getIssuedAt())
-          .build();
-      dto.setPassport(passportDTO);
-    }
-    Address address = findAddress(dto);
-    if (Objects.nonNull(address)) {
-      AddressDTO addressDTO = AddressDTO.builder()
-          .city(address.getCity())
-          .streetAndHouse(address.getAddress1())
-          .office(address.getAddress2())
-          .build();
-      dto.setAddress(addressDTO);
-    }
-    return dto;
+    return null;
   }
 
   private ContactCreate convertToCreateContact(UserDTO userDTO) {

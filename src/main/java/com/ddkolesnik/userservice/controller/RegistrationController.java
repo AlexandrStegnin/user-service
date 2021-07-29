@@ -34,14 +34,11 @@ public class RegistrationController {
   @ResponseBody
   @PostMapping(path = Location.CONFIRM_URL, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponse updateUser(@RequestBody UserDTO dto) {
-    return userService.update(dto);
-  }
-
-  @GetMapping(path = Location.SUCCESS_URL)
-  public String success(Model model) {
-    model.addAttribute("message", "ЗАПРОС ОТПРАВЛЕН АДМИНИСТРАТОРАМ СИСТЕМЫ. \n" +
-        "ОЖИДАЙТЕ ИНСТРУКЦИЙ НА АДРЕС ЭЛЕКТРОННОЙ ПОЧТЫ.");
-    return Location.SUCCESS_URL;
+    dto = userService.update(dto);
+    userService.authenticateUser(dto.getPhone(), dto.getPassword());
+    return ApiResponse.builder()
+        .message("OK")
+        .build();
   }
 
 }

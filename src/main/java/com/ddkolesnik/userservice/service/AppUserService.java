@@ -25,4 +25,8 @@ public class AppUserService {
         .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
   }
 
+  public AppUser create(AppUser appUser) {
+    return appUserRepository.save(appUser);
+  }
+
 }
