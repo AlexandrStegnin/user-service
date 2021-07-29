@@ -41,6 +41,8 @@ public class AppUser implements UserDetails {
 
   String password;
 
+  Long roleId;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(() -> "USER");

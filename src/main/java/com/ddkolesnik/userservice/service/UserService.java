@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
@@ -69,6 +70,7 @@ public class UserService {
         .phone(dto.getPhone())
         .login(dto.getPhone())
         .password(passwordEncoder.encode(dto.getPassword()))
+        .roleId(AppRole.INVESTOR.getId())
         .profile(
             UserProfile.builder()
                 .email(dto.getEmail())
