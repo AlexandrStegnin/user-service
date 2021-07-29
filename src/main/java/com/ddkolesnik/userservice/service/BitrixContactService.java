@@ -29,6 +29,8 @@ import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -360,9 +362,9 @@ public class BitrixContactService {
       dto.setName(contact.getName());
       dto.setSecondName(contact.getSecondName());
       dto.setLastName(contact.getLastName());
+      dto.setBirthdate(parseBirthdate(contact.getBirthdate()));
       contact = getById(contact.getId().toString());
-      if (Objects.nonNull(contact) && Objects.nonNull(contact.getGender()) &&
-          !contact.getGender().isEmpty()) {
+      if (isGenderAvailable(contact)) {
         dto.setGender(Gender.fromId(Integer.parseInt(contact.getGender())));
       }
     }
@@ -498,6 +500,20 @@ public class BitrixContactService {
     return Objects.nonNull(dto)
         && Objects.nonNull(dto.getScans())
         && (dto.getScans().length > 0);
+  }
+
+  private boolean isGenderAvailable(Contact contact) {
+    return Objects.nonNull(contact) && Objects.nonNull(contact.getGender()) &&
+        !contact.getGender().isEmpty();
+  }
+
+  private String parseBirthdate(String birthdateString) {
+    if (Objects.isNull(birthdateString)) {
+      return null;
+    }
+    String datePart = birthdateString.split("T")[0];
+    LocalDate localDate = LocalDate.parse(datePart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    return localDate.toString();
   }
 
 }
