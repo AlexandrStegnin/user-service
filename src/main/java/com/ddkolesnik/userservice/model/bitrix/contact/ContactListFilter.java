@@ -28,6 +28,16 @@ public class ContactListFilter {
     select.add("SECOND_NAME");
     select.add("LAST_NAME");
     select.add("EMAIL");
+    select.add("UF_CRM_1554359872664");
+    select.add("UF_CRM_1623241031");
+    select.add("UF_CRM_1623241054");
+    select.add("BIRTHDATE");
+    select.add("UF_CRM_1623241366");
+    select.add("RQ_IDENT_DOC");
+    select.add("RQ_IDENT_DOC_DATE");
+    select.add("CITY");
+    select.add("ADDRESS_1");
+    select.add("ADDRESS_2");
   }
 
 }
