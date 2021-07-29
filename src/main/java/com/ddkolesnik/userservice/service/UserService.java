@@ -8,7 +8,6 @@ import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.UserProfile;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
-import com.ddkolesnik.userservice.response.ApiResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -66,16 +65,17 @@ public class UserService {
   }
 
   private void createAppUser(UserDTO dto) {
+    UserProfile profile = UserProfile.builder()
+        .email(dto.getEmail())
+        .build();
     AppUser appUser = AppUser.builder()
         .phone(dto.getPhone())
         .login(dto.getPhone())
         .password(passwordEncoder.encode(dto.getPassword()))
         .roleId(AppRole.INVESTOR.getId())
-        .profile(
-            UserProfile.builder()
-                .email(dto.getEmail())
-                .build())
+        .profile(profile)
         .build();
+    profile.setUser(appUser);
     appUserService.create(appUser);
   }
 
@@ -89,24 +89,14 @@ public class UserService {
     return created;
   }
 
-  private ApiResponse updateContact(UserDTO dto) {
+  private boolean updateContact(UserDTO dto) {
     Contact contact = bitrixContactService.findFirstContact(dto);
     if (Objects.isNull(contact)) {
-      return ApiResponse.builder()
-          .message(String.format("Произошла ошибка. Контакт не найден %s", dto))
-          .build();
+      throw new RuntimeException(String.format("Произошла ошибка. Контакт не найден %s", dto));
     }
     dto.setId(contact.getId());
     Object update = bitrixContactService.updateContact(dto);
-    boolean updated = extractResult(update);
-    if (updated) {
-      return ApiResponse.builder()
-          .message(String.format(MESSAGE_TEMPLATE, "обновлён", dto))
-          .build();
-    }
-    return ApiResponse.builder()
-        .message("Произошла ошибка. Контакт не обновлён.")
-        .build();
+    return extractResult(update);
   }
 
   public void updateAdditionalFields(UserDTO dto) {

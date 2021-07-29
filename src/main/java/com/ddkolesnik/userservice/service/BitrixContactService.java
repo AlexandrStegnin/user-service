@@ -64,8 +64,6 @@ import org.springframework.web.multipart.MultipartFile;
 @PropertySource(value = "classpath:application.properties")
 public class BitrixContactService {
 
-  ObjectMapper mapper;
-
   @Value("${bitrix.crm.duplicate.findbycomm}")
   String BITRIX_CRM_DUPLICATE_FIND_BY_COMM;
 
@@ -522,7 +520,7 @@ public class BitrixContactService {
   }
 
   private String parseBirthdate(String birthdateString) {
-    if (Objects.isNull(birthdateString)) {
+    if (Objects.isNull(birthdateString) || birthdateString.isEmpty()) {
       return null;
     }
     String datePart = birthdateString.split("T")[0];
