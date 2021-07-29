@@ -71,19 +71,23 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-2 offset-sm-2 col-form-label-sm">
-                <input class="form-control input-sm" type="checkbox" id="individual" th:field="*{individual}" th:value="*{individual}">
+                <input class="form-control input-sm" type="checkbox" id="individual" value=""
+                       th:checked="${userDTO.individual}"
+                       name="individual">
             </div>
             <label class="col-sm-6 col-form-label-sm" for="individual">ИМЕЮ СТАТУС ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ</label>
         </div>
         <div class="form-group row">
             <div class="col-sm-2 offset-sm-2 col-form-label-sm">
-                <input class="form-control input-sm" type="checkbox" value="2" id="self-employed" th:field="*{selfEmployed}">
+                <input class="form-control input-sm" type="checkbox" id="self-employed" value=""
+                       th:checked="${userDTO.selfEmployed}"
+                       name="selfEmployed">
             </div>
             <label class="col-sm-6 col-form-label-sm" for="self-employed">ИМЕЮ СТАТУС САМОЗАНЯТЫЙ</label>
         </div>
         <div class="form-group row">
             <div class="col-sm-2 offset-sm-2 col-form-label-sm">
-                <input class="form-control input-sm" type="checkbox" value="" id="agreement-personal-data" th:field="*{agreementPersonalData}">
+                <input class="form-control input-sm" type="checkbox" id="agreement-personal-data" value="">
             </div>
             <label class="col-sm-6 col-form-label-sm" for="agreement-personal-data">
                 СОГЛАСЕН НА ОБРАБОТКУ И ХРАНЕНИЕ ПЕРСОНАЛЬНЫХ ДАННЫХ
@@ -91,7 +95,7 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-2 offset-sm-2 col-form-label-sm">
-                <input class="form-control input-sm" type="checkbox" value="" id="agreement-rules" th:field="*{agreementRules}">
+                <input class="form-control input-sm" type="checkbox" value="" id="agreement-rules">
             </div>
             <label class="col-sm-6 col-form-label-sm" for="agreement-rules">
                 ПРИНИМАЮ ПРАВИЛА ПЛАТФОРМЫ И ДЕКЛАРАЦИЮ О РИСКАХ

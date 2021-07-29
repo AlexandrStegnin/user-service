@@ -44,10 +44,10 @@ function updateUser(confirmCode) {
         confirmCode: confirmCode,
         password: $('#password').val(),
         confirmPassword: $('#confirmPassword').val(),
-        individual: $('#individual').val(),
-        selfEmployed: $('#self-employed').val(),
-        agreementPersonalData: $('#agreement-personal-data').val(),
-        agreementRules: $('#agreement-rules').val()
+        individual: $('#individual').prop('checked'),
+        selfEmployed: $('#self-employed').prop('checked'),
+        agreementPersonalData: $('#agreement-personal-data').prop('checked'),
+        agreementRules: $('#agreement-rules').prop('checked')
     }
 
     $.post({

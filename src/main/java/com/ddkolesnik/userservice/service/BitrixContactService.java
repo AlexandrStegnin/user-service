@@ -415,14 +415,18 @@ public class BitrixContactService {
     fields.put("EMAIL", Collections.singletonList(convertEmail(userDTO.getEmail())));
     fields.put("PHONE", Collections.singletonList(convertPhone(userDTO.getPhone())));
     fields.put("UF_CRM_1625221385", "1");
-    fields.put("BIRTHDATE", userDTO.getBirthdate());
+    if (Objects.nonNull(userDTO.getBirthdate())) {
+      fields.put("BIRTHDATE", userDTO.getBirthdate());
+    }
     if (Objects.nonNull(userDTO.getGender())) {
       fields.put("UF_CRM_1554359872664", userDTO.getGender().getId());
     }
     if (isScansAvailable(userDTO.getPassport())) {
       fields.put("UF_CRM_1625469293802", convertScans(userDTO));
     }
-    fields.put("UF_CRM_1623241366", userDTO.getPlaceOfBirth());
+    if (Objects.nonNull(userDTO.getPlaceOfBirth())) {
+      fields.put("UF_CRM_1623241366", userDTO.getPlaceOfBirth());
+    }
     fields.put("UF_CRM_1623241031", userDTO.isIndividual() ? "Y" : "N");
     fields.put("UF_CRM_1623241054", userDTO.isSelfEmployed() ? "Y" : "N");
     return fields;

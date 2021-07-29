@@ -27,7 +27,7 @@ public class RegistrationController {
 
   @GetMapping(path = Location.HOME_URL)
   public String registrationPage(Model model) {
-    model.addAttribute("userDTO", new UserDTO());
+    model.addAttribute("userDTO", UserDTO.builder().build());
     return Location.REGISTRATION_URL;
   }
 
