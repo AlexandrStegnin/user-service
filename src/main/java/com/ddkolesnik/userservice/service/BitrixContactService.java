@@ -377,7 +377,7 @@ public class BitrixContactService {
             .issuedBy(requisite.getIssuedBy())
             .departmentCode(requisite.getDepartmentCode())
             .number(requisite.getNumber())
-            .issuedAt(requisite.getIssuedAt())
+            .issuedAt(convertToYYYYMMDD(requisite.getIssuedAt()))
             .build();
         dto.setPassport(passportDTO);
       }
@@ -445,7 +445,7 @@ public class BitrixContactService {
     fields.put("PRESET_ID", "5");
     fields.put("ENTITY_ID", userDTO.getId().toString());
     fields.put("NAME", "Реквизит");
-    fields.put("RQ_IDENT_DOC_DATE", userDTO.getPassport().getIssuedAt());
+    fields.put("RQ_IDENT_DOC_DATE", convertToDDMMYYYY(userDTO.getPassport().getIssuedAt()));
     fields.put("RQ_IDENT_DOC", "Паспорт");
     return fields;
   }
@@ -531,6 +531,22 @@ public class BitrixContactService {
     String datePart = birthdateString.split("T")[0];
     LocalDate localDate = LocalDate.parse(datePart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     return localDate.toString();
+  }
+
+  private String convertToDDMMYYYY(String issuedAt) {
+    return convertTo(issuedAt, "yyyy-MM-dd", "dd.MM.yyyy");
+  }
+
+  private String convertToYYYYMMDD(String issuedAt) {
+    return convertTo(issuedAt, "dd.MM.yyyy", "yyyy-MM-dd");
+  }
+
+  private String convertTo(String date, String patternFrom, String patternTo) {
+    if (Objects.isNull(date) || date.isBlank()) {
+      return null;
+    }
+    LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(patternFrom));
+    return localDate.format(DateTimeFormatter.ofPattern(patternTo));
   }
 
 }
