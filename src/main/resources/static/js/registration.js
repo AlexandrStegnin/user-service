@@ -15,6 +15,12 @@ jQuery(document).ready(function ($) {
 function onSubmitRegistration() {
     registration.on('submit', function (event) {
         event.preventDefault()
+        let agreementPersonalData = $('#agreement-personal-data').prop('checked')
+        let agreementRules = $('#agreement-rules').prop('checked')
+        if (!agreementPersonalData || !agreementRules) {
+            console.log("Нужно принять правила и согласиться с обработкой и хранением ПД")
+            return false
+        }
         confirmModal.modal('show')
     })
 }
