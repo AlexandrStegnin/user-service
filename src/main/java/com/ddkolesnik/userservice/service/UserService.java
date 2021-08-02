@@ -110,6 +110,7 @@ public class UserService {
     Requisite requisite = bitrixContactService.findRequisite(dto);
     if (Objects.isNull(requisite)) {
       bitrixContactService.createRequisite(dto);
+      requisite = bitrixContactService.findRequisite(dto);
     } else {
       bitrixContactService.updateRequisite(requisite, dto);
     }
