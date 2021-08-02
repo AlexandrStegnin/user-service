@@ -380,15 +380,15 @@ public class BitrixContactService {
             .issuedAt(convertToYYYYMMDD(requisite.getIssuedAt()))
             .build();
         dto.setPassport(passportDTO);
-      }
-      Address address = findAddress(requisite);
-      if (Objects.nonNull(address)) {
-        AddressDTO addressDTO = AddressDTO.builder()
-            .city(address.getCity())
-            .streetAndHouse(address.getAddress1())
-            .office(address.getAddress2())
-            .build();
-        dto.setAddress(addressDTO);
+        Address address = findAddress(requisite);
+        if (Objects.nonNull(address)) {
+          AddressDTO addressDTO = AddressDTO.builder()
+              .city(address.getCity())
+              .streetAndHouse(address.getAddress1())
+              .office(address.getAddress2())
+              .build();
+          dto.setAddress(addressDTO);
+        }
       }
       return dto;
     }
