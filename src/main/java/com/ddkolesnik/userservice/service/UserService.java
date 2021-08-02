@@ -113,7 +113,7 @@ public class UserService {
     } else {
       bitrixContactService.updateRequisite(requisite, dto);
     }
-    Address address = bitrixContactService.findAddress(dto);
+    Address address = bitrixContactService.findAddress(requisite);
     if (Objects.isNull(address)) {
       bitrixContactService.createAddress(dto);
     } else {

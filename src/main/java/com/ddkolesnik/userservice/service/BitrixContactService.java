@@ -304,11 +304,11 @@ public class BitrixContactService {
     return updated;
   }
 
-  public Address findAddress(UserDTO dto) {
+  public Address findAddress(Requisite requisite) {
     LinkedHashMap<String, String> filter = new LinkedHashMap<>();
     filter.put("ENTITY_TYPE_ID", "8");
     filter.put("TYPE_ID", "1");
-    filter.put("ENTITY_ID", dto.getId().toString());
+    filter.put("ENTITY_ID", requisite.getId());
     this.addressFilter.setFilter(filter);
     ResponseEntity<AddressResult> address = restTemplate.exchange(BITRIX_CRM_ADDRESS_LIST,
         HttpMethod.POST, addressFilterHttpEntity, AddressResult.class);
@@ -381,7 +381,7 @@ public class BitrixContactService {
             .build();
         dto.setPassport(passportDTO);
       }
-      Address address = findAddress(dto);
+      Address address = findAddress(requisite);
       if (Objects.nonNull(address)) {
         AddressDTO addressDTO = AddressDTO.builder()
             .city(address.getCity())
@@ -451,10 +451,15 @@ public class BitrixContactService {
   }
 
   private Map<String, Object> prepareAddressFields(UserDTO userDTO) {
+    Requisite requisite = findRequisite(userDTO);
     Map<String, Object> fields = new LinkedHashMap<>();
+    if (Objects.isNull(requisite)) {
+      log.error("Реквизит не найден: {}", userDTO);
+    } else {
+      fields.put("ENTITY_ID", requisite.getId());
+    }
     fields.put("TYPE_ID", 1);
     fields.put("ENTITY_TYPE_ID", 8);
-    fields.put("ENTITY_ID", userDTO.getId().toString());
     fields.put("CITY", userDTO.getAddress().getCity());
     fields.put("ADDRESS_1", getAddress1(userDTO));
     fields.put("ADDRESS_2", getAddress2(userDTO));
