@@ -397,18 +397,18 @@ public class BitrixContactService {
 
   private ContactCreate convertToCreateContact(UserDTO userDTO) {
     return ContactCreate.builder()
-        .fields(prepareFields(userDTO))
+        .fields(prepareFields(userDTO, true))
         .build();
   }
 
   private ContactUpdate convertToUpdateContact(UserDTO userDTO) {
     return ContactUpdate.builder()
         .id(userDTO.getId())
-        .fields(prepareFields(userDTO))
+        .fields(prepareFields(userDTO, false))
         .build();
   }
 
-  private Map<String, Object> prepareFields(UserDTO userDTO) {
+  private Map<String, Object> prepareFields(UserDTO userDTO, boolean isCreate) {
     Map<String, Object> fields = new LinkedHashMap<>();
     fields.put("NAME", userDTO.getName());
     fields.put("SECOND_NAME", userDTO.getSecondName());
@@ -428,8 +428,10 @@ public class BitrixContactService {
     if (Objects.nonNull(userDTO.getPlaceOfBirth())) {
       fields.put("UF_CRM_1623241366", userDTO.getPlaceOfBirth());
     }
-    fields.put("UF_CRM_1623241031", userDTO.isIndividual() ? "Y" : "N");
-    fields.put("UF_CRM_1623241054", userDTO.isSelfEmployed() ? "Y" : "N");
+    if (isCreate) {
+      fields.put("UF_CRM_1623241031", userDTO.isIndividual() ? "Y" : "N");
+      fields.put("UF_CRM_1623241054", userDTO.isSelfEmployed() ? "Y" : "N");
+    }
     return fields;
   }
 
