@@ -3,6 +3,7 @@ package com.ddkolesnik.userservice.controller;
 import com.ddkolesnik.userservice.configuration.Location;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
+import com.ddkolesnik.userservice.service.SendMessageService;
 import com.ddkolesnik.userservice.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RegistrationController {
 
   UserService userService;
+  SendMessageService sendMessageService;
 
   @GetMapping(path = Location.HOME_URL)
   public String registrationPage(Model model) {
@@ -39,6 +41,7 @@ public class RegistrationController {
     dto = userService.confirm(dto);
     log.info("Пользователь успешно подтверждён {}", dto);
     userService.authenticateUser(dto.getPhone(), dto.getPassword());
+    sendMessageService.sendMessage(dto.getPhone());
     return ApiResponse.builder()
         .message("OK")
         .build();

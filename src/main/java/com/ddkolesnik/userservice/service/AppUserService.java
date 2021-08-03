@@ -5,6 +5,7 @@ import com.ddkolesnik.userservice.model.domain.Account;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
 import java.util.Objects;
+import javax.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,11 @@ public class AppUserService {
 
   AppUserRepository appUserRepository;
   AccountService accountService;
+
+  public AppUser findByLogin(String login) {
+    return appUserRepository.findByPhone(login)
+        .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+  }
 
   public void create(AppUser appUser) {
     AppUser user = appUserRepository.save(appUser);
