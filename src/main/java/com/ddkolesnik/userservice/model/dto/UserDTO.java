@@ -38,5 +38,6 @@ public class UserDTO {
   @Builder.Default
   boolean selfEmployed = false;
   String placeOfBirth;
+  Integer bitrixId;
 
 }

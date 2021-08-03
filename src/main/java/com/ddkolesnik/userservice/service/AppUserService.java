@@ -4,11 +4,11 @@ import com.ddkolesnik.userservice.enums.OwnerType;
 import com.ddkolesnik.userservice.model.domain.Account;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,18 +23,12 @@ public class AppUserService {
   AppUserRepository appUserRepository;
   AccountService accountService;
 
-  public AppUser findByPhone(String phone) {
-    return appUserRepository.findByPhone(phone)
-        .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-  }
-
-  public AppUser create(AppUser appUser) {
+  public void create(AppUser appUser) {
     AppUser user = appUserRepository.save(appUser);
     Account account = accountService.findByOwnerId(user.getId(), OwnerType.INVESTOR);
-    if (account == null) {
+    if (Objects.isNull(account)) {
       accountService.createAccount(user);
     }
-    return user;
   }
 
 }

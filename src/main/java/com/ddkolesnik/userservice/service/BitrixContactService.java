@@ -6,6 +6,7 @@ import com.ddkolesnik.userservice.model.bitrix.address.AddressCreate;
 import com.ddkolesnik.userservice.model.bitrix.address.AddressFilter;
 import com.ddkolesnik.userservice.model.bitrix.address.AddressResult;
 import com.ddkolesnik.userservice.model.bitrix.address.AddressUpdate;
+import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcess;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactCreate;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactDelete;
@@ -100,6 +101,9 @@ public class BitrixContactService {
   @Value("${bitrix.crm.address.add}")
   String BITRIX_CRM_ADDRESS_ADD;
 
+  @Value("${bitrix.business.process.start}")
+  String BITRIX_CRM_BUSINESS_PROCESS_START;
+
   final RestTemplate restTemplate;
 
   final HttpEntity<DuplicateFilter> httpEntity;
@@ -150,6 +154,10 @@ public class BitrixContactService {
 
   final HttpEntity<ContactGet> contactGetHttpEntity;
 
+  final BusinessProcess businessProcess;
+
+  final HttpEntity<BusinessProcess> businessProcessHttpEntity;
+
   final ObjectMapper objectMapper;
 
   @Autowired
@@ -167,6 +175,7 @@ public class BitrixContactService {
     this.addressCreate = new AddressCreate();
     this.addressUpdate = new AddressUpdate();
     this.contactGet = new ContactGet();
+    this.businessProcess = new BusinessProcess();
     this.httpEntity = new HttpEntity<>(duplicateFilter);
     this.contactListEntity = new HttpEntity<>(contactListFilter);
     this.updateContactHttpEntity = new HttpEntity<>(contactUpdate);
@@ -179,6 +188,7 @@ public class BitrixContactService {
     this.addressCreateHttpEntity = new HttpEntity<>(addressCreate);
     this.addressUpdateHttpEntity = new HttpEntity<>(addressUpdate);
     this.contactGetHttpEntity = new HttpEntity<>(contactGet);
+    this.businessProcessHttpEntity = new HttpEntity<>(businessProcess);
     this.objectMapper = new ObjectMapper();
   }
 
@@ -211,7 +221,7 @@ public class BitrixContactService {
     return null;
   }
 
-  public Object updateContact(UserDTO userDTO) {
+  public void updateContact(UserDTO userDTO) {
     ContactUpdate contact = convertToUpdateContact(userDTO);
     this.contactUpdate.setId(contact.getId());
     this.contactUpdate.setFields(contact.getFields());
@@ -219,7 +229,6 @@ public class BitrixContactService {
         HttpMethod.POST, updateContactHttpEntity, Object.class);
     Object updated = update.getBody();
     log.info("Результат обновления контакта {}", updated);
-    return updated;
   }
 
   public Contact getById(String id) {
@@ -278,7 +287,7 @@ public class BitrixContactService {
     return findRequisite(dto.getId().toString());
   }
 
-  public Object createRequisite(UserDTO dto) {
+  public void createRequisite(UserDTO dto) {
     RequisiteCreate requisiteCreate = RequisiteCreate.builder()
         .fields(prepareRequisiteFields(dto))
         .build();
@@ -287,10 +296,9 @@ public class BitrixContactService {
         HttpMethod.POST, requisiteCreateHttpEntity, Object.class);
     Object created = create.getBody();
     log.info("Результат создания реквизита {}", created);
-    return created;
   }
 
-  public Object updateRequisite(Requisite requisite, UserDTO dto) {
+  public void updateRequisite(Requisite requisite, UserDTO dto) {
     RequisiteUpdate requisiteUpdate = RequisiteUpdate.builder()
         .id(Integer.parseInt(requisite.getId()))
         .fields(prepareRequisiteFields(dto))
@@ -301,7 +309,6 @@ public class BitrixContactService {
         HttpMethod.POST, requisiteUpdateHttpEntity, Object.class);
     Object updated = update.getBody();
     log.info("Результат обновления реквизита {}", updated);
-    return updated;
   }
 
   public Address findAddress(Requisite requisite) {
@@ -324,7 +331,7 @@ public class BitrixContactService {
     return addresses.get(0);
   }
 
-  public Object createAddress(UserDTO dto) {
+  public void createAddress(UserDTO dto) {
     AddressCreate addressCreate = AddressCreate.builder()
         .fields(prepareAddressFields(dto))
         .build();
@@ -333,10 +340,9 @@ public class BitrixContactService {
         HttpMethod.POST, addressCreateHttpEntity, Object.class);
     Object created = create.getBody();
     log.info("Результат создания адреса {}", created);
-    return created;
   }
 
-  public Object updateAddress(UserDTO dto) {
+  public void updateAddress(UserDTO dto) {
     AddressUpdate addressUpdate = AddressUpdate.builder()
         .fields(prepareAddressFields(dto))
         .build();
@@ -345,7 +351,14 @@ public class BitrixContactService {
         HttpMethod.POST, addressUpdateHttpEntity, Object.class);
     Object updated = update.getBody();
     log.info("Результат обновления адреса {}", updated);
-    return updated;
+  }
+
+  public void sendConfirmMessage(UserDTO dto) {
+    this.businessProcess.getDocumentId().add("CONTACT_".concat(dto.getBitrixId().toString()));
+    ResponseEntity<Object> start = restTemplate.exchange(BITRIX_CRM_BUSINESS_PROCESS_START,
+        HttpMethod.POST, businessProcessHttpEntity, Object.class);
+    Object started = start.getBody();
+    log.info("Результат отправки смс для подтверждения {}", started);
   }
 
   public UserDTO getBitrixContact(String phone) {

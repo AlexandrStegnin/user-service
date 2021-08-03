@@ -37,4 +37,8 @@ public class AppUserController {
     return "login";
   }
 
+  @GetMapping(path = "logout")
+  public String logout() {
+    return "login";
+  }
 }

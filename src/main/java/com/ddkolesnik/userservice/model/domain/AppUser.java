@@ -42,6 +42,8 @@ public class AppUser implements UserDetails {
 
   Long roleId;
 
+  Integer bitrixId;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(() -> "USER");

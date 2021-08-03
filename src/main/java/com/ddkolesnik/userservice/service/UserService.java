@@ -33,33 +33,37 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserService {
 
-  static String MESSAGE_TEMPLATE = "Инвестор успешно %s %s";
-
   BitrixContactService bitrixContactService;
   AuthenticationManager authenticationManager;
   AppUserService appUserService;
   PasswordEncoder passwordEncoder;
 
-  public boolean confirmPhone(UserDTO dto) {
-    log.info("Функционал в разработке. {}", dto);
-    //TODO сделать подтверждение номера телефона
-    return true;
+  public UserDTO confirm(UserDTO dto) {
+    Contact contact = bitrixContactService.getById(dto.getBitrixId().toString());
+    if (Objects.isNull(contact)) {
+      throw new RuntimeException("Ошибка. Контакт не найден");
+    }
+    if (!dto.getConfirmCode().equalsIgnoreCase(contact.getConfirmCode())) {
+      throw new RuntimeException("Ошибка. Контакт не подтверждён");
+    }
+    return dto;
   }
 
-  public UserDTO update(UserDTO dto) {
-    if (!confirmPhone(dto)) {
-      throw new RuntimeException("При подтверждении номера телефона произошла ошибка");
-    }
+  public UserDTO create(UserDTO dto) {
     DuplicateResult duplicate = bitrixContactService.findDuplicates(dto);
     if (responseEmpty(duplicate.getResult())) {
-      if (createContact(dto)) {
+      Integer contactId = createContact(dto);
+      if (Objects.nonNull(contactId)) {
+        dto.setBitrixId(contactId);
         createAppUser(dto);
+        sendConfirmMessage(dto);
         return dto;
       } else {
         throw new RuntimeException("Пользователь не создан");
       }
     } else {
       updateContact(dto);
+      sendConfirmMessage(dto);
       return dto;
     }
   }
@@ -74,29 +78,28 @@ public class UserService {
         .password(passwordEncoder.encode(dto.getPassword()))
         .roleId(AppRole.INVESTOR.getId())
         .profile(profile)
+        .bitrixId(dto.getBitrixId())
         .build();
     profile.setUser(appUser);
     appUserService.create(appUser);
   }
 
-  private boolean createContact(UserDTO dto) {
+  private Integer createContact(UserDTO dto) {
     Object create = bitrixContactService.createContact(dto);
-    boolean created = false;
     if (create instanceof LinkedHashMap) {
-      Integer id = (Integer) (((LinkedHashMap<?, ?>) create).get("result"));
-      created = Objects.nonNull(id);
+      return (Integer) (((LinkedHashMap<?, ?>) create).get("result"));
     }
-    return created;
+    return null;
   }
 
-  private boolean updateContact(UserDTO dto) {
+  private void updateContact(UserDTO dto) {
     Contact contact = bitrixContactService.findFirstContact(dto);
     if (Objects.isNull(contact)) {
       throw new RuntimeException(String.format("Произошла ошибка. Контакт не найден %s", dto));
     }
     dto.setId(contact.getId());
-    Object update = bitrixContactService.updateContact(dto);
-    return extractResult(update);
+    dto.setBitrixId(contact.getId());
+    bitrixContactService.updateContact(dto);
   }
 
   public void updateAdditionalFields(UserDTO dto) {
@@ -123,13 +126,6 @@ public class UserService {
     bitrixContactService.updateContact(dto);
   }
 
-  private boolean extractResult(Object update) {
-    if (update instanceof LinkedHashMap) {
-      return (Boolean) (((LinkedHashMap<?, ?>) update).get("result"));
-    }
-    return false;
-  }
-
   private boolean responseEmpty(Object result) {
     boolean isEmpty = false;
     if (result instanceof ArrayList<?>) {
@@ -146,6 +142,10 @@ public class UserService {
     Authentication auth = authenticationManager.authenticate(authReq);
     SecurityContext sc = SecurityContextHolder.getContext();
     sc.setAuthentication(auth);
+  }
+
+  public void sendConfirmMessage(UserDTO dto) {
+    bitrixContactService.sendConfirmMessage(dto);
   }
 
 }

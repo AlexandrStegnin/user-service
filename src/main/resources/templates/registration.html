@@ -10,6 +10,7 @@
 <body>
 <div class="container-fluid" style="margin-top: 1%">
     <form action="#" th:method="POST" th:object="${userDTO}" id="registration">
+        <input type="hidden" id="client-id">
         <div class="form-group row">
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="lastName">ФАМИЛИЯ</label>
             <div class="col-sm-6">

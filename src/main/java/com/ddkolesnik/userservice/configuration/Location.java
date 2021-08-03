@@ -15,5 +15,6 @@ public class Location {
 
   public static final String CONFIRM_URL = "confirm";
 
-  public static final String SUCCESS_URL = "success";
+  public static final String CREATE_USER = "create";
+
 }

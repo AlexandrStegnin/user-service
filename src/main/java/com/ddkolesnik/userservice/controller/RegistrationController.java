@@ -36,11 +36,21 @@ public class RegistrationController {
   @ResponseBody
   @PostMapping(path = Location.CONFIRM_URL, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponse updateUser(@RequestBody UserDTO dto) {
-    dto = userService.update(dto);
-    log.info("Пользователь успешно зарегистрирован {}", dto);
+    dto = userService.confirm(dto);
+    log.info("Пользователь успешно подтверждён {}", dto);
     userService.authenticateUser(dto.getPhone(), dto.getPassword());
     return ApiResponse.builder()
         .message("OK")
+        .build();
+  }
+
+  @ResponseBody
+  @PostMapping(path = Location.CREATE_USER, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ApiResponse create(@RequestBody UserDTO dto) {
+    dto = userService.create(dto);
+    log.info("Пользователь успешно зарегистрирован {}", dto);
+    return ApiResponse.builder()
+        .message(dto.getBitrixId().toString())
         .build();
   }
 

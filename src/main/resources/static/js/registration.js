@@ -23,7 +23,7 @@ function onSubmitRegistration() {
             console.log("Нужно принять правила и согласиться с обработкой и хранением ПД")
             return false
         }
-        confirmModal.modal('show')
+        create()
     })
 }
 
@@ -31,34 +31,47 @@ function onConfirmPhone() {
     confirmButton.on('click', function (event) {
         event.preventDefault()
         let confirmCode = $('#confirm-code').val()
+        let clientBitrixId = $('#client-id').val()
         if (confirmCode.length === 0) {
             console.log("Код не должен быть пустым")
             return false
         }
         confirmButton.addClass('disabled')
         confirmButton.prop('disabled', true)
-        updateUser(confirmCode)
+        confirm(confirmCode, clientBitrixId)
     })
 }
 
-function updateUser(confirmCode) {
+function create() {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
-    let userDTO = {
-        name: $('#name').val(),
-        secondName: $('#secondName').val(),
-        lastName: $('#lastName').val(),
-        email: $('#email').val(),
-        phone: $('#phone').val(),
-        confirmCode: confirmCode,
-        password: $('#password').val(),
-        confirmPassword: $('#confirmPassword').val(),
-        individual: $('#individual').prop('checked'),
-        selfEmployed: $('#self-employed').prop('checked'),
-        agreementPersonalData: $('#agreement-personal-data').prop('checked'),
-        agreementRules: $('#agreement-rules').prop('checked')
-    }
+    let userDTO = getUserDTO(null, null)
+
+    $.post({
+        url: "/create",
+        data: JSON.stringify(userDTO),
+        dataType: 'json',
+        contentType: "application/json;charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+        }})
+        .done(function (data) {
+            $('#client-id').val(data.message)
+            confirmModal.modal('show')
+        })
+        .fail(function (jqXHR) {
+            console.log(jqXHR.responseText);
+        })
+        .always(function () {
+            console.log("FINISHED")
+        })
+}
+function confirm(confirmCode, clientBitrixId) {
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+
+    let userDTO = getUserDTO(confirmCode, clientBitrixId)
 
     $.post({
         url: "/confirm",
@@ -78,4 +91,22 @@ function updateUser(confirmCode) {
         .always(function () {
             console.log("FINISHED")
         })
+}
+
+function getUserDTO(confirmCode, clientBitrixId) {
+    return {
+        name: $('#name').val(),
+        secondName: $('#secondName').val(),
+        lastName: $('#lastName').val(),
+        email: $('#email').val(),
+        phone: $('#phone').val(),
+        confirmCode: confirmCode,
+        password: $('#password').val(),
+        confirmPassword: $('#confirmPassword').val(),
+        individual: $('#individual').prop('checked'),
+        selfEmployed: $('#self-employed').prop('checked'),
+        agreementPersonalData: $('#agreement-personal-data').prop('checked'),
+        agreementRules: $('#agreement-rules').prop('checked'),
+        bitrixId: clientBitrixId
+    }
 }
