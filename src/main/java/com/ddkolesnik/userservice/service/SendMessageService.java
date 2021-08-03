@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,7 +18,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@PropertySource(value = "classpath:private.properties")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SendMessageService {
 
   @Value("${spring.mail.app.token}")
@@ -29,7 +31,7 @@ public class SendMessageService {
   @Value("${spring.mail.app.welcome.path}")
   String MAIL_APP_WELCOME_PATH;
 
-  AppUserService appUserService;
+  final AppUserService appUserService;
 
   public void sendMessage(String login) {
     if (MAIL_APP_TOKEN == null || MAIL_APP_TOKEN.isEmpty()) {
