@@ -11,6 +11,7 @@ import com.ddkolesnik.userservice.model.dto.UserDTO;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,7 @@ public class UserService {
     UserProfile profile = UserProfile.builder()
         .email(dto.getEmail())
         .build();
+    generatePassword(dto);
     AppUser appUser = AppUser.builder()
         .phone(dto.getPhone())
         .login(dto.getPhone())
@@ -148,4 +150,7 @@ public class UserService {
     bitrixContactService.sendConfirmMessage(dto);
   }
 
+  private void generatePassword(UserDTO dto) {
+    dto.setPassword(UUID.randomUUID().toString().substring(0, 8));
+  }
 }

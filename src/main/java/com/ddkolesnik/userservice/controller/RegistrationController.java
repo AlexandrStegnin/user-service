@@ -54,6 +54,7 @@ public class RegistrationController {
     log.info("Пользователь успешно зарегистрирован {}", dto);
     return ApiResponse.builder()
         .message(dto.getBitrixId().toString())
+        .additionalInfo(dto.getPassword())
         .build();
   }
 

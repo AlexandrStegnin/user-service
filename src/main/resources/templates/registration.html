@@ -11,6 +11,7 @@
 <div class="container-fluid" style="margin-top: 1%">
     <form action="#" th:method="POST" th:object="${userDTO}" id="registration">
         <input type="hidden" id="client-id">
+        <input type="hidden" id="client-secret">
         <div class="form-group row">
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="lastName">ФАМИЛИЯ</label>
             <div class="col-sm-6">
@@ -50,24 +51,6 @@
                        oninvalid="this.setCustomValidity('Укажите телефон в правильном формате +79998887766')"
                        oninput="setCustomValidity('')"
                        pattern="\+{1,}[7][0-9]{10}"/>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="password">ПАРОЛЬ</label>
-            <div class="col-sm-6">
-                <input class="form-control input-sm" type="password" id="password"
-                       th:field="*{password}" required
-                       oninvalid="this.setCustomValidity('Необходимо задать пароль')"
-                       oninput="setCustomValidity('')"/>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="confirmPassword">ПОВТОРИТЕ ПАРОЛЬ</label>
-            <div class="col-sm-6">
-                <input class="form-control input-sm" type="password" id="confirmPassword"
-                       th:field="*{confirmPassword}" required
-                       oninvalid="this.setCustomValidity('Пароли не совпадают')"
-                       oninput="setCustomValidity('')"/>
             </div>
         </div>
         <div class="form-group row">

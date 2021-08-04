@@ -19,4 +19,6 @@ public class ApiResponse {
 
   String message;
 
+  String additionalInfo;
+
 }

@@ -32,7 +32,6 @@ public class UserDTO {
   Gender gender;
   String birthdate;
   String password;
-  String confirmPassword;
   @Builder.Default
   boolean individual = false;
   @Builder.Default

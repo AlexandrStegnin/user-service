@@ -32,13 +32,14 @@ function onConfirmPhone() {
         event.preventDefault()
         let confirmCode = $('#confirm-code').val()
         let clientBitrixId = $('#client-id').val()
+        let clientSecret = $('#client-secret').val()
         if (confirmCode.length === 0) {
             console.log("Код не должен быть пустым")
             return false
         }
         confirmButton.addClass('disabled')
         confirmButton.prop('disabled', true)
-        confirm(confirmCode, clientBitrixId)
+        confirm(confirmCode, clientBitrixId, clientSecret)
     })
 }
 
@@ -46,7 +47,7 @@ function create() {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
-    let userDTO = getUserDTO(null, null)
+    let userDTO = getUserDTO(null, null, null)
 
     $.post({
         url: "/create",
@@ -58,6 +59,7 @@ function create() {
         }})
         .done(function (data) {
             $('#client-id').val(data.message)
+            $('#client-secret').val(data.additionalInfo)
             confirmModal.modal('show')
         })
         .fail(function (jqXHR) {
@@ -67,11 +69,11 @@ function create() {
             console.log("FINISHED")
         })
 }
-function confirm(confirmCode, clientBitrixId) {
+function confirm(confirmCode, clientBitrixId, additionalInfo) {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
-    let userDTO = getUserDTO(confirmCode, clientBitrixId)
+    let userDTO = getUserDTO(confirmCode, clientBitrixId, additionalInfo)
 
     $.post({
         url: "/confirm",
@@ -93,7 +95,7 @@ function confirm(confirmCode, clientBitrixId) {
         })
 }
 
-function getUserDTO(confirmCode, clientBitrixId) {
+function getUserDTO(confirmCode, clientBitrixId, additionalInfo) {
     return {
         name: $('#name').val(),
         secondName: $('#secondName').val(),
@@ -101,12 +103,11 @@ function getUserDTO(confirmCode, clientBitrixId) {
         email: $('#email').val(),
         phone: $('#phone').val(),
         confirmCode: confirmCode,
-        password: $('#password').val(),
-        confirmPassword: $('#confirmPassword').val(),
         individual: $('#individual').prop('checked'),
         selfEmployed: $('#self-employed').prop('checked'),
         agreementPersonalData: $('#agreement-personal-data').prop('checked'),
         agreementRules: $('#agreement-rules').prop('checked'),
-        bitrixId: clientBitrixId
+        bitrixId: clientBitrixId,
+        password: additionalInfo
     }
 }
