@@ -31,15 +31,6 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="gender">ПОЛ</label>
-            <div class="col-sm-6">
-                <select class="selectpicker" id="gender" th:field="*{gender}">
-                    <option th:each="gender : ${T(com.ddkolesnik.userservice.enums.Gender).values()}"
-                            th:value="${gender}" th:text="${gender.title}"></option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="birthdate">ДАТА РОЖДЕНИЯ</label>
             <div class="col-sm-6">
                 <input class="form-control input-sm" type="date" id="birthdate" th:field="*{birthdate}"/>
