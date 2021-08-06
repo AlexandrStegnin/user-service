@@ -445,6 +445,7 @@ public class BitrixContactService {
       fields.put("UF_CRM_1623241031", userDTO.isIndividual() ? "Y" : "N");
       fields.put("UF_CRM_1623241054", userDTO.isSelfEmployed() ? "Y" : "N");
     }
+    fields.put("UF_CRM_1628253424", "1");
     return fields;
   }
 

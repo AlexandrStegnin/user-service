@@ -8,8 +8,8 @@ jQuery(document).ready(function ($) {
     registration = $('#registration')
     submitButton = $('#submit')
     confirmButton = $('#confirm')
-    confirmButton.removeClass('disabled')
-    confirmButton.prop('disabled', false)
+    // confirmButton.removeClass('disabled')
+    // confirmButton.prop('disabled', false)
     onSubmitRegistration()
     onConfirmPhone()
 })
@@ -37,8 +37,8 @@ function onConfirmPhone() {
             console.log("Код не должен быть пустым")
             return false
         }
-        confirmButton.addClass('disabled')
-        confirmButton.prop('disabled', true)
+        // confirmButton.addClass('disabled')
+        // confirmButton.prop('disabled', true)
         confirm(confirmCode, clientBitrixId, clientSecret)
     })
 }
