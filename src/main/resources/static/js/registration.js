@@ -50,7 +50,7 @@ function create() {
     let userDTO = getUserDTO(null, null, null)
 
     $.post({
-        url: "/create",
+        url: "create",
         data: JSON.stringify(userDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
@@ -76,7 +76,7 @@ function confirm(confirmCode, clientBitrixId, additionalInfo) {
     let userDTO = getUserDTO(confirmCode, clientBitrixId, additionalInfo)
 
     $.post({
-        url: "/confirm",
+        url: "confirm",
         data: JSON.stringify(userDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
