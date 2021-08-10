@@ -47,7 +47,7 @@ public class Contact {
   @JsonProperty("UF_CRM_1623241366")
   String placeOfBirth;
 
-  @JsonProperty("UF_CRM_1627978615")
+  @JsonProperty("UF_CRM_1625143364")
   String confirmCode;
 
   @JsonCreator
@@ -60,7 +60,7 @@ public class Contact {
                  @JsonProperty("BIRTHDATE") String birthdate,
                  @JsonProperty("UF_CRM_1625469293802") List<Scan> scans,
                  @JsonProperty("UF_CRM_1623241366") String placeOfBirth,
-                 @JsonProperty("UF_CRM_1627978615") String confirmCode) {
+                 @JsonProperty("UF_CRM_1625143364") String confirmCode) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
