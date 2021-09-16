@@ -26,15 +26,27 @@ function onRestorePasswordClick() {
 }
 
 function onRestoreFormSubmit() {
-    submitRestoreButton.on('click', function (event) {
+    submitRestoreButton.on('click', function () {
         let phoneNumber = phoneNumberField.val().trim()
         if (phoneNumber === '') {
             console.log('Номер телефона должен быть указан')
             return false
         }
-        console.log('Телефон ' + phoneNumber)
-        restoreForm.modal('hide')
-        messageForm.modal('show')
+        if (validPhoneNumber(phoneNumber)) {
+            console.log('Телефон ' + phoneNumber)
+            restoreForm.modal('hide')
+            messageForm.modal('show')
+        }
     })
 }
 
+function validPhoneNumber(phone) {
+    let pattern = /^\+?([0-9]{11})$/;
+    if(phone.match(pattern)) {
+        return true;
+    }
+    else {
+        alert("Введите номер телефона в формате +79999999999");
+        return false;
+    }
+}
