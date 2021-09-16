@@ -30,9 +30,14 @@ public class RegistrationController {
   SendMessageService sendMessageService;
 
   @GetMapping(path = Location.HOME_URL)
+  public String redirect() {
+    return "redirect:/login";
+  }
+
+  @GetMapping(path = Location.REGISTRATION_URL)
   public String registrationPage(Model model) {
     model.addAttribute("userDTO", UserDTO.builder().build());
-    return Location.REGISTRATION_URL;
+    return "registration";
   }
 
   @ResponseBody
