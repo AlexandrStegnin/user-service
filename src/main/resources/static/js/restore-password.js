@@ -35,7 +35,7 @@ function onRestoreFormSubmit() {
         if (validPhoneNumber(phoneNumber)) {
             console.log('Телефон ' + phoneNumber)
             restoreForm.modal('hide')
-            messageForm.modal('show')
+            restorePassword(phoneNumber)
         }
     })
 }
@@ -49,4 +49,49 @@ function validPhoneNumber(phone) {
         alert("Введите номер телефона в формате +79999999999");
         return false;
     }
+}
+
+/**
+ *
+ * @param phoneNumber {String} номер телефона
+ */
+function restorePassword(phoneNumber) {
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+
+    let userDTO = {
+        phone: phoneNumber
+    }
+
+    $.post({
+        url: "restore-password",
+        data: JSON.stringify(userDTO),
+        dataType: 'json',
+        contentType: "application/json;charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+        }})
+        .done(function (data) {
+            if (data.status === 200) {
+                showMessage('ВАМ ОТПРАВЛЕНО СМС С ВРЕМЕННЫМ ПАРОЛЕМ. ИСПОЛЬЗУЙТЕ ЕГО ДЛЯ АВТОРИЗАЦИИ.')
+            }
+        })
+        .fail(function (jqXHR) {
+            let errorMessage = (jqXHR.responseJSON.message).toUpperCase()
+            console.log(errorMessage);
+            showMessage(errorMessage)
+        })
+        .always(function () {
+            console.log("FINISHED")
+        })
+}
+
+/**
+ *
+ * @param message {String}
+ */
+function showMessage(message) {
+    let divMessage = messageForm.find('#message')
+    divMessage.text(message)
+    messageForm.modal('show')
 }

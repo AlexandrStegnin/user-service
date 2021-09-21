@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,6 +61,16 @@ public class RegistrationController {
     return ApiResponse.builder()
         .message(dto.getBitrixId().toString())
         .additionalInfo(dto.getPassword())
+        .build();
+  }
+
+  @ResponseBody
+  @PostMapping(path = Location.RESTORE_PASSWORD)
+  public ApiResponse restorePassword(@RequestBody UserDTO dto) {
+    userService.sendRestoreMessage(dto);
+    return ApiResponse.builder()
+        .status(HttpStatus.OK)
+        .message("Сообщение успешно отправлено")
         .build();
   }
 

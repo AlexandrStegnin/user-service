@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.enums.AppRole;
+import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
@@ -8,11 +9,6 @@ import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.UserProfile;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Objects;
-import java.util.UUID;
-import javax.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +20,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author Aleksandr Stegnin on 11.07.2021
@@ -38,6 +40,7 @@ public class UserService {
   AuthenticationManager authenticationManager;
   AppUserService appUserService;
   PasswordEncoder passwordEncoder;
+  UserMapper userMapper;
 
   public UserDTO confirm(UserDTO dto) {
     Contact contact = bitrixContactService.getById(dto.getBitrixId().toString());
@@ -148,6 +151,22 @@ public class UserService {
 
   public void sendConfirmMessage(UserDTO dto) {
     bitrixContactService.sendConfirmMessage(dto);
+  }
+
+  public void sendRestoreMessage(UserDTO dto) {
+    dto = findUserByPhone(dto);
+    bitrixContactService.sendRestoreMessage(dto);
+    Contact contact = bitrixContactService.findFirstContact(dto);
+    if (Objects.isNull(contact.getConfirmCode()) || contact.getConfirmCode().isBlank()) {
+      throw new RuntimeException("Не удалось обновить контакт. Код из Б24 не получен");
+    }
+    dto.setPassword(passwordEncoder.encode(contact.getConfirmCode()));
+    appUserService.updatePassword(dto);
+  }
+
+  private UserDTO findUserByPhone(UserDTO dto) {
+    AppUser user = appUserService.findByLogin(dto.getPhone());
+    return userMapper.toDTO(user);
   }
 
   private void generatePassword(UserDTO dto) {

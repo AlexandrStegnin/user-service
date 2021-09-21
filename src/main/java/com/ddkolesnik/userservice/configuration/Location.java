@@ -17,4 +17,6 @@ public class Location {
 
   public static final String CREATE_USER = "create";
 
+  public static final String RESTORE_PASSWORD = "restore-password";
+
 }

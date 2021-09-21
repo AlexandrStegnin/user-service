@@ -3,14 +3,16 @@ package com.ddkolesnik.userservice.service;
 import com.ddkolesnik.userservice.enums.OwnerType;
 import com.ddkolesnik.userservice.model.domain.Account;
 import com.ddkolesnik.userservice.model.domain.AppUser;
+import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
-import java.util.Objects;
-import javax.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.Objects;
 
 /**
  * @author Aleksandr Stegnin on 13.07.2021
@@ -35,6 +37,12 @@ public class AppUserService {
     if (Objects.isNull(account)) {
       accountService.createAccount(user);
     }
+  }
+
+  public void updatePassword(UserDTO dto) {
+    AppUser user = findByLogin(dto.getPhone());
+    user.setPassword(dto.getPassword());
+    appUserRepository.save(user);
   }
 
 }

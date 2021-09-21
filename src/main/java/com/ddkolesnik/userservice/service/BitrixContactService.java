@@ -1,27 +1,14 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.enums.Gender;
-import com.ddkolesnik.userservice.model.bitrix.address.Address;
-import com.ddkolesnik.userservice.model.bitrix.address.AddressCreate;
-import com.ddkolesnik.userservice.model.bitrix.address.AddressFilter;
-import com.ddkolesnik.userservice.model.bitrix.address.AddressResult;
-import com.ddkolesnik.userservice.model.bitrix.address.AddressUpdate;
+import com.ddkolesnik.userservice.model.bitrix.address.*;
+import com.ddkolesnik.userservice.model.bitrix.bp.BPTemplate;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcess;
-import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactCreate;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactDelete;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactGet;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactList;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactListFilter;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactUpdate;
+import com.ddkolesnik.userservice.model.bitrix.contact.*;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.file.FileData;
-import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
-import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteCreate;
-import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteFilter;
-import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteResult;
-import com.ddkolesnik.userservice.model.bitrix.requisite.RequisiteUpdate;
+import com.ddkolesnik.userservice.model.bitrix.requisite.*;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.utils.ValueType;
@@ -29,17 +16,6 @@ import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -54,6 +30,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * @author Aleksandr Stegnin on 05.07.2021
@@ -354,11 +335,21 @@ public class BitrixContactService {
   }
 
   public void sendConfirmMessage(UserDTO dto) {
+    this.businessProcess.setTemplateId(BPTemplate.CONFIRM_PHONE.getId());
     this.businessProcess.getDocumentId().add("CONTACT_".concat(dto.getBitrixId().toString()));
     ResponseEntity<Object> start = restTemplate.exchange(BITRIX_CRM_BUSINESS_PROCESS_START,
         HttpMethod.POST, businessProcessHttpEntity, Object.class);
     Object started = start.getBody();
     log.info("Результат отправки смс для подтверждения {}", started);
+  }
+
+  public void sendRestoreMessage(UserDTO dto) {
+    this.businessProcess.setTemplateId(BPTemplate.CONFIRM_PHONE.getId());
+    this.businessProcess.getDocumentId().add("CONTACT_".concat(dto.getBitrixId().toString()));
+    ResponseEntity<Object> restore = restTemplate.exchange(BITRIX_CRM_BUSINESS_PROCESS_START,
+        HttpMethod.POST, businessProcessHttpEntity, Object.class);
+    Object restored = restore.getBody();
+    log.info("Результат отправки смс для восстановления пароля {}", restored);
   }
 
   public UserDTO getBitrixContact(String phone) {

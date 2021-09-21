@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Aleksandr Stegnin on 11.07.2021
@@ -20,5 +21,7 @@ public class ApiResponse {
   String message;
 
   String additionalInfo;
+
+  HttpStatus status;
 
 }

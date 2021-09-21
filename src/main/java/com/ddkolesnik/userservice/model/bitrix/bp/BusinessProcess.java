@@ -1,11 +1,12 @@
 package com.ddkolesnik.userservice.model.bitrix.bp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.Data;
 
 /**
  * @author Alexandr Stegnin
@@ -14,7 +15,7 @@ import lombok.Data;
 public class BusinessProcess {
 
   @JsonProperty("TEMPLATE_ID")
-  String templateId = "574";
+  String templateId;
 
   @JsonProperty("DOCUMENT_ID")
   List<String> documentId = new ArrayList<>();
