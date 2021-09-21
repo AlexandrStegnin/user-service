@@ -29,26 +29,21 @@ function onRestoreFormSubmit() {
     submitRestoreButton.on('click', function () {
         let phoneNumber = phoneNumberField.val().trim()
         if (phoneNumber === '') {
-            console.log('Номер телефона должен быть указан')
+            showMessage('НОМЕР ТЕЛЕФОНА ДОЛЖЕН БЫТЬ УКАЗАН')
             return false
         }
         if (validPhoneNumber(phoneNumber)) {
-            console.log('Телефон ' + phoneNumber)
             restoreForm.modal('hide')
             restorePassword(phoneNumber)
+        } else {
+            showMessage('ВВЕДИТЕ НОМЕР ТЕЛЕФОНА В ФОРМАТЕ +79999999999')
         }
     })
 }
 
 function validPhoneNumber(phone) {
     let pattern = /^\+?([0-9]{11})$/;
-    if(phone.match(pattern)) {
-        return true;
-    }
-    else {
-        alert("Введите номер телефона в формате +79999999999");
-        return false;
-    }
+    return !!phone.match(pattern);
 }
 
 /**
@@ -70,9 +65,10 @@ function restorePassword(phoneNumber) {
         contentType: "application/json;charset=utf-8",
         beforeSend: function (xhr) {
             xhr.setRequestHeader(header, token);
-        }})
+        }
+    })
         .done(function (data) {
-            if (data.status === 200) {
+            if (data.status === 'OK') {
                 showMessage('ВАМ ОТПРАВЛЕНО СМС С ВРЕМЕННЫМ ПАРОЛЕМ. ИСПОЛЬЗУЙТЕ ЕГО ДЛЯ АВТОРИЗАЦИИ.')
             }
         })
