@@ -50,9 +50,7 @@ public class UserService {
     if (!dto.getConfirmCode().equalsIgnoreCase(contact.getConfirmCode())) {
       throw new RuntimeException("Ошибка. Контакт не подтверждён");
     }
-    AppUser user = appUserService.findByPhone(dto.getPhone());
-    user.setPassword(passwordEncoder.encode(dto.getConfirmCode()));
-    appUserService.update(user);
+    appUserService.updatePassword(dto.getPhone(), dto.getConfirmCode());
     sendConfirmMessage(dto);
     return dto;
   }

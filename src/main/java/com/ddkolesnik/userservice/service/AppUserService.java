@@ -13,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -30,10 +31,11 @@ public class AppUserService {
   BitrixContactService bitrixContactService;
   AppUserRepository appUserRepository;
   AccountService accountService;
+  PasswordEncoder encoder;
   UserMapper userMapper;
 
-  public AppUser findByPhone(String login) {
-    return appUserRepository.findByPhone(login)
+  public AppUser findByPhone(String phone) {
+    return appUserRepository.findByPhone(phone)
         .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
   }
 
@@ -48,6 +50,12 @@ public class AppUserService {
   public void updatePassword(UserDTO dto) {
     AppUser user = findByPhone(dto.getPhone());
     user.setPassword(dto.getPassword());
+    appUserRepository.save(user);
+  }
+
+  public void updatePassword(String phone, String rawPassword) {
+    AppUser user = findByPhone(phone);
+    user.setPassword(encoder.encode(rawPassword));
     appUserRepository.save(user);
   }
 
