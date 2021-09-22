@@ -1,6 +1,10 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.enums.OwnerType;
+import com.ddkolesnik.userservice.mapper.UserMapper;
+import com.ddkolesnik.userservice.model.bitrix.address.Address;
+import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
+import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.domain.Account;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
@@ -23,8 +27,10 @@ import java.util.Objects;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AppUserService {
 
+  BitrixContactService bitrixContactService;
   AppUserRepository appUserRepository;
   AccountService accountService;
+  UserMapper userMapper;
 
   public AppUser findByLogin(String login) {
     return appUserRepository.findByPhone(login)
@@ -43,6 +49,21 @@ public class AppUserService {
     AppUser user = findByLogin(dto.getPhone());
     user.setPassword(dto.getPassword());
     appUserRepository.save(user);
+  }
+
+  public UserDTO findUser(String phone) {
+    Contact contact = bitrixContactService.findFirstContact(phone);
+    if (Objects.nonNull(contact)) {
+      UserDTO dto = userMapper.toDTO(contact);
+      Requisite requisite = bitrixContactService.findRequisite(contact.getId().toString());
+      userMapper.updatePassport(requisite, dto);
+      if (Objects.nonNull(requisite)) {
+        Address address = bitrixContactService.findAddress(requisite);
+        userMapper.updateAddress(address, dto);
+      }
+      return dto;
+    }
+    return null;
   }
 
 }

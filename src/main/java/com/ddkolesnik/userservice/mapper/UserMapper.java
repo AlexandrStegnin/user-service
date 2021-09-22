@@ -10,13 +10,12 @@ import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.utils.DateUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -59,7 +58,7 @@ public abstract class UserMapper {
         .issuedBy(requisite.getIssuedBy())
         .departmentCode(requisite.getDepartmentCode())
         .number(requisite.getNumber())
-        .issuedAt(convertToYYYYMMDD(requisite.getIssuedAt()))
+        .issuedAt(DateUtils.convertToYYYYMMDD(requisite.getIssuedAt()))
         .build();
   }
 
@@ -69,18 +68,6 @@ public abstract class UserMapper {
         .streetAndHouse(address.getAddress1())
         .office(address.getAddress2())
         .build();
-  }
-
-  private String convertToYYYYMMDD(String issuedAt) {
-    return convertTo(issuedAt);
-  }
-
-  private String convertTo(String date) {
-    if (Objects.isNull(date) || date.isBlank()) {
-      return null;
-    }
-    LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-    return localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
   }
 
 }

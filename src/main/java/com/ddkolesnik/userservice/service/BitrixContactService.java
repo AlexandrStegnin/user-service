@@ -15,6 +15,7 @@ import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.utils.ValueType;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.utils.DateUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -47,7 +46,6 @@ public class BitrixContactService {
   BitrixProperty bitrixProperty;
   RestTemplate restTemplate;
   ObjectMapper objectMapper;
-  UserMapper userMapper;
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
     DuplicateFilter duplicateFilter = new DuplicateFilter(userDTO.getPhone());
@@ -234,21 +232,6 @@ public class BitrixContactService {
     log.info("Результат отправки смс для восстановления пароля {}", restored);
   }
 
-  public UserDTO getBitrixContact(String phone) {
-    Contact contact = findFirstContact(phone);
-    if (Objects.nonNull(contact)) {
-      UserDTO dto = userMapper.toDTO(contact);
-      Requisite requisite = findRequisite(contact.getId().toString());
-      userMapper.updatePassport(requisite, dto);
-      if (Objects.nonNull(requisite)) {
-        Address address = findAddress(requisite);
-        userMapper.updateAddress(address, dto);
-      }
-      return dto;
-    }
-    return null;
-  }
-
   private ContactCreate convertToCreateContact(UserDTO userDTO) {
     return ContactCreate.builder()
         .fields(prepareFields(userDTO, true))
@@ -302,7 +285,7 @@ public class BitrixContactService {
     fields.put("PRESET_ID", "5");
     fields.put("ENTITY_ID", userDTO.getId().toString());
     fields.put("NAME", "Реквизит");
-    fields.put("RQ_IDENT_DOC_DATE", convertToDDMMYYYY(userDTO.getPassport().getIssuedAt()));
+    fields.put("RQ_IDENT_DOC_DATE", DateUtils.convertToDDMMYYYY(userDTO.getPassport().getIssuedAt()));
     fields.put("RQ_IDENT_DOC", "Паспорт");
     return fields;
   }
@@ -374,36 +357,6 @@ public class BitrixContactService {
     return Objects.nonNull(dto)
         && Objects.nonNull(dto.getScans())
         && (dto.getScans().length > 0);
-  }
-
-  private boolean isGenderAvailable(Contact contact) {
-    return Objects.nonNull(contact.getGender()) &&
-        !contact.getGender().isEmpty();
-  }
-
-  private String parseBirthdate(String birthdateString) {
-    if (Objects.isNull(birthdateString) || birthdateString.isEmpty()) {
-      return null;
-    }
-    String datePart = birthdateString.split("T")[0];
-    LocalDate localDate = LocalDate.parse(datePart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    return localDate.toString();
-  }
-
-  private String convertToDDMMYYYY(String issuedAt) {
-    return convertTo(issuedAt, "yyyy-MM-dd", "dd.MM.yyyy");
-  }
-
-  private String convertToYYYYMMDD(String issuedAt) {
-    return convertTo(issuedAt, "dd.MM.yyyy", "yyyy-MM-dd");
-  }
-
-  private String convertTo(String date, String patternFrom, String patternTo) {
-    if (Objects.isNull(date) || date.isBlank()) {
-      return null;
-    }
-    LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(patternFrom));
-    return localDate.format(DateTimeFormatter.ofPattern(patternTo));
   }
 
 }
