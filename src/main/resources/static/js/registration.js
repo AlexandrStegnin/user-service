@@ -4,16 +4,18 @@ let submitButton;
 let confirmButton;
 
 jQuery(document).ready(function ($) {
-    confirmModal = $('#confirm-form-modal');
-    registration = $('#registration')
-    submitButton = $('#submit')
-    confirmButton = $('#confirm')
-    // confirmButton.removeClass('disabled')
-    // confirmButton.prop('disabled', false)
+    init()
     onSubmitRegistration()
     onConfirmPhone()
     onEnterKeyPressed()
 })
+
+function init() {
+    confirmModal = $('#confirm-form-modal');
+    registration = $('#registration')
+    submitButton = $('#submit')
+    confirmButton = $('#confirm')
+}
 
 function onSubmitRegistration() {
     registration.on('submit', function (event) {
@@ -33,14 +35,11 @@ function onConfirmPhone() {
         event.preventDefault()
         let confirmCode = $('#confirm-code').val()
         let clientBitrixId = $('#client-id').val()
-        let clientSecret = $('#client-secret').val()
         if (confirmCode.length === 0) {
             console.log("Код не должен быть пустым")
             return false
         }
-        // confirmButton.addClass('disabled')
-        // confirmButton.prop('disabled', true)
-        confirm(confirmCode, clientBitrixId, clientSecret)
+        confirm(confirmCode, clientBitrixId)
     })
 }
 
@@ -60,7 +59,6 @@ function create() {
         }})
         .done(function (data) {
             $('#client-id').val(data.message)
-            $('#client-secret').val(data.additionalInfo)
             confirmModal.modal('show')
         })
         .fail(function (jqXHR) {
@@ -70,11 +68,11 @@ function create() {
             console.log("FINISHED")
         })
 }
-function confirm(confirmCode, clientBitrixId, additionalInfo) {
+function confirm(confirmCode, clientBitrixId) {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
-    let userDTO = getUserDTO(confirmCode, clientBitrixId, additionalInfo)
+    let userDTO = getUserDTO(confirmCode, clientBitrixId)
 
     $.post({
         url: "confirm",
@@ -96,7 +94,7 @@ function confirm(confirmCode, clientBitrixId, additionalInfo) {
         })
 }
 
-function getUserDTO(confirmCode, clientBitrixId, additionalInfo) {
+function getUserDTO(confirmCode, clientBitrixId) {
     return {
         name: $('#name').val(),
         secondName: $('#secondName').val(),
@@ -108,8 +106,7 @@ function getUserDTO(confirmCode, clientBitrixId, additionalInfo) {
         selfEmployed: $('#self-employed').prop('checked'),
         agreementPersonalData: $('#agreement-personal-data').prop('checked'),
         agreementRules: $('#agreement-rules').prop('checked'),
-        bitrixId: clientBitrixId,
-        password: additionalInfo
+        bitrixId: clientBitrixId
     }
 }
 

@@ -50,6 +50,10 @@ public class UserService {
     if (!dto.getConfirmCode().equalsIgnoreCase(contact.getConfirmCode())) {
       throw new RuntimeException("Ошибка. Контакт не подтверждён");
     }
+    AppUser user = appUserService.findByPhone(dto.getPhone());
+    user.setPassword(passwordEncoder.encode(dto.getConfirmCode()));
+    appUserService.update(user);
+    sendConfirmMessage(dto);
     return dto;
   }
 
@@ -60,7 +64,6 @@ public class UserService {
       if (Objects.nonNull(contactId)) {
         dto.setBitrixId(contactId);
         createAppUser(dto);
-        sendConfirmMessage(dto);
         return dto;
       } else {
         throw new RuntimeException("Пользователь не создан");

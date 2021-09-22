@@ -66,4 +66,8 @@ public class AppUserService {
     return null;
   }
 
+  public void update(AppUser user) {
+    appUserRepository.save(user);
+  }
+
 }

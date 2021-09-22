@@ -46,7 +46,7 @@ public class RegistrationController {
   public ApiResponse confirmUser(@RequestBody UserDTO dto) {
     dto = userService.confirm(dto);
     log.info("Пользователь успешно подтверждён {}", dto);
-    userService.authenticateUser(dto.getPhone(), dto.getPassword());
+    userService.authenticateUser(dto.getPhone(), dto.getConfirmCode());
     sendMessageService.sendMessage(dto.getPhone());
     return ApiResponse.builder()
         .message("OK")
@@ -60,7 +60,6 @@ public class RegistrationController {
     log.info("Пользователь успешно зарегистрирован {}", dto);
     return ApiResponse.builder()
         .message(dto.getBitrixId().toString())
-        .additionalInfo(dto.getPassword())
         .build();
   }
 
