@@ -40,12 +40,14 @@ public class Requisite {
   @JsonProperty("RQ_IDENT_DOC_ISSUED_BY")
   String issuedBy;
 
+  @Builder.Default
   @JsonProperty("ENTITY_TYPE_ID")
   String entityTypeId = "3";
 
   @JsonProperty("ENTITY_ID")
   String contactId;
 
+  @Builder.Default
   @JsonProperty("PRESET_ID")
   String presetId = "5";
 

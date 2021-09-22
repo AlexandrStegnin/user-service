@@ -1,20 +1,9 @@
 package com.ddkolesnik.userservice.model.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import javax.persistence.*;
 
 /**
  * @author Aleksandr Stegnin on 13.07.2021
@@ -48,6 +37,7 @@ public class UserProfile {
 
   String email;
 
+  @Builder.Default
   boolean locked = false;
 
 }

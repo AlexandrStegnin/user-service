@@ -51,6 +51,8 @@ public class Contact {
   @JsonProperty("UF_CRM_1625143364")
   String confirmCode;
 
+  String phone;
+
   @JsonCreator
   public Contact(@JsonProperty("ID") Integer id,
                  @JsonProperty("NAME") String name,

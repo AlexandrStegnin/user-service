@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,11 @@ public class AppConfiguration {
     RestTemplate restTemplate = builder.build();
     restTemplate.setUriTemplateHandler(builderFactory);
     return restTemplate;
+  }
+
+  @Bean
+  public ObjectMapper getObjectMapper() {
+    return new ObjectMapper();
   }
 
   private String getBaseUrl() {

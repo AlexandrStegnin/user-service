@@ -1,13 +1,14 @@
 package com.ddkolesnik.userservice.model.bitrix.contact;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 /**
  * @author Aleksandr Stegnin on 05.07.2021
@@ -38,6 +39,11 @@ public class ContactListFilter {
     select.add("CITY");
     select.add("ADDRESS_1");
     select.add("ADDRESS_2");
+  }
+
+  public ContactListFilter(Map<String, String[]> filter) {
+    this();
+    this.filter = filter;
   }
 
 }

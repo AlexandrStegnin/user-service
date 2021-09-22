@@ -9,7 +9,7 @@ import org.mapstruct.ReportingPolicy;
  * @author Alexandr Stegnin
  */
 @MapperConfig(
-    unmappedTargetPolicy = ReportingPolicy.ERROR,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE,
     componentModel = "spring",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
     builder = @Builder(disableBuilder = true)

@@ -17,9 +17,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Address {
 
+  @Builder.Default
   @JsonProperty("TYPE_ID")
   String typeId = "1";
 
+  @Builder.Default
   @JsonProperty("ENTITY_TYPE_ID")
   String entityTypeId = "8";
 

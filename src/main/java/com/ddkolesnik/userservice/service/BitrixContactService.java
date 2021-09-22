@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.enums.Gender;
+import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
+import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.address.*;
 import com.ddkolesnik.userservice.model.bitrix.bp.BPTemplate;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcess;
@@ -12,7 +13,6 @@ import com.ddkolesnik.userservice.model.bitrix.requisite.*;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.utils.ValueType;
-import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +20,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -42,141 +40,19 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @PropertySource(value = "classpath:application.properties")
 public class BitrixContactService {
 
-  @Value("${bitrix.crm.duplicate.findbycomm}")
-  String BITRIX_CRM_DUPLICATE_FIND_BY_COMM;
-
-  @Value("${bitrix.crm.contact.list}")
-  String BITRIX_CRM_CONTACT_LIST;
-
-  @Value("${bitrix.crm.contact.update}")
-  String BITRIX_CRM_CONTACT_UPDATE;
-
-  @Value("${bitrix.crm.contact.add}")
-  String BITRIX_CRM_CONTACT_ADD;
-
-  @Value("${bitrix.crm.contact.delete}")
-  String BITRIX_CRM_CONTACT_DELETE;
-
-  @Value("${bitrix.crm.contact.get}")
-  String BITRIX_CRM_CONTACT_GET;
-
-  @Value("${bitrix.crm.requisite.list}")
-  String BITRIX_CRM_REQUISITE_LIST;
-
-  @Value("${bitrix.crm.requisite.update}")
-  String BITRIX_CRM_REQUISITE_UPDATE;
-
-  @Value("${bitrix.crm.requisite.add}")
-  String BITRIX_CRM_REQUISITE_ADD;
-
-  @Value("${bitrix.crm.address.list}")
-  String BITRIX_CRM_ADDRESS_LIST;
-
-  @Value("${bitrix.crm.address.update}")
-  String BITRIX_CRM_ADDRESS_UPDATE;
-
-  @Value("${bitrix.crm.address.add}")
-  String BITRIX_CRM_ADDRESS_ADD;
-
-  @Value("${bitrix.business.process.start}")
-  String BITRIX_CRM_BUSINESS_PROCESS_START;
-
-  final RestTemplate restTemplate;
-
-  final HttpEntity<DuplicateFilter> httpEntity;
-
-  final DuplicateFilter duplicateFilter;
-
-  final ContactListFilter contactListFilter;
-
-  final HttpEntity<ContactListFilter> contactListEntity;
-
-  final HttpEntity<ContactUpdate> updateContactHttpEntity;
-
-  final ContactUpdate contactUpdate;
-
-  final ContactCreate contactCreate;
-
-  final HttpEntity<ContactCreate> createContactHttpEntity;
-
-  final ContactDelete contactDelete;
-
-  final HttpEntity<ContactDelete> deleteContactHttpEntity;
-
-  final RequisiteFilter requisiteFilter;
-
-  final HttpEntity<RequisiteFilter> requisiteHttpEntity;
-
-  final RequisiteUpdate requisiteUpdate;
-
-  final HttpEntity<RequisiteUpdate> requisiteUpdateHttpEntity;
-
-  final RequisiteCreate requisiteCreate;
-
-  final HttpEntity<RequisiteCreate> requisiteCreateHttpEntity;
-
-  final AddressFilter addressFilter;
-
-  final HttpEntity<AddressFilter> addressFilterHttpEntity;
-
-  final AddressCreate addressCreate;
-
-  final HttpEntity<AddressCreate> addressCreateHttpEntity;
-
-  final AddressUpdate addressUpdate;
-
-  final HttpEntity<AddressUpdate> addressUpdateHttpEntity;
-
-  final ContactGet contactGet;
-
-  final HttpEntity<ContactGet> contactGetHttpEntity;
-
-  final BusinessProcess businessProcess;
-
-  final HttpEntity<BusinessProcess> businessProcessHttpEntity;
-
-  final ObjectMapper objectMapper;
-
-  @Autowired
-  public BitrixContactService(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
-    this.duplicateFilter = new DuplicateFilter();
-    this.contactListFilter = new ContactListFilter();
-    this.contactUpdate = new ContactUpdate();
-    this.contactCreate = new ContactCreate();
-    this.contactDelete = new ContactDelete();
-    this.requisiteFilter = new RequisiteFilter();
-    this.requisiteUpdate = new RequisiteUpdate();
-    this.requisiteCreate = new RequisiteCreate();
-    this.addressFilter = new AddressFilter();
-    this.addressCreate = new AddressCreate();
-    this.addressUpdate = new AddressUpdate();
-    this.contactGet = new ContactGet();
-    this.businessProcess = new BusinessProcess();
-    this.httpEntity = new HttpEntity<>(duplicateFilter);
-    this.contactListEntity = new HttpEntity<>(contactListFilter);
-    this.updateContactHttpEntity = new HttpEntity<>(contactUpdate);
-    this.createContactHttpEntity = new HttpEntity<>(contactCreate);
-    this.deleteContactHttpEntity = new HttpEntity<>(contactDelete);
-    this.requisiteHttpEntity = new HttpEntity<>(requisiteFilter);
-    this.requisiteUpdateHttpEntity = new HttpEntity<>(requisiteUpdate);
-    this.requisiteCreateHttpEntity = new HttpEntity<>(requisiteCreate);
-    this.addressFilterHttpEntity = new HttpEntity<>(addressFilter);
-    this.addressCreateHttpEntity = new HttpEntity<>(addressCreate);
-    this.addressUpdateHttpEntity = new HttpEntity<>(addressUpdate);
-    this.contactGetHttpEntity = new HttpEntity<>(contactGet);
-    this.businessProcessHttpEntity = new HttpEntity<>(businessProcess);
-    this.objectMapper = new ObjectMapper();
-  }
+  BitrixProperty bitrixProperty;
+  RestTemplate restTemplate;
+  ObjectMapper objectMapper;
+  UserMapper userMapper;
 
   public DuplicateResult findDuplicates(UserDTO userDTO) {
-    duplicateFilter.setValues(Collections.singletonList(userDTO.getPhone()));
-    ResponseEntity<DuplicateResult> bitrixResult = restTemplate.exchange(BITRIX_CRM_DUPLICATE_FIND_BY_COMM,
-        HttpMethod.POST, httpEntity, DuplicateResult.class);
+    DuplicateFilter duplicateFilter = new DuplicateFilter(userDTO.getPhone());
+    ResponseEntity<DuplicateResult> bitrixResult = restTemplate.exchange(bitrixProperty.getDuplicateFindByComm(),
+        HttpMethod.POST, new HttpEntity<>(duplicateFilter), DuplicateResult.class);
     DuplicateResult duplicate = bitrixResult.getBody();
     log.info("Результат поиска дубликатов {}", duplicate);
     return duplicate;
@@ -189,34 +65,39 @@ public class BitrixContactService {
   public Contact findFirstContact(String phone) {
     Map<String, String[]> filter = new HashMap<>();
     filter.put("PHONE", Collections.singleton(phone).toArray(new String[0]));
-    contactListFilter.setFilter(filter);
-    ResponseEntity<ContactList> contactList = restTemplate.exchange(BITRIX_CRM_CONTACT_LIST,
-        HttpMethod.POST, contactListEntity, ContactList.class);
+    ContactListFilter contactListFilter = new ContactListFilter(filter);
+    ResponseEntity<ContactList> contactList = restTemplate.exchange(bitrixProperty.getContactList(),
+        HttpMethod.POST, new HttpEntity<>(contactListFilter), ContactList.class);
     ContactList contacts = contactList.getBody();
     log.info("Результат поиска списка контактов по телефону {}", contacts);
     if (Objects.nonNull(contacts)) {
-      return contacts.getResult()
+      Contact contact = contacts.getResult()
           .stream().min(Comparator.comparing(Contact::getId))
           .orElse(null);
+      if (Objects.nonNull(contact)) {
+        contact.setPhone(phone);
+      }
+      return contact;
     }
     return null;
   }
 
   public void updateContact(UserDTO userDTO) {
     ContactUpdate contact = convertToUpdateContact(userDTO);
-    this.contactUpdate.setId(contact.getId());
-    this.contactUpdate.setFields(contact.getFields());
-    ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_CONTACT_UPDATE,
-        HttpMethod.POST, updateContactHttpEntity, Object.class);
+    ContactUpdate contactUpdate = new ContactUpdate(contact.getId(), contact.getFields());
+    ResponseEntity<Object> update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
+        HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
     Object updated = update.getBody();
     log.info("Результат обновления контакта {}", updated);
   }
 
   public Contact getById(String id) {
-    this.contactGet.setId(id);
+    ContactGet contactGet = ContactGet.builder()
+        .id(id)
+        .build();
     Contact contact = null;
-    ResponseEntity<Object> contactResponseEntity = restTemplate.exchange(BITRIX_CRM_CONTACT_GET,
-        HttpMethod.POST, contactGetHttpEntity, Object.class);
+    ResponseEntity<Object> contactResponseEntity = restTemplate.exchange(bitrixProperty.getContactGet(),
+        HttpMethod.POST, new HttpEntity<>(contactGet), Object.class);
     Object contactObject = contactResponseEntity.getBody();
     if (contactObject instanceof LinkedHashMap) {
       Object result = ((LinkedHashMap<?, ?>) contactObject).get("result");
@@ -228,18 +109,18 @@ public class BitrixContactService {
 
   public Object createContact(UserDTO userDTO) {
     ContactCreate contact = convertToCreateContact(userDTO);
-    this.contactCreate.setFields(contact.getFields());
-    ResponseEntity<Object> create = restTemplate.exchange(BITRIX_CRM_CONTACT_ADD,
-        HttpMethod.POST, createContactHttpEntity, Object.class);
+    ContactCreate contactCreate = new ContactCreate(contact.getFields());
+    ResponseEntity<Object> create = restTemplate.exchange(bitrixProperty.getContactAdd(),
+        HttpMethod.POST, new HttpEntity<>(contactCreate), Object.class);
     Object created = create.getBody();
     log.info("Результат создания контакта {}", created);
     return created;
   }
 
   public Object deleteContact(UserDTO userDTO) {
-    this.contactDelete.setId(userDTO.getId());
-    ResponseEntity<Object> delete = restTemplate.exchange(BITRIX_CRM_CONTACT_DELETE,
-        HttpMethod.POST, deleteContactHttpEntity, Object.class);
+    ContactDelete contactDelete = new ContactDelete(userDTO.getBitrixId());
+    ResponseEntity<Object> delete = restTemplate.exchange(bitrixProperty.getContactDelete(),
+        HttpMethod.POST, new HttpEntity<>(contactDelete), Object.class);
     Object deleted = delete.getBody();
     log.info("Результат удаления контакта {}", delete);
     return deleted;
@@ -249,9 +130,10 @@ public class BitrixContactService {
     LinkedHashMap<String, String> filter = new LinkedHashMap<>();
     filter.put("ENTITY_TYPE_ID", "3");
     filter.put("ENTITY_ID", entityId);
-    this.requisiteFilter.setFilter(filter);
-    ResponseEntity<RequisiteResult> requisite = restTemplate.exchange(BITRIX_CRM_REQUISITE_LIST,
-        HttpMethod.POST, requisiteHttpEntity, RequisiteResult.class);
+
+    RequisiteFilter requisiteFilter = new RequisiteFilter(filter);
+    ResponseEntity<RequisiteResult> requisite = restTemplate.exchange(bitrixProperty.getRequisiteList(),
+        HttpMethod.POST, new HttpEntity<>(requisiteFilter), RequisiteResult.class);
     log.info("Результат поиска реквизита {}", requisite);
     RequisiteResult response = requisite.getBody();
     if (Objects.isNull(response) || response.getTotal() == 0) {
@@ -272,9 +154,8 @@ public class BitrixContactService {
     RequisiteCreate requisiteCreate = RequisiteCreate.builder()
         .fields(prepareRequisiteFields(dto))
         .build();
-    this.requisiteCreate.setFields(requisiteCreate.getFields());
-    ResponseEntity<Object> create = restTemplate.exchange(BITRIX_CRM_REQUISITE_ADD,
-        HttpMethod.POST, requisiteCreateHttpEntity, Object.class);
+    ResponseEntity<Object> create = restTemplate.exchange(bitrixProperty.getRequisiteAdd(),
+        HttpMethod.POST, new HttpEntity<>(requisiteCreate), Object.class);
     Object created = create.getBody();
     log.info("Результат создания реквизита {}", created);
   }
@@ -284,10 +165,8 @@ public class BitrixContactService {
         .id(Integer.parseInt(requisite.getId()))
         .fields(prepareRequisiteFields(dto))
         .build();
-    this.requisiteUpdate.setId(requisiteUpdate.getId());
-    this.requisiteUpdate.setFields(requisiteUpdate.getFields());
-    ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_REQUISITE_UPDATE,
-        HttpMethod.POST, requisiteUpdateHttpEntity, Object.class);
+    ResponseEntity<Object> update = restTemplate.exchange(bitrixProperty.getRequisiteUpdate(),
+        HttpMethod.POST, new HttpEntity<>(requisiteUpdate), Object.class);
     Object updated = update.getBody();
     log.info("Результат обновления реквизита {}", updated);
   }
@@ -297,9 +176,10 @@ public class BitrixContactService {
     filter.put("ENTITY_TYPE_ID", "8");
     filter.put("TYPE_ID", "1");
     filter.put("ENTITY_ID", requisite.getId());
-    this.addressFilter.setFilter(filter);
-    ResponseEntity<AddressResult> address = restTemplate.exchange(BITRIX_CRM_ADDRESS_LIST,
-        HttpMethod.POST, addressFilterHttpEntity, AddressResult.class);
+
+    AddressFilter addressFilter = new AddressFilter(filter);
+    ResponseEntity<AddressResult> address = restTemplate.exchange(bitrixProperty.getAddressList(),
+        HttpMethod.POST, new HttpEntity<>(addressFilter), AddressResult.class);
     log.info("Результат поиска адресов {}", address);
     AddressResult response = address.getBody();
     if (Objects.isNull(response) || response.getTotal() == 0) {
@@ -316,9 +196,8 @@ public class BitrixContactService {
     AddressCreate addressCreate = AddressCreate.builder()
         .fields(prepareAddressFields(dto))
         .build();
-    this.addressCreate.setFields(addressCreate.getFields());
-    ResponseEntity<Object> create = restTemplate.exchange(BITRIX_CRM_ADDRESS_ADD,
-        HttpMethod.POST, addressCreateHttpEntity, Object.class);
+    ResponseEntity<Object> create = restTemplate.exchange(bitrixProperty.getAddressAdd(),
+        HttpMethod.POST, new HttpEntity<>(addressCreate), Object.class);
     Object created = create.getBody();
     log.info("Результат создания адреса {}", created);
   }
@@ -327,72 +206,43 @@ public class BitrixContactService {
     AddressUpdate addressUpdate = AddressUpdate.builder()
         .fields(prepareAddressFields(dto))
         .build();
-    this.addressUpdate.setFields(addressUpdate.getFields());
-    ResponseEntity<Object> update = restTemplate.exchange(BITRIX_CRM_ADDRESS_UPDATE,
-        HttpMethod.POST, addressUpdateHttpEntity, Object.class);
+    ResponseEntity<Object> update = restTemplate.exchange(bitrixProperty.getAddressUpdate(),
+        HttpMethod.POST, new HttpEntity<>(addressUpdate), Object.class);
     Object updated = update.getBody();
     log.info("Результат обновления адреса {}", updated);
   }
 
   public void sendConfirmMessage(UserDTO dto) {
-    this.businessProcess.setTemplateId(BPTemplate.CONFIRM_PHONE.getId());
-    this.businessProcess.getDocumentId().add("CONTACT_".concat(dto.getBitrixId().toString()));
-    ResponseEntity<Object> start = restTemplate.exchange(BITRIX_CRM_BUSINESS_PROCESS_START,
-        HttpMethod.POST, businessProcessHttpEntity, Object.class);
+    BusinessProcess businessProcess = BusinessProcess.builder()
+        .templateId(BPTemplate.CONFIRM_PHONE.getId())
+        .build();
+    businessProcess.addDocumentId("CONTACT_".concat(dto.getBitrixId().toString()));
+    ResponseEntity<Object> start = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
+        HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
     Object started = start.getBody();
     log.info("Результат отправки смс для подтверждения {}", started);
   }
 
   public void sendRestoreMessage(UserDTO dto) {
-    this.businessProcess.setTemplateId(BPTemplate.CONFIRM_PHONE.getId());
-    this.businessProcess.getDocumentId().add("CONTACT_".concat(dto.getBitrixId().toString()));
-    ResponseEntity<Object> restore = restTemplate.exchange(BITRIX_CRM_BUSINESS_PROCESS_START,
-        HttpMethod.POST, businessProcessHttpEntity, Object.class);
+    BusinessProcess businessProcess = BusinessProcess.builder()
+        .templateId(BPTemplate.CONFIRM_PHONE.getId())
+        .build();
+    businessProcess.addDocumentId("CONTACT_".concat(dto.getBitrixId().toString()));
+    ResponseEntity<Object> restore = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
+        HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
     Object restored = restore.getBody();
     log.info("Результат отправки смс для восстановления пароля {}", restored);
   }
 
   public UserDTO getBitrixContact(String phone) {
-
     Contact contact = findFirstContact(phone);
     if (Objects.nonNull(contact)) {
-      UserDTO dto = new UserDTO();
-      dto.setId(contact.getId());
-      dto.setPhone(phone);
-      if (!contact.getEmails().isEmpty()) {
-        contact.getEmails().stream().findAny().ifPresent(email -> dto.setEmail(email.getValue()));
-      }
-      dto.setName(contact.getName());
-      dto.setSecondName(contact.getSecondName());
-      dto.setLastName(contact.getLastName());
-      dto.setBirthdate(parseBirthdate(contact.getBirthdate()));
-      dto.setPlaceOfBirth(contact.getPlaceOfBirth());
-      contact = getById(contact.getId().toString());
-      if (isGenderAvailable(contact)) {
-        dto.setGender(Gender.fromId(Integer.parseInt(contact.getGender())));
-      }
-
+      UserDTO dto = userMapper.toDTO(contact);
       Requisite requisite = findRequisite(contact.getId().toString());
+      userMapper.updatePassport(requisite, dto);
       if (Objects.nonNull(requisite)) {
-        dto.setInn(requisite.getInn());
-        dto.setSnils(requisite.getSnils());
-        PassportDTO passportDTO = PassportDTO.builder()
-            .serial(requisite.getSerial())
-            .issuedBy(requisite.getIssuedBy())
-            .departmentCode(requisite.getDepartmentCode())
-            .number(requisite.getNumber())
-            .issuedAt(convertToYYYYMMDD(requisite.getIssuedAt()))
-            .build();
-        dto.setPassport(passportDTO);
         Address address = findAddress(requisite);
-        if (Objects.nonNull(address)) {
-          AddressDTO addressDTO = AddressDTO.builder()
-              .city(address.getCity())
-              .streetAndHouse(address.getAddress1())
-              .office(address.getAddress2())
-              .build();
-          dto.setAddress(addressDTO);
-        }
+        userMapper.updateAddress(address, dto);
       }
       return dto;
     }
@@ -527,7 +377,7 @@ public class BitrixContactService {
   }
 
   private boolean isGenderAvailable(Contact contact) {
-    return Objects.nonNull(contact) && Objects.nonNull(contact.getGender()) &&
+    return Objects.nonNull(contact.getGender()) &&
         !contact.getGender().isEmpty();
   }
 
