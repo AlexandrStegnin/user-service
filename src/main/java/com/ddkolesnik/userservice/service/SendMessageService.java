@@ -38,7 +38,7 @@ public class SendMessageService {
       return;
     }
     WebClient webClient = WebClient.create(MAIL_APP_BASE_URL);
-    AppUser user = appUserService.findByLogin(login);
+    AppUser user = appUserService.findByPhone(login);
     if (user.getProfile().getEmail() == null) {
       return;
     }

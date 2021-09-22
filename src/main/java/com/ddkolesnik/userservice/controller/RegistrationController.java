@@ -43,7 +43,7 @@ public class RegistrationController {
 
   @ResponseBody
   @PostMapping(path = Location.CONFIRM_URL, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ApiResponse updateUser(@RequestBody UserDTO dto) {
+  public ApiResponse confirmUser(@RequestBody UserDTO dto) {
     dto = userService.confirm(dto);
     log.info("Пользователь успешно подтверждён {}", dto);
     userService.authenticateUser(dto.getPhone(), dto.getPassword());

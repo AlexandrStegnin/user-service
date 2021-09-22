@@ -165,7 +165,7 @@ public class UserService {
   }
 
   private UserDTO findUserByPhone(UserDTO dto) {
-    AppUser user = appUserService.findByLogin(dto.getPhone());
+    AppUser user = appUserService.findByPhone(dto.getPhone());
     return userMapper.toDTO(user);
   }
 

@@ -32,7 +32,7 @@ public class AppUserService {
   AccountService accountService;
   UserMapper userMapper;
 
-  public AppUser findByLogin(String login) {
+  public AppUser findByPhone(String login) {
     return appUserRepository.findByPhone(login)
         .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
   }
@@ -46,7 +46,7 @@ public class AppUserService {
   }
 
   public void updatePassword(UserDTO dto) {
-    AppUser user = findByLogin(dto.getPhone());
+    AppUser user = findByPhone(dto.getPhone());
     user.setPassword(dto.getPassword());
     appUserRepository.save(user);
   }
