@@ -39,6 +39,7 @@ public abstract class UserMapper {
   @Mapping(target = "bitrixId", source = "id")
   @Mapping(target = "email", expression = "java(extractEmail(contact))")
   @Mapping(target = "gender", expression = "java(extractGender(contact))")
+  @Mapping(target = "birthdate", expression = "java(extractBirthdate(contact))")
   public abstract UserDTO toDTO(Contact contact);
 
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
@@ -46,6 +47,10 @@ public abstract class UserMapper {
 
   @Mapping(target = "address", expression = "java(extractAddress(address))")
   public abstract void updateAddress(Address address, @MappingTarget UserDTO dto);
+
+  protected String extractBirthdate(Contact contact) {
+    return contact.getBirthdate().split("T")[0];
+  }
 
   protected Long getInvestorRole() {
     return AppRole.INVESTOR.getId();
