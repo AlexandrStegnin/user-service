@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.configuration;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -42,7 +43,9 @@ public class AppConfiguration {
 
   @Bean
   public ObjectMapper getObjectMapper() {
-    return new ObjectMapper();
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+    return mapper;
   }
 
   private String getBaseUrl() {

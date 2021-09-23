@@ -1,13 +1,11 @@
 package com.ddkolesnik.userservice.service;
 
-import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.domain.AppUser;
-import com.ddkolesnik.userservice.model.domain.UserProfile;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +49,6 @@ public class UserService {
       throw new RuntimeException("Ошибка. Контакт не подтверждён");
     }
     appUserService.updatePassword(dto.getPhone(), dto.getConfirmCode());
-    sendConfirmMessage(dto);
     return dto;
   }
 
@@ -59,34 +56,22 @@ public class UserService {
     DuplicateResult duplicate = bitrixContactService.findDuplicates(dto);
     if (responseEmpty(duplicate.getResult())) {
       Integer contactId = createContact(dto);
-      if (Objects.nonNull(contactId)) {
-        dto.setBitrixId(contactId);
-        createAppUser(dto);
-        return dto;
-      } else {
+      if (Objects.isNull(contactId)) {
         throw new RuntimeException("Пользователь не создан");
       }
+      dto.setBitrixId(contactId);
+      createAppUser(dto);
     } else {
       updateContact(dto);
-      sendConfirmMessage(dto);
-      return dto;
     }
+    sendConfirmMessage(dto);
+    return dto;
   }
 
   private void createAppUser(UserDTO dto) {
-    UserProfile profile = UserProfile.builder()
-        .email(dto.getEmail())
-        .build();
     generatePassword(dto);
-    AppUser appUser = AppUser.builder()
-        .phone(dto.getPhone())
-        .login(dto.getPhone())
-        .password(passwordEncoder.encode(dto.getPassword()))
-        .roleId(AppRole.INVESTOR.getId())
-        .profile(profile)
-        .bitrixId(dto.getBitrixId())
-        .build();
-    profile.setUser(appUser);
+    AppUser appUser = userMapper.toEntity(dto);
+    userMapper.updateProfile(dto, appUser);
     appUserService.create(appUser);
   }
 

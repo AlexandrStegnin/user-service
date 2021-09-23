@@ -1,12 +1,14 @@
 package com.ddkolesnik.userservice.mapper;
 
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
+import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.enums.Gender;
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.domain.AppUser;
+import com.ddkolesnik.userservice.model.domain.UserProfile;
 import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
@@ -25,6 +27,13 @@ import java.util.Objects;
 @Mapper(config = MapStructConfig.class)
 public abstract class UserMapper {
 
+  @Mapping(target = "login", source = "phone")
+  @Mapping(target = "roleId", expression = "java(getInvestorRole())")
+  public abstract AppUser toEntity(UserDTO dto);
+
+  @Mapping(target = "profile", expression = "java(getProfile(dto, user))")
+  public abstract void updateProfile(UserDTO dto, @MappingTarget AppUser user);
+
   public abstract UserDTO toDTO(AppUser user);
 
   @Mapping(target = "bitrixId", source = "id")
@@ -37,6 +46,18 @@ public abstract class UserMapper {
 
   @Mapping(target = "address", expression = "java(extractAddress(address))")
   public abstract void updateAddress(Address address, @MappingTarget UserDTO dto);
+
+  protected Long getInvestorRole() {
+    return AppRole.INVESTOR.getId();
+  }
+
+  protected UserProfile getProfile(UserDTO dto, AppUser user) {
+    UserProfile profile = UserProfile.builder()
+        .email(dto.getEmail())
+        .build();
+    profile.setUser(user);
+    return profile;
+  }
 
   protected String extractEmail(Contact contact) {
     return contact.getEmails().stream()
