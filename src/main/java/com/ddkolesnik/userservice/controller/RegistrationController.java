@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.controller;
 
 import com.ddkolesnik.userservice.configuration.Location;
+import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
 import com.ddkolesnik.userservice.service.SendMessageService;
@@ -60,6 +61,16 @@ public class RegistrationController {
     log.info("Пользователь успешно зарегистрирован {}", dto);
     return ApiResponse.builder()
         .message(dto.getBitrixId().toString())
+        .build();
+  }
+
+  @ResponseBody
+  @PostMapping(path = Location.CHANGE_PASSWORD)
+  public ApiResponse changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+    userService.changePassword(changePasswordDTO);
+    return ApiResponse.builder()
+        .status(HttpStatus.OK)
+        .message("Пароль успешно изменён")
         .build();
   }
 

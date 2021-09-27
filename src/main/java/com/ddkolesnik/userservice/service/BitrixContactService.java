@@ -1,9 +1,8 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
-import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.address.*;
-import com.ddkolesnik.userservice.model.bitrix.bp.BPTemplate;
+import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcessTemplate;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcess;
 import com.ddkolesnik.userservice.model.bitrix.contact.*;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateFilter;
@@ -83,6 +82,19 @@ public class BitrixContactService {
   public void updateContact(UserDTO userDTO) {
     ContactUpdate contact = convertToUpdateContact(userDTO);
     ContactUpdate contactUpdate = new ContactUpdate(contact.getId(), contact.getFields());
+    ResponseEntity<Object> update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
+        HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
+    Object updated = update.getBody();
+    log.info("Результат обновления контакта {}", updated);
+  }
+
+  public void clearContactPassword(UserDTO dto) {
+    Map<String, Object> fields = new HashMap<>();
+    fields.put("UF_CRM_1632722824", null);
+    ContactUpdate contactUpdate = ContactUpdate.builder()
+        .id(dto.getBitrixId())
+        .fields(fields)
+        .build();
     ResponseEntity<Object> update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
         HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
     Object updated = update.getBody();
@@ -212,7 +224,7 @@ public class BitrixContactService {
 
   public void sendConfirmMessage(UserDTO dto) {
     BusinessProcess businessProcess = BusinessProcess.builder()
-        .templateId(BPTemplate.CONFIRM_PHONE.getId())
+        .templateId(BusinessProcessTemplate.CONFIRM_PHONE.getId())
         .build();
     businessProcess.addDocumentId("CONTACT_".concat(dto.getBitrixId().toString()));
     ResponseEntity<Object> start = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
@@ -223,7 +235,7 @@ public class BitrixContactService {
 
   public void sendRestoreMessage(UserDTO dto) {
     BusinessProcess businessProcess = BusinessProcess.builder()
-        .templateId(BPTemplate.CONFIRM_PHONE.getId())
+        .templateId(BusinessProcessTemplate.CHANGE_PASSWORD.getId())
         .build();
     businessProcess.addDocumentId("CONTACT_".concat(dto.getBitrixId().toString()));
     ResponseEntity<Object> restore = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),

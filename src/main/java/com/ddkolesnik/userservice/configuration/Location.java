@@ -19,4 +19,6 @@ public class Location {
 
   public static final String RESTORE_PASSWORD = "restore-password";
 
+  public static final String CHANGE_PASSWORD = "change-password";
+
 }

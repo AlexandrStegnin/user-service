@@ -6,6 +6,7 @@ import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.domain.AppUser;
+import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -143,11 +144,12 @@ public class UserService {
     dto = findUserByPhone(dto);
     bitrixContactService.sendRestoreMessage(dto);
     Contact contact = bitrixContactService.findFirstContact(dto);
-    if (Objects.isNull(contact.getConfirmCode()) || contact.getConfirmCode().isBlank()) {
+    if (Objects.isNull(contact.getRawPassword()) || contact.getRawPassword().isBlank()) {
       throw new RuntimeException("Не удалось обновить контакт. Код из Б24 не получен");
     }
-    dto.setPassword(passwordEncoder.encode(contact.getConfirmCode()));
+    dto.setPassword(passwordEncoder.encode(contact.getRawPassword()));
     appUserService.updatePassword(dto);
+    bitrixContactService.clearContactPassword(dto);
   }
 
   private UserDTO findUserByPhone(UserDTO dto) {
@@ -157,5 +159,14 @@ public class UserService {
 
   private void generatePassword(UserDTO dto) {
     dto.setPassword(UUID.randomUUID().toString().substring(0, 8));
+  }
+
+  public void changePassword(ChangePasswordDTO changePasswordDTO) {
+    AppUser user = appUserService.findByPhone(changePasswordDTO.getPhone());
+    if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
+      throw new RuntimeException("Имя пользователя или пароль указан не верно");
+    }
+    user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+    appUserService.update(user);
   }
 }

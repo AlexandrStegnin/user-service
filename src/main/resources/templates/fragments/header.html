@@ -18,7 +18,7 @@
                 <li class="nav-item mr-2">
                     <a id="profile" th:href="@{/profile}" class="nav-link" style="color: #0D345D;">
                         <span class="fas fa-lock" style="color: #0D345D;"></span>
-                        Личный кабинет / <b th:text="${login}"></b>
+                        Личный кабинет / <b id="phone" th:text="${login}"></b>
                     </a>
                 </li>
             </ul>
@@ -37,6 +37,14 @@
                     <a id="home" th:href="@{/profile}" class="nav-link" style="color: #0D345D;">
                         <span class="fas fa-home" style="color: #0D345D;"></span>
                         На главную
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="nav-item mr-2">
+                    <a id="change-password" th:href="@{/#}" class="nav-link" style="color: #0D345D;">
+                        <span class="fas fa-key" style="color: #0D345D;"></span>
+                        Сменить пароль
                     </a>
                 </li>
             </ul>
