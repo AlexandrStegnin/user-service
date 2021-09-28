@@ -10,6 +10,7 @@ jQuery(document).ready(function ($) {
     init()
     onChangePasswordClick()
     onChangeFormSubmit()
+    onShowPasswordClick()
 })
 
 function init() {
@@ -102,4 +103,32 @@ function showMessage(message) {
     let divMessage = messageForm.find('#message')
     divMessage.text(message)
     messageForm.modal('show')
+}
+
+function onShowPasswordClick() {
+    $('#old-password-show').on('click', function (event) {
+        event.preventDefault()
+        togglePasswordVisible('#old-password')
+    })
+    $('#new-password-show').on('click', function (event) {
+        event.preventDefault()
+        togglePasswordVisible('#new-password')
+    })
+    $('#confirm-password-show').on('click', function (event) {
+        event.preventDefault()
+        togglePasswordVisible('#confirm-password')
+    })
+}
+
+function togglePasswordVisible(inputId) {
+    let eyeClass = 'fas fa-eye'
+    let eyeSlashClass = 'fas fa-eye-slash'
+    let inputType = $(inputId).attr('type')
+    console.log(inputType)
+    let type = inputType === 'password' ? 'text' : 'password'
+    let spanClass = type === 'password' ? eyeClass : eyeSlashClass
+    $(inputId).attr('type', type)
+    $(inputId + '-span').removeClass(eyeClass)
+    $(inputId + '-span').removeClass(eyeSlashClass)
+    $(inputId + '-span').addClass(spanClass)
 }
