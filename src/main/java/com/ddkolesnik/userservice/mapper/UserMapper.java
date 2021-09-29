@@ -7,6 +7,7 @@ import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
+import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.UserProfile;
 import com.ddkolesnik.userservice.model.dto.AddressDTO;
@@ -40,6 +41,7 @@ public abstract class UserMapper {
   @Mapping(target = "email", expression = "java(extractEmail(contact))")
   @Mapping(target = "gender", expression = "java(extractGender(contact))")
   @Mapping(target = "birthdate", expression = "java(extractBirthdate(contact))")
+  @Mapping(target = "phone", expression = "java(extractPhone(contact))")
   public abstract UserDTO toDTO(Contact contact);
 
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
@@ -94,6 +96,13 @@ public abstract class UserMapper {
         .streetAndHouse(address.getAddress1())
         .office(address.getAddress2())
         .build();
+  }
+
+  protected String extractPhone(Contact contact) {
+    return contact.getPhones().stream()
+        .findAny()
+        .map(Phone::getValue)
+        .orElse(null);
   }
 
 }

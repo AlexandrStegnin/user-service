@@ -69,16 +69,6 @@ public class UserService {
     appUserService.create(appUser);
   }
 
-  private void updateContactPhone(UserDTO dto) {
-    Contact contact = bitrixContactService.findFirstContact(dto);
-    if (Objects.isNull(contact)) {
-      throw new RuntimeException(String.format("Произошла ошибка. Контакт не найден %s", dto));
-    }
-    dto.setId(contact.getId());
-    dto.setBitrixId(contact.getId());
-    bitrixContactService.updateContact(dto);
-  }
-
   public void updateAdditionalFields(UserDTO dto) {
     Contact contact = bitrixContactService.findFirstContact(dto);
     if (Objects.isNull(contact)) {
@@ -161,15 +151,18 @@ public class UserService {
     bitrixContactService.sendConfirmNewPhoneMessage(userDTO);
   }
 
-  public void changePhone(ChangePhoneDTO dto) {
-    UserDTO userDTO = getUserDTO(dto.getOldPhone());
+  public void changePhone(ChangePhoneDTO changePhoneDTO) {
+    UserDTO userDTO = getUserDTO(changePhoneDTO.getOldPhone());
+    Integer id = userDTO.getId();
     Contact contact = bitrixContactService.findFirstContact(userDTO);
-    checkConfirmCode(contact, dto);
+    checkConfirmCode(contact, changePhoneDTO);
     bitrixContactService.updateContact(userDTO);
     AppUser user = userMapper.toEntity(userDTO);
-    user.setLogin(dto.getNewPhone());
-    user.setPhone(dto.getNewPhone());
+    user.setId(Long.valueOf(id));
+    user.setLogin(changePhoneDTO.getNewPhone());
+    user.setPhone(changePhoneDTO.getNewPhone());
     appUserService.update(user);
+    bitrixContactService.updateContactPhone(contact, changePhoneDTO, userDTO);
   }
 
   private UserDTO getUserDTO(String phone) {

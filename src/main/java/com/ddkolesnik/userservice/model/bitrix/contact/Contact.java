@@ -2,6 +2,7 @@ package com.ddkolesnik.userservice.model.bitrix.contact;
 
 import com.ddkolesnik.userservice.model.bitrix.file.Scan;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
+import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,7 +55,8 @@ public class Contact {
   @JsonProperty("UF_CRM_1632722824")
   String rawPassword;
 
-  String phone;
+  @JsonProperty("PHONE")
+  List<Phone> phones;
 
   @JsonCreator
   public Contact(@JsonProperty("ID") Integer id,

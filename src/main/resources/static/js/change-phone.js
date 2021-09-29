@@ -39,6 +39,10 @@ function onChangePhoneFormSubmit() {
             showMessage('ВВЕДИТЕ НОВЫЙ ТЕЛЕФОН')
             return false
         }
+        if (oldPhone === newPhone) {
+            showMessage('ВВЕДИТЕ РАЗНЫЕ НОМЕРА ТЕЛЕФОНОВ')
+            return false
+        }
         changePhoneForm.modal('hide')
         let isOld = confirmForm.find('#is-old').val()
         sendConfirmPhoneMessage(oldPhone, newPhone, isOld)

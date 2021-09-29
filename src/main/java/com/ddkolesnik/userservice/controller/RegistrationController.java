@@ -121,7 +121,7 @@ public class RegistrationController {
     userService.changePhone(dto);
     return ApiResponse.builder()
         .status(HttpStatus.OK)
-        .message("Телефон успешно изменён")
+        .message("Необходимо войти используя новый номер телефона.")
         .build();
   }
 

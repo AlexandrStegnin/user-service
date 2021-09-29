@@ -19,6 +19,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Phone {
 
+  @JsonProperty("ID")
+  String id;
+
   @JsonProperty("VALUE_TYPE")
   String valueType;
 
@@ -26,8 +29,10 @@ public class Phone {
   String value;
 
   @JsonCreator
-  public Phone(@JsonProperty("VALUE_TYPE") String valueType,
+  public Phone(@JsonProperty("ID") String id,
+               @JsonProperty("VALUE_TYPE") String valueType,
                @JsonProperty("VALUE") String value) {
+    this.id = id;
     this.valueType = valueType;
     this.value = value;
   }

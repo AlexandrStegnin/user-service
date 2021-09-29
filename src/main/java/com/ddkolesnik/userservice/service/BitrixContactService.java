@@ -2,8 +2,8 @@ package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
 import com.ddkolesnik.userservice.model.bitrix.address.*;
-import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcessTemplate;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcess;
+import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcessTemplate;
 import com.ddkolesnik.userservice.model.bitrix.contact.*;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateFilter;
 import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
@@ -12,6 +12,7 @@ import com.ddkolesnik.userservice.model.bitrix.requisite.*;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.utils.ValueType;
+import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
@@ -96,13 +97,9 @@ public class BitrixContactService {
     ContactList contacts = contactList.getBody();
     log.info("Результат поиска списка контактов по телефону {}", contacts);
     if (Objects.nonNull(contacts)) {
-      Contact contact = contacts.getResult()
+      return contacts.getResult()
           .stream().min(Comparator.comparing(Contact::getId))
           .orElse(null);
-      if (Objects.nonNull(contact)) {
-        contact.setPhone(phone);
-      }
-      return contact;
     }
     return null;
   }
@@ -115,12 +112,30 @@ public class BitrixContactService {
     log.info("Результат обновления контакта {}", updated);
   }
 
-  public void updateContactPhone(UserDTO userDTO) {
-    ContactUpdate contactUpdate = convertToUpdateContact(userDTO);
+  public void updateContactPhone(Contact contact, ChangePhoneDTO changePhoneDTO, UserDTO userDTO) {
+    Map<String, Object> fields = new HashMap<>();
+    List<Phone> phones = new ArrayList<>();
+    Phone oldPhone = contact.getPhones().stream()
+        .findAny()
+        .orElseThrow(() -> new RuntimeException("Не удалось получить телефон из контакта"));
+    oldPhone.setValue("");
+    phones.add(oldPhone);
+    Phone newPhone = Phone.builder()
+        .value(changePhoneDTO.getNewPhone())
+        .valueType(ValueType.WORK.name())
+        .build();
+    phones.add(newPhone);
+
+    fields.put("PHONE", phones);
+
+    ContactUpdate contactUpdate = ContactUpdate.builder()
+        .id(userDTO.getBitrixId())
+        .fields(fields)
+        .build();
     ResponseEntity<Object> update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
         HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
     Object updated = update.getBody();
-    log.info("Результат обновления контакта {}", updated);
+    log.info("Результат обновления телефона контакта {}", updated);
   }
 
   public void clearContactPassword(UserDTO dto) {
