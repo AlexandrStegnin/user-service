@@ -19,9 +19,6 @@ import org.springframework.http.HttpStatus;
 public class ApiResponse {
 
   String message;
-
-  String additionalInfo;
-
   HttpStatus status;
 
 }

@@ -14,6 +14,7 @@ import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.bitrix.utils.ValueType;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.response.ApiResponse;
 import com.ddkolesnik.userservice.utils.DateUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -46,7 +48,28 @@ public class BitrixContactService {
   RestTemplate restTemplate;
   ObjectMapper objectMapper;
 
-  public DuplicateResult findDuplicates(UserDTO userDTO) {
+  public ApiResponse createOrUpdateContact(UserDTO dto) {
+    DuplicateResult duplicate = findDuplicates(dto);
+    if (responseEmpty(duplicate.getResult())) {
+      Integer contactId = createContact(dto);
+      if (Objects.isNull(contactId)) {
+        throw new RuntimeException("Пользователь не создан");
+      }
+      dto.setBitrixId(contactId);
+      return ApiResponse.builder()
+          .status(HttpStatus.CREATED)
+          .message("Пользователь успешно создан в Б24")
+          .build();
+    } else {
+      updateContact(dto);
+      return ApiResponse.builder()
+          .status(HttpStatus.OK)
+          .message("Контакт Б24 успешно обновлён")
+          .build();
+    }
+  }
+
+  private DuplicateResult findDuplicates(UserDTO userDTO) {
     DuplicateFilter duplicateFilter = new DuplicateFilter(userDTO.getPhone());
     ResponseEntity<DuplicateResult> bitrixResult = restTemplate.exchange(bitrixProperty.getDuplicateFindByComm(),
         HttpMethod.POST, new HttpEntity<>(duplicateFilter), DuplicateResult.class);
@@ -56,7 +79,12 @@ public class BitrixContactService {
   }
 
   public Contact findFirstContact(UserDTO userDTO) {
-    return findFirstContact(userDTO.getPhone());
+    Contact contact = findFirstContact(userDTO.getPhone());
+    if (Objects.nonNull(contact)) {
+      userDTO.setBitrixId(contact.getId());
+      userDTO.setId(contact.getId());
+    }
+    return contact;
   }
 
   public Contact findFirstContact(String phone) {
@@ -124,14 +152,14 @@ public class BitrixContactService {
     return contact;
   }
 
-  public Object createContact(UserDTO userDTO) {
+  public Integer createContact(UserDTO userDTO) {
     ContactCreate contact = convertToCreateContact(userDTO);
     ContactCreate contactCreate = new ContactCreate(contact.getFields());
     ResponseEntity<Object> create = restTemplate.exchange(bitrixProperty.getContactAdd(),
         HttpMethod.POST, new HttpEntity<>(contactCreate), Object.class);
     Object created = create.getBody();
     log.info("Результат создания контакта {}", created);
-    return created;
+    return getContactId(created);
   }
 
   public Object deleteContact(UserDTO userDTO) {
@@ -398,6 +426,23 @@ public class BitrixContactService {
     return Objects.nonNull(dto)
         && Objects.nonNull(dto.getScans())
         && (dto.getScans().length > 0);
+  }
+
+  private Integer getContactId(Object contact) {
+    if (contact instanceof LinkedHashMap) {
+      return (Integer) (((LinkedHashMap<?, ?>) contact).get("result"));
+    }
+    return null;
+  }
+
+  private boolean responseEmpty(Object result) {
+    boolean isEmpty = false;
+    if (result instanceof ArrayList<?>) {
+      isEmpty = ((ArrayList<?>) result).isEmpty();
+    } else if (result instanceof LinkedHashMap<?, ?>) {
+      isEmpty = ((LinkedHashMap<?, ?>) result).isEmpty();
+    }
+    return isEmpty;
   }
 
 }

@@ -3,16 +3,17 @@ package com.ddkolesnik.userservice.service;
 import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
-import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.response.ApiResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,8 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -55,18 +54,11 @@ public class UserService {
   }
 
   public UserDTO create(UserDTO dto) {
-    DuplicateResult duplicate = bitrixContactService.findDuplicates(dto);
-    if (responseEmpty(duplicate.getResult())) {
-      Integer contactId = createContact(dto);
-      if (Objects.isNull(contactId)) {
-        throw new RuntimeException("Пользователь не создан");
-      }
-      dto.setBitrixId(contactId);
+    ApiResponse response = bitrixContactService.createOrUpdateContact(dto);
+    if (response.getStatus() == HttpStatus.CREATED) {
       createAppUser(dto);
-    } else {
-      updateContact(dto);
     }
-    sendConfirmMessage(dto);
+    bitrixContactService.sendConfirmMessage(dto);
     return dto;
   }
 
@@ -75,24 +67,6 @@ public class UserService {
     AppUser appUser = userMapper.toEntity(dto);
     userMapper.updateProfile(dto, appUser);
     appUserService.create(appUser);
-  }
-
-  private Integer createContact(UserDTO dto) {
-    Object create = bitrixContactService.createContact(dto);
-    if (create instanceof LinkedHashMap) {
-      return (Integer) (((LinkedHashMap<?, ?>) create).get("result"));
-    }
-    return null;
-  }
-
-  private void updateContact(UserDTO dto) {
-    Contact contact = bitrixContactService.findFirstContact(dto);
-    if (Objects.isNull(contact)) {
-      throw new RuntimeException(String.format("Произошла ошибка. Контакт не найден %s", dto));
-    }
-    dto.setId(contact.getId());
-    dto.setBitrixId(contact.getId());
-    bitrixContactService.updateContact(dto);
   }
 
   private void updateContactPhone(UserDTO dto) {
@@ -129,26 +103,12 @@ public class UserService {
     bitrixContactService.updateContact(dto);
   }
 
-  private boolean responseEmpty(Object result) {
-    boolean isEmpty = false;
-    if (result instanceof ArrayList<?>) {
-      isEmpty = ((ArrayList<?>) result).isEmpty();
-    } else if (result instanceof LinkedHashMap<?, ?>) {
-      isEmpty = ((LinkedHashMap<?, ?>) result).isEmpty();
-    }
-    return isEmpty;
-  }
-
   public void authenticateUser(String phone, String password) {
     UsernamePasswordAuthenticationToken authReq
         = new UsernamePasswordAuthenticationToken(phone, password);
     Authentication auth = authenticationManager.authenticate(authReq);
     SecurityContext sc = SecurityContextHolder.getContext();
     sc.setAuthentication(auth);
-  }
-
-  public void sendConfirmMessage(UserDTO dto) {
-    bitrixContactService.sendConfirmMessage(dto);
   }
 
   public void sendRestoreMessage(UserDTO dto) {
@@ -205,13 +165,11 @@ public class UserService {
     UserDTO userDTO = getUserDTO(dto.getOldPhone());
     Contact contact = bitrixContactService.findFirstContact(userDTO);
     checkConfirmCode(contact, dto);
+    bitrixContactService.updateContact(userDTO);
     AppUser user = userMapper.toEntity(userDTO);
     user.setLogin(dto.getNewPhone());
     user.setPhone(dto.getNewPhone());
     appUserService.update(user);
-    userDTO = userMapper.toDTO(user);
-    userDTO.setPhone(dto.getOldPhone());
-    updateContact(userDTO);
   }
 
   private UserDTO getUserDTO(String phone) {
