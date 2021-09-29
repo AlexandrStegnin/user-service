@@ -21,4 +21,12 @@ public class Location {
 
   public static final String CHANGE_PASSWORD = "change-password";
 
+  public static final String CONFIRM_OLD_PHONE = "confirm-old-phone";
+
+  public static final String CHECK_CONFIRM_CODE = "check-confirm-code";
+
+  public static final String CONFIRM_NEW_PHONE = "confirm-new-phone";
+
+  public static final String CHANGE_PHONE = "change-phone";
+
 }

@@ -7,6 +7,7 @@ import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
+import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +95,16 @@ public class UserService {
     bitrixContactService.updateContact(dto);
   }
 
+  private void updateContactPhone(UserDTO dto) {
+    Contact contact = bitrixContactService.findFirstContact(dto);
+    if (Objects.isNull(contact)) {
+      throw new RuntimeException(String.format("Произошла ошибка. Контакт не найден %s", dto));
+    }
+    dto.setId(contact.getId());
+    dto.setBitrixId(contact.getId());
+    bitrixContactService.updateContact(dto);
+  }
+
   public void updateAdditionalFields(UserDTO dto) {
     Contact contact = bitrixContactService.findFirstContact(dto);
     if (Objects.isNull(contact)) {
@@ -169,4 +180,51 @@ public class UserService {
     user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
     appUserService.update(user);
   }
+
+  public void sendConfirmOldPhoneMessage(ChangePhoneDTO dto) {
+    UserDTO userDTO = getUserDTO(dto.getOldPhone());
+    bitrixContactService.sendConfirmOldPhoneMessage(userDTO);
+  }
+
+  public void checkConfirmCode(ChangePhoneDTO dto) {
+    Contact contact = bitrixContactService.findFirstContact(dto.getOldPhone());
+    if (Objects.isNull(contact)) {
+      throw new RuntimeException("Не найден контакт Б24");
+    }
+    if (Objects.isNull(contact.getConfirmCode()) || !Objects.equals(contact.getConfirmCode(), dto.getConfirmCode())) {
+      throw new RuntimeException("Не указан или неверно указан код подтверждения");
+    }
+  }
+
+  public void sendConfirmNewPhoneMessage(ChangePhoneDTO dto) {
+    UserDTO userDTO = getUserDTO(dto.getOldPhone());
+    bitrixContactService.sendConfirmNewPhoneMessage(userDTO);
+  }
+
+  public void changePhone(ChangePhoneDTO dto) {
+    UserDTO userDTO = getUserDTO(dto.getOldPhone());
+    Contact contact = bitrixContactService.findFirstContact(userDTO);
+    checkConfirmCode(contact, dto);
+    AppUser user = userMapper.toEntity(userDTO);
+    user.setLogin(dto.getNewPhone());
+    user.setPhone(dto.getNewPhone());
+    appUserService.update(user);
+    userDTO = userMapper.toDTO(user);
+    userDTO.setPhone(dto.getOldPhone());
+    updateContact(userDTO);
+  }
+
+  private UserDTO getUserDTO(String phone) {
+    return userMapper.toDTO(appUserService.findByPhone(phone));
+  }
+
+  private void checkConfirmCode(Contact contact, ChangePhoneDTO dto) {
+    if (Objects.isNull(contact.getConfirmCode()) || Objects.isNull(dto.getConfirmCode())) {
+      throw new RuntimeException("Не указан код подтверждения");
+    }
+    if (!contact.getConfirmCode().equals(dto.getConfirmCode())) {
+      throw new RuntimeException("Код подтверждения не верный");
+    }
+  }
+
 }

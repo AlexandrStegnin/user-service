@@ -2,6 +2,7 @@ package com.ddkolesnik.userservice.controller;
 
 import com.ddkolesnik.userservice.configuration.Location;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
+import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
 import com.ddkolesnik.userservice.service.SendMessageService;
@@ -81,6 +82,46 @@ public class RegistrationController {
     return ApiResponse.builder()
         .status(HttpStatus.OK)
         .message("Сообщение успешно отправлено")
+        .build();
+  }
+
+  @ResponseBody
+  @PostMapping(path = Location.CONFIRM_OLD_PHONE)
+  public ApiResponse confirmOldPhone(@RequestBody ChangePhoneDTO dto) {
+    userService.sendConfirmOldPhoneMessage(dto);
+    return ApiResponse.builder()
+        .status(HttpStatus.OK)
+        .message("Код успешно отправлен")
+        .build();
+  }
+
+  @ResponseBody
+  @PostMapping(path = Location.CHECK_CONFIRM_CODE)
+  public ApiResponse checkConfirmCode(@RequestBody ChangePhoneDTO dto) {
+    userService.checkConfirmCode(dto);
+    return ApiResponse.builder()
+        .status(HttpStatus.OK)
+        .message("Код подтверждён")
+        .build();
+  }
+
+  @ResponseBody
+  @PostMapping(path = Location.CONFIRM_NEW_PHONE)
+  public ApiResponse confirmNewPhone(@RequestBody ChangePhoneDTO dto) {
+    userService.sendConfirmNewPhoneMessage(dto);
+    return ApiResponse.builder()
+        .status(HttpStatus.OK)
+        .message("Код успешно отправлен")
+        .build();
+  }
+
+  @ResponseBody
+  @PostMapping(path = Location.CHANGE_PHONE)
+  public ApiResponse changePhone(@RequestBody ChangePhoneDTO dto) {
+    userService.changePhone(dto);
+    return ApiResponse.builder()
+        .status(HttpStatus.OK)
+        .message("Телефон успешно изменён")
         .build();
   }
 

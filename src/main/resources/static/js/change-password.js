@@ -7,13 +7,6 @@ let changePasswordLink;
 let messageForm;
 
 jQuery(document).ready(function ($) {
-    init()
-    onChangePasswordClick()
-    onChangeFormSubmit()
-    onShowPasswordClick()
-})
-
-function init() {
     changePasswordLink = $('a#change-password')
     changePasswordForm = $('#change-password-form-modal')
     oldPasswordField = $('#old-password')
@@ -21,7 +14,10 @@ function init() {
     confirmPasswordField = $('#confirm-password')
     changePasswordButton = $('button#change-password')
     messageForm = $('#message-form-modal')
-}
+    onChangePasswordClick()
+    onChangeFormSubmit()
+    onShowPasswordClick()
+})
 
 function onChangePasswordClick() {
     changePasswordLink.on('click', function (event) {
