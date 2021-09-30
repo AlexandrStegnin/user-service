@@ -65,6 +65,7 @@ public class UserService {
   private void createAppUser(UserDTO dto) {
     generatePassword(dto);
     AppUser appUser = userMapper.toEntity(dto);
+    appUser.setPassword(passwordEncoder.encode(dto.getPassword()));
     userMapper.updateProfile(dto, appUser);
     appUserService.create(appUser);
   }
