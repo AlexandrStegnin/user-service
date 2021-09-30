@@ -2,7 +2,6 @@ let restoreForm;
 let phoneNumberField;
 let submitRestoreButton;
 let restorePasswordButton;
-let messageForm;
 
 jQuery(document).ready(function ($) {
     init()
@@ -15,7 +14,6 @@ function init() {
     restoreForm = $('#restore-password-form-modal')
     phoneNumberField = $('#phone-number')
     submitRestoreButton = $('#restore')
-    messageForm = $('#message-form-modal')
 }
 
 function onRestorePasswordClick() {
@@ -80,14 +78,4 @@ function restorePassword(phoneNumber) {
         .always(function () {
             console.log("FINISHED")
         })
-}
-
-/**
- *
- * @param message {String}
- */
-function showMessage(message) {
-    let divMessage = messageForm.find('#message')
-    divMessage.text(message)
-    messageForm.modal('show')
 }

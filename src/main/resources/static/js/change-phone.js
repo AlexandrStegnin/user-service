@@ -12,7 +12,6 @@ jQuery(document).ready(function ($) {
     newPhoneField = $('#new-phone')
     oldPhoneField = $('#old-phone')
     changePhoneButton = $('button#change-phone')
-    messageForm = $('#message-form-modal')
     confirmForm = $('#confirm-form-modal')
     confirmButton = $('#confirm')
     onChangePhoneClick()
@@ -95,16 +94,6 @@ function changePhone(changePhoneDTO) {
         .always(function () {
             console.log("FINISHED")
         })
-}
-
-/**
- *
- * @param message {String}
- */
-function showMessage(message) {
-    let divMessage = messageForm.find('#message')
-    divMessage.text(message)
-    messageForm.modal('show')
 }
 
 function getChangePhoneDTO(confirmCode) {
