@@ -110,7 +110,6 @@ public class UserService {
     }
     dto.setPassword(passwordEncoder.encode(contact.getRawPassword()));
     appUserService.updatePassword(dto);
-    bitrixContactService.clearContactPassword(dto);
   }
 
   private UserDTO findUserByPhone(UserDTO dto) {

@@ -2,11 +2,7 @@ package com.ddkolesnik.userservice.model.dto;
 
 import com.ddkolesnik.userservice.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -18,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString(of = { "id", "name", "email", "individual", "selfEmployed"})
 public class UserDTO {
 
   Integer id;

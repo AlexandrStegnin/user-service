@@ -138,19 +138,6 @@ public class BitrixContactService {
     log.info("Результат обновления телефона контакта {}", updated);
   }
 
-  public void clearContactPassword(UserDTO dto) {
-    Map<String, Object> fields = new HashMap<>();
-    fields.put("UF_CRM_1632722824", null);
-    ContactUpdate contactUpdate = ContactUpdate.builder()
-        .id(dto.getBitrixId())
-        .fields(fields)
-        .build();
-    ResponseEntity<Object> update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
-        HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
-    Object updated = update.getBody();
-    log.info("Результат обновления контакта {}", updated);
-  }
-
   public Contact getById(String id) {
     ContactGet contactGet = ContactGet.builder()
         .id(id)
@@ -285,7 +272,7 @@ public class BitrixContactService {
 
   public void sendRestoreMessage(UserDTO dto) {
     BusinessProcess businessProcess = BusinessProcess.builder()
-        .templateId(BusinessProcessTemplate.CHANGE_PASSWORD.getId())
+        .templateId(BusinessProcessTemplate.RESTORE_PASSWORD.getId())
         .build();
     businessProcess.addDocumentId("CONTACT_".concat(dto.getBitrixId().toString()));
     ResponseEntity<Object> restore = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),

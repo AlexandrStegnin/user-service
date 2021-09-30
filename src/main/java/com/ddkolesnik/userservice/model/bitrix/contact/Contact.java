@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
+@ToString(of = { "id", "name", "emails" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
@@ -52,7 +54,7 @@ public class Contact {
   @JsonProperty("UF_CRM_1627978615")
   String confirmCode;
 
-  @JsonProperty("UF_CRM_1632722824")
+  @JsonProperty(value = "UF_CRM_1632722824", access = JsonProperty.Access.WRITE_ONLY)
   String rawPassword;
 
   @JsonProperty("PHONE")

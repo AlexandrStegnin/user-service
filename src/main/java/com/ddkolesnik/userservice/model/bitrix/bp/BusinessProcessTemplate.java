@@ -17,7 +17,7 @@ public enum BusinessProcessTemplate {
   CONFIRM_OLD_PHONE("579"),
   CONFIRM_NEW_PHONE("580"),
   CHANGE_PHONE("581"),
-  CHANGE_PASSWORD("586");
+  RESTORE_PASSWORD("586");
 
   String id;
 
