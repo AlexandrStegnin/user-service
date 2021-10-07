@@ -2,10 +2,6 @@ package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.enums.OwnerType;
 import com.ddkolesnik.userservice.mapper.UserMapper;
-import com.ddkolesnik.userservice.model.bitrix.address.Address;
-import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
-import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
-import com.ddkolesnik.userservice.model.domain.Account;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
@@ -45,33 +41,33 @@ public class AppUserService {
   }
 
   public void create(AppUser appUser) {
-    AppUser user = appUserRepository.save(appUser);
-    Account account = accountService.findByOwnerId(user.getId(), OwnerType.INVESTOR);
+    var user = appUserRepository.save(appUser);
+    var account = accountService.findByOwnerId(user.getId(), OwnerType.INVESTOR);
     if (Objects.isNull(account)) {
       accountService.createAccount(user);
     }
   }
 
   public void updatePassword(UserDTO dto) {
-    AppUser user = findByPhone(dto.getPhone());
+    var user = findByPhone(dto.getPhone());
     user.setPassword(dto.getPassword());
     appUserRepository.save(user);
   }
 
   public void updatePassword(String phone, String rawPassword) {
-    AppUser user = findByPhone(phone);
+    var user = findByPhone(phone);
     user.setPassword(encoder.encode(rawPassword));
     appUserRepository.save(user);
   }
 
   public UserDTO findUser(String phone) {
-    Contact contact = bitrixContactService.findFirstContact(phone);
+    var contact = bitrixContactService.findFirstContact(phone);
     if (Objects.nonNull(contact)) {
-      UserDTO dto = userMapper.toDTO(contact);
-      Requisite requisite = requisiteService.findRequisite(contact.getId().toString());
+      var dto = userMapper.toDTO(contact);
+      var requisite = requisiteService.findRequisite(contact.getId().toString());
       userMapper.updatePassport(requisite, dto);
       if (Objects.nonNull(requisite)) {
-        Address address = addressService.findAddress(requisite);
+        var address = addressService.findAddress(requisite);
         userMapper.updateAddress(address, dto);
       }
       return dto;

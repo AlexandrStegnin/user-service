@@ -3,7 +3,6 @@ package com.ddkolesnik.userservice.service.bitrix;
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
 import com.ddkolesnik.userservice.model.bitrix.address.*;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
-import com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -84,13 +83,13 @@ public class AddressService extends BitrixService {
     if (Objects.isNull(requisite)) {
       log.error("Реквизит не найден: {}", userDTO);
     } else {
-      fields.put(BitrixFields.ENTITY_ID, requisite.getId());
+      fields.put(ENTITY_ID, requisite.getId());
     }
-    fields.put("TYPE_ID", 1);
-    fields.put(BitrixFields.ENTITY_TYPE_ID, 8);
-    fields.put("CITY", userDTO.getAddress().getCity());
-    fields.put("ADDRESS_1", getAddress1(userDTO));
-    fields.put("ADDRESS_2", getAddress2(userDTO));
+    fields.put(TYPE_ID, 1);
+    fields.put(ENTITY_TYPE_ID, 8);
+    fields.put(CITY, userDTO.getAddress().getCity());
+    fields.put(ADDRESS_1, getAddress1(userDTO));
+    fields.put(ADDRESS_2, getAddress2(userDTO));
     return fields;
   }
 
