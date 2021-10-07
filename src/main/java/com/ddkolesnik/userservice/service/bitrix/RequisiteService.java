@@ -5,7 +5,6 @@ import com.ddkolesnik.userservice.model.bitrix.requisite.*;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.utils.DateUtils;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
@@ -19,20 +18,19 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
-import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.IDENT_DOC_NAME;
 
 /**
  * @author Alexandr Stegnin
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @PropertySource(value = "classpath:application.properties")
-public class RequisiteService {
+public class RequisiteService extends BitrixService {
 
-  BitrixProperty bitrixProperty;
-  RestTemplate restTemplate;
+  public RequisiteService(BitrixProperty bitrixProperty, RestTemplate restTemplate) {
+    super(bitrixProperty, restTemplate);
+  }
 
   public Requisite findRequisite(String entityId) {
     var filter = new LinkedHashMap<String, String>();

@@ -14,7 +14,6 @@ import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
@@ -32,16 +31,22 @@ import java.util.*;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @PropertySource(value = "classpath:application.properties")
-public class BitrixContactService {
+public class BitrixContactService extends BitrixService {
 
-  BitrixProperty bitrixProperty;
-  RestTemplate restTemplate;
   ObjectMapper objectMapper;
   ContactMapper contactMapper;
   DuplicateService duplicateService;
+
+  public BitrixContactService(BitrixProperty bitrixProperty, RestTemplate restTemplate,
+                              ObjectMapper objectMapper, ContactMapper contactMapper,
+                              DuplicateService duplicateService) {
+    super(bitrixProperty, restTemplate);
+    this.objectMapper = objectMapper;
+    this.contactMapper = contactMapper;
+    this.duplicateService = duplicateService;
+  }
 
   public ApiResponse createOrUpdateContact(UserDTO dto) {
     var duplicate = duplicateService.findDuplicates(dto);

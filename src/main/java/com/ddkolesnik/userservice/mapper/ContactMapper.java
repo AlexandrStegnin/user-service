@@ -2,6 +2,7 @@ package com.ddkolesnik.userservice.mapper;
 
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactCreate;
+import com.ddkolesnik.userservice.model.bitrix.contact.ContactUpdate;
 import com.ddkolesnik.userservice.model.bitrix.enums.ValueType;
 import com.ddkolesnik.userservice.model.bitrix.file.FileData;
 import com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields;
@@ -20,7 +21,6 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
-import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.CONTACT_IS_SELF_EMPLOYED;
 
 /**
  * @author Alexandr Stegnin
@@ -34,7 +34,7 @@ public abstract class ContactMapper {
   public abstract ContactCreate convertDtoToContactCreate(UserDTO dto);
 
   @Mapping(target = "fields", expression = "java(extractFields(dto, false))")
-  public abstract ContactCreate convertDtoToContactUpdate(UserDTO dto);
+  public abstract ContactUpdate convertDtoToContactUpdate(UserDTO dto);
   
   protected Map<String, Object> extractFields(UserDTO dto, boolean isCreate) {
     var fields = new LinkedHashMap<String, Object>();
@@ -68,7 +68,7 @@ public abstract class ContactMapper {
     return Email.builder()
         .value(email)
         .valueType(ValueType.WORK.name())
-        .typeId("EMAIL")
+        .typeId(CONTACT_EMAIL)
         .build();
   }
 

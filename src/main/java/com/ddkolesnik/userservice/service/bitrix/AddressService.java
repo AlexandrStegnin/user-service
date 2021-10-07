@@ -6,7 +6,6 @@ import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.PropertySource;
@@ -26,14 +25,17 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @PropertySource(value = "classpath:application.properties")
-public class AddressService {
+public class AddressService extends BitrixService {
 
   RequisiteService requisiteService;
-  BitrixProperty bitrixProperty;
-  RestTemplate restTemplate;
+
+  public AddressService(BitrixProperty bitrixProperty, RestTemplate restTemplate,
+                        RequisiteService requisiteService) {
+    super(bitrixProperty, restTemplate);
+    this.requisiteService = requisiteService;
+  }
 
   public Address findAddress(Requisite requisite) {
     var filter = new LinkedHashMap<String, String>();
