@@ -1,22 +1,17 @@
-package com.ddkolesnik.userservice.service;
+package com.ddkolesnik.userservice.service.bitrix;
 
 import com.ddkolesnik.userservice.configuration.exception.BitrixException;
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
 import com.ddkolesnik.userservice.mapper.ContactMapper;
-import com.ddkolesnik.userservice.model.bitrix.address.*;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcess;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcessTemplate;
 import com.ddkolesnik.userservice.model.bitrix.contact.*;
-import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateFilter;
-import com.ddkolesnik.userservice.model.bitrix.duplicate.DuplicateResult;
 import com.ddkolesnik.userservice.model.bitrix.enums.ValueType;
-import com.ddkolesnik.userservice.model.bitrix.requisite.*;
 import com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.response.ApiResponse;
-import com.ddkolesnik.userservice.utils.DateUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +27,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
-
 /**
  * @author Aleksandr Stegnin on 05.07.2021
  */
@@ -48,9 +41,10 @@ public class BitrixContactService {
   RestTemplate restTemplate;
   ObjectMapper objectMapper;
   ContactMapper contactMapper;
+  DuplicateService duplicateService;
 
   public ApiResponse createOrUpdateContact(UserDTO dto) {
-    var duplicate = findDuplicates(dto);
+    var duplicate = duplicateService.findDuplicates(dto);
     if (Objects.isNull(duplicate)) {
       throw BitrixException.builder()
           .message("Поиск дубликатов по номеру телефона вернул неверный результат")
@@ -77,15 +71,6 @@ public class BitrixContactService {
           .message("Контакт Б24 успешно обновлён")
           .build();
     }
-  }
-
-  private DuplicateResult findDuplicates(UserDTO userDTO) {
-    var duplicateFilter = new DuplicateFilter(userDTO.getPhone());
-    var bitrixResult = restTemplate.exchange(bitrixProperty.getDuplicateFindByComm(),
-        HttpMethod.POST, new HttpEntity<>(duplicateFilter), DuplicateResult.class);
-    var duplicate = bitrixResult.getBody();
-    log.info("Результат поиска дубликатов {}", duplicate);
-    return duplicate;
   }
 
   public Contact findFirstContact(UserDTO userDTO) {
@@ -184,92 +169,6 @@ public class BitrixContactService {
     return deleted;
   }
 
-  public Requisite findRequisite(String entityId) {
-    var filter = new LinkedHashMap<String, String>();
-    filter.put(ENTITY_TYPE_ID, "3");
-    filter.put(ENTITY_ID, entityId);
-
-    var requisiteFilter = new RequisiteFilter(filter);
-    var requisite = restTemplate.exchange(bitrixProperty.getRequisiteList(),
-        HttpMethod.POST, new HttpEntity<>(requisiteFilter), RequisiteResult.class);
-    log.info("Результат поиска реквизита {}", requisite);
-    var response = requisite.getBody();
-    if (Objects.isNull(response) || response.getTotal() == 0) {
-      return null;
-    }
-    var requisites = response.getResult();
-    if (requisites.isEmpty()) {
-      return null;
-    }
-    return requisites.get(0);
-  }
-
-  public Requisite findRequisite(UserDTO dto) {
-    return findRequisite(dto.getId().toString());
-  }
-
-  public void createRequisite(UserDTO dto) {
-    var requisiteCreate = RequisiteCreate.builder()
-        .fields(prepareRequisiteFields(dto))
-        .build();
-    var create = restTemplate.exchange(bitrixProperty.getRequisiteAdd(),
-        HttpMethod.POST, new HttpEntity<>(requisiteCreate), Object.class);
-    var created = create.getBody();
-    log.info("Результат создания реквизита {}", created);
-  }
-
-  public void updateRequisite(Requisite requisite, UserDTO dto) {
-    var requisiteUpdate = RequisiteUpdate.builder()
-        .id(Integer.parseInt(requisite.getId()))
-        .fields(prepareRequisiteFields(dto))
-        .build();
-    var update = restTemplate.exchange(bitrixProperty.getRequisiteUpdate(),
-        HttpMethod.POST, new HttpEntity<>(requisiteUpdate), Object.class);
-    var updated = update.getBody();
-    log.info("Результат обновления реквизита {}", updated);
-  }
-
-  public Address findAddress(Requisite requisite) {
-    var filter = new LinkedHashMap<String, String>();
-    filter.put(ENTITY_TYPE_ID, "8");
-    filter.put(TYPE_ID, "1");
-    filter.put(ENTITY_ID, requisite.getId());
-
-    var addressFilter = new AddressFilter(filter);
-    var address = restTemplate.exchange(bitrixProperty.getAddressList(),
-        HttpMethod.POST, new HttpEntity<>(addressFilter), AddressResult.class);
-    log.info("Результат поиска адресов {}", address);
-    var response = address.getBody();
-    if (Objects.isNull(response) || response.getTotal() == 0) {
-      return null;
-    }
-    var addresses = response.getResult();
-    if (addresses.isEmpty()) {
-      return null;
-    }
-    return addresses.get(0);
-  }
-
-  public void createAddress(UserDTO dto) {
-    var addressCreate = AddressCreate.builder()
-        .fields(prepareAddressFields(dto))
-        .build();
-    var create = restTemplate.exchange(bitrixProperty.getAddressAdd(),
-        HttpMethod.POST, new HttpEntity<>(addressCreate), Object.class);
-    var created = create.getBody();
-    log.info("Результат создания адреса {}", created);
-  }
-
-  public void updateAddress(UserDTO dto) {
-    var addressUpdate = AddressUpdate.builder()
-        .fields(prepareAddressFields(dto))
-        .build();
-    var update = restTemplate.exchange(bitrixProperty.getAddressUpdate(),
-        HttpMethod.POST, new HttpEntity<>(addressUpdate), Object.class);
-    var updated = update.getBody();
-    log.info("Результат обновления адреса {}", updated);
-  }
-
   public void sendConfirmMessage(UserDTO dto) {
     var businessProcess = BusinessProcess.builder()
         .templateId(BusinessProcessTemplate.CONFIRM_PHONE.getId())
@@ -312,54 +211,6 @@ public class BitrixContactService {
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
     var confirmedChangePhone = confirmChangePhone.getBody();
     log.info("Результат отправки смс для подтверждения нового телефона {}", confirmedChangePhone);
-  }
-
-  private Map<String, Object> prepareRequisiteFields(UserDTO userDTO) {
-    var fields = new LinkedHashMap<String, Object>();
-    fields.put(CONTACT_INN, userDTO.getInn());
-    fields.put(CONTACT_SNILS, userDTO.getSnils());
-    fields.put(PASSPORT_SERIAL, userDTO.getPassport().getSerial());
-    fields.put(PASSPORT_NUMBER, userDTO.getPassport().getNumber());
-    fields.put(PASSPORT_DEP_CODE, userDTO.getPassport().getDepartmentCode());
-    fields.put(PASSPORT_ISSUED_BY, userDTO.getPassport().getIssuedBy());
-    fields.put(ENTITY_TYPE_ID, "3");
-    fields.put(PRESET_ID, "5");
-    fields.put(ENTITY_ID, userDTO.getId().toString());
-    fields.put(REQUISITE_NAME, "Реквизит");
-    fields.put(PASSPORT_ISSUED_AT, DateUtils.convertToDDMMYYYY(userDTO.getPassport().getIssuedAt()));
-    fields.put(IDENT_DOC_NAME, "Паспорт");
-    return fields;
-  }
-
-  private Map<String, Object> prepareAddressFields(UserDTO userDTO) {
-    var requisite = findRequisite(userDTO);
-    var fields = new LinkedHashMap<String, Object>();
-    if (Objects.isNull(requisite)) {
-      log.error("Реквизит не найден: {}", userDTO);
-    } else {
-      fields.put(BitrixFields.ENTITY_ID, requisite.getId());
-    }
-    fields.put("TYPE_ID", 1);
-    fields.put(BitrixFields.ENTITY_TYPE_ID, 8);
-    fields.put("CITY", userDTO.getAddress().getCity());
-    fields.put("ADDRESS_1", getAddress1(userDTO));
-    fields.put("ADDRESS_2", getAddress2(userDTO));
-    return fields;
-  }
-
-  private String getAddress1(UserDTO dto) {
-    var address = "";
-    if (Objects.nonNull(dto.getAddress().getStreetAndHouse())) {
-      address += dto.getAddress().getStreetAndHouse();
-    }
-    return address;
-  }
-
-  private String getAddress2(UserDTO dto) {
-    if (Objects.nonNull(dto.getAddress().getOffice())) {
-      return dto.getAddress().getOffice();
-    }
-    return "";
   }
 
   private Integer getContactId(Object contact) {

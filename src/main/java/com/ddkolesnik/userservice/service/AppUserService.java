@@ -9,6 +9,9 @@ import com.ddkolesnik.userservice.model.domain.Account;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
+import com.ddkolesnik.userservice.service.bitrix.AddressService;
+import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
+import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +33,8 @@ public class AppUserService {
 
   BitrixContactService bitrixContactService;
   AppUserRepository appUserRepository;
+  RequisiteService requisiteService;
+  AddressService addressService;
   AccountService accountService;
   PasswordEncoder encoder;
   UserMapper userMapper;
@@ -63,10 +68,10 @@ public class AppUserService {
     Contact contact = bitrixContactService.findFirstContact(phone);
     if (Objects.nonNull(contact)) {
       UserDTO dto = userMapper.toDTO(contact);
-      Requisite requisite = bitrixContactService.findRequisite(contact.getId().toString());
+      Requisite requisite = requisiteService.findRequisite(contact.getId().toString());
       userMapper.updatePassport(requisite, dto);
       if (Objects.nonNull(requisite)) {
-        Address address = bitrixContactService.findAddress(requisite);
+        Address address = addressService.findAddress(requisite);
         userMapper.updateAddress(address, dto);
       }
       return dto;
