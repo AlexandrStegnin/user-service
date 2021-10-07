@@ -1,17 +1,11 @@
 package com.ddkolesnik.userservice.model.domain;
 
 import com.ddkolesnik.userservice.enums.OwnerType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import javax.persistence.*;
 
 /**
  * @author Alexandr Stegnin
@@ -25,7 +19,8 @@ import lombok.ToString;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_generator")
+    @SequenceGenerator(name="account_generator", sequenceName = "account_id_seq")
     @Column(name = "id")
     private Long id;
 

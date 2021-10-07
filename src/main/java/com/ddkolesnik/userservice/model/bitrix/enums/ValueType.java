@@ -1,4 +1,4 @@
-package com.ddkolesnik.userservice.model.bitrix.utils;
+package com.ddkolesnik.userservice.model.bitrix.enums;
 
 import lombok.Getter;
 

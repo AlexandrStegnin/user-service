@@ -14,6 +14,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
+
 /**
  * @author Aleksandr Stegnin on 05.07.2021
  */
@@ -24,54 +26,58 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
 
-  @JsonProperty("ID")
+  @JsonProperty(CONTACT_ID)
   Integer id;
 
-  @JsonProperty("NAME")
+  @JsonProperty(CONTACT_NAME)
   String name;
 
-  @JsonProperty("SECOND_NAME")
+  @JsonProperty(CONTACT_SECOND_NAME)
   String secondName;
 
-  @JsonProperty("LAST_NAME")
+  @JsonProperty(CONTACT_LAST_NAME)
   String lastName;
 
-  @JsonProperty("EMAIL")
+  @JsonProperty(CONTACT_EMAIL)
   List<Email> emails;
 
-  @JsonProperty("UF_CRM_1554359872664")
+  @JsonProperty(CONTACT_GENDER)
   String gender;
 
-  @JsonProperty("BIRTHDATE")
+  @JsonProperty(CONTACT_BIRTHDATE)
   String birthdate;
 
-  @JsonProperty("UF_CRM_1625469293802")
+  @JsonProperty(CONTACT_SCANS)
   List<Scan> scans;
 
-  @JsonProperty("UF_CRM_1623241366")
+  @JsonProperty(CONTACT_PLACE_OF_BIRTH)
   String placeOfBirth;
 
-  @JsonProperty("UF_CRM_1627978615")
+  @JsonProperty(CONTACT_CONFIRM_CODE)
   String confirmCode;
 
-  @JsonProperty(value = "UF_CRM_1632722824", access = JsonProperty.Access.WRITE_ONLY)
+  @JsonProperty(value = CONTACT_RAW_PASSWORD, access = JsonProperty.Access.WRITE_ONLY)
   String rawPassword;
 
-  @JsonProperty("PHONE")
+  @JsonProperty(CONTACT_PHONE)
   List<Phone> phones;
 
+  @JsonProperty(CONTACT_TAX_STATUS)
+  Integer taxStatus;
+
   @JsonCreator
-  public Contact(@JsonProperty("ID") Integer id,
-                 @JsonProperty("NAME") String name,
-                 @JsonProperty("SECOND_NAME") String secondName,
-                 @JsonProperty("LAST_NAME") String lastName,
-                 @JsonProperty("EMAIL") List<Email> email,
-                 @JsonProperty("UF_CRM_1554359872664") String gender,
-                 @JsonProperty("BIRTHDATE") String birthdate,
-                 @JsonProperty("UF_CRM_1625469293802") List<Scan> scans,
-                 @JsonProperty("UF_CRM_1623241366") String placeOfBirth,
-                 @JsonProperty("UF_CRM_1627978615") String confirmCode,
-                 @JsonProperty("UF_CRM_1632722824") String rawPassword) {
+  public Contact(@JsonProperty(CONTACT_ID) Integer id,
+                 @JsonProperty(CONTACT_NAME) String name,
+                 @JsonProperty(CONTACT_SECOND_NAME) String secondName,
+                 @JsonProperty(CONTACT_LAST_NAME) String lastName,
+                 @JsonProperty(CONTACT_EMAIL) List<Email> email,
+                 @JsonProperty(CONTACT_GENDER) String gender,
+                 @JsonProperty(CONTACT_BIRTHDATE) String birthdate,
+                 @JsonProperty(CONTACT_SCANS) List<Scan> scans,
+                 @JsonProperty(CONTACT_PLACE_OF_BIRTH) String placeOfBirth,
+                 @JsonProperty(CONTACT_CONFIRM_CODE) String confirmCode,
+                 @JsonProperty(CONTACT_RAW_PASSWORD) String rawPassword,
+                 @JsonProperty(CONTACT_TAX_STATUS) Integer taxStatus) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
@@ -83,6 +89,7 @@ public class Contact {
     this.placeOfBirth = placeOfBirth;
     this.confirmCode = confirmCode;
     this.rawPassword = rawPassword;
+    this.taxStatus = taxStatus;
   }
 
 }

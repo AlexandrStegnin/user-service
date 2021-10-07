@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author Aleksandr Stegnin on 13.07.2021
@@ -16,7 +17,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "user_profile")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfile {
+public class UserProfile implements Serializable {
 
   @Id
   Long id;

@@ -42,6 +42,7 @@ public class ContactListFilter {
     select.add("UF_CRM_1627978615");
     select.add("UF_CRM_1632722824");
     select.add("PHONE");
+    select.add("UF_CRM_1633509856");
   }
 
   public ContactListFilter(Map<String, String[]> filter) {

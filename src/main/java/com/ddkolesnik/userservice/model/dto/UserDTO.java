@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.model.dto;
 
 import com.ddkolesnik.userservice.enums.Gender;
+import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -37,5 +38,6 @@ public class UserDTO {
   boolean selfEmployed = false;
   String placeOfBirth;
   Integer bitrixId;
+  TaxStatus taxStatus;
 
 }

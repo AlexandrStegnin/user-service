@@ -5,6 +5,7 @@ import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.enums.Gender;
 import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
+import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
@@ -42,6 +43,7 @@ public abstract class UserMapper {
   @Mapping(target = "gender", expression = "java(extractGender(contact))")
   @Mapping(target = "birthdate", expression = "java(extractBirthdate(contact))")
   @Mapping(target = "phone", expression = "java(extractPhone(contact))")
+  @Mapping(target = "taxStatus", expression = "java(convertTaxStatus(contact))")
   public abstract UserDTO toDTO(Contact contact);
 
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
@@ -103,6 +105,10 @@ public abstract class UserMapper {
         .findAny()
         .map(Phone::getValue)
         .orElse(null);
+  }
+
+  protected TaxStatus convertTaxStatus(Contact contact) {
+    return TaxStatus.fromCode(contact.getTaxStatus());
   }
 
 }
