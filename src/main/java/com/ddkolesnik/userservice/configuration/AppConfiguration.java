@@ -23,13 +23,13 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 public class AppConfiguration {
 
   @Value("${bitrix.default.url}")
-  String BITRIX_API_BASE_URL;
+  String bitrixApiBaseUrl;
 
   @Value("${bitrix.webhook.user.id}")
-  String BITRIX_WEBHOOK_USER_ID;
+  String bitrixWebhookUserId;
 
   @Value("${bitrix.access.key}")
-  String BITRIX_ACCESS_KEY;
+  String bitrixAccessKey;
 
   @Bean
   public RestTemplate getRestTemplate() {
@@ -49,7 +49,7 @@ public class AppConfiguration {
   }
 
   private String getBaseUrl() {
-    return BITRIX_API_BASE_URL + BITRIX_WEBHOOK_USER_ID + BITRIX_ACCESS_KEY;
+    return bitrixApiBaseUrl + bitrixWebhookUserId + bitrixAccessKey;
   }
 
 }

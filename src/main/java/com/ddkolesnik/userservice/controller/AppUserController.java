@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.controller;
 
+import com.ddkolesnik.userservice.configuration.Constant;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.service.AppUserService;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
@@ -26,20 +27,20 @@ public class AppUserController {
   public String profile(Model model) {
     UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
     if (Objects.isNull(userDTO)) {
-      return "redirect:/login";
+      return "redirect:/" + Constant.LOGIN;
     }
     model.addAttribute("userDTO", userDTO);
-    model.addAttribute("login", userDTO.getPhone());
+    model.addAttribute(Constant.LOGIN, userDTO.getPhone());
     return "profile";
   }
 
-  @GetMapping(path = "login")
+  @GetMapping(path = Constant.LOGIN)
   public String login() {
-    return "login";
+    return Constant.LOGIN;
   }
 
   @GetMapping(path = "logout")
   public String logout() {
-    return "login";
+    return Constant.LOGIN;
   }
 }
