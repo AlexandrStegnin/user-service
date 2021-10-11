@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum TaxStatus {
 
-  INDIVIDUAL("Физлицо", 2303),
-  LEGAL_ENTITY("Юрлицо", 2304),
+  INDIVIDUAL("Физ лицо", 2303),
+  LEGAL_ENTITY("Юр лицо", 2304),
   BUSINESSMAN("ИП", 2305),
   SELF_EMPLOYED("Самозанятый", 2306);
 

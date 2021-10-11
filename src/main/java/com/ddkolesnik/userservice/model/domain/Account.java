@@ -1,9 +1,11 @@
 package com.ddkolesnik.userservice.model.domain;
 
 import com.ddkolesnik.userservice.enums.OwnerType;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
@@ -15,6 +17,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "account")
 @ToString(of = {"id", "accountNumber"})
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = {"id", "accountNumber"})
 public class Account {
 
@@ -22,18 +25,18 @@ public class Account {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_generator")
   @SequenceGenerator(name="account_generator", sequenceName = "account_id_seq")
   @Column(name = "id")
-  private Long id;
+  Long id;
 
   @Column(name = "account_number")
-  private String accountNumber;
+  String accountNumber;
 
   @Column(name = "owner_id")
-  private Long ownerId;
+  Long ownerId;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "owner_type")
-  private OwnerType ownerType;
+  OwnerType ownerType;
 
   @Column(name = "owner_name")
-  private String ownerName;
+  String ownerName;
 }

@@ -61,6 +61,7 @@ public abstract class ContactMapper {
       fields.put(CONTACT_IS_SELF_EMPLOYED, dto.isSelfEmployed() ? "Y" : "N");
     }
     fields.put("UF_CRM_1628253424", "1");
+    fields.put(CONTACT_TAX_STATUS, dto.getTaxStatus().getCode());
     return fields;
   }
 

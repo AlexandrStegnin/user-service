@@ -49,6 +49,15 @@
             </div>
         </div>
         <div class="form-group row">
+            <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="tax-status">НАЛОГОВЫЙ СТАТУС</label>
+            <div class="col-sm-6">
+                <select name="tax-status" id="tax-status" class="selectpicker" th:field="*{taxStatus}">
+                    <option th:each="taxStatus : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
+                            th:value="${taxStatus}" th:text="${taxStatus.title}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
             <label class="col-sm-2 offset-sm-2 col-form-label-sm" for="inn">ИНН</label>
             <div class="col-sm-6">
                 <input class="form-control input-sm" type="text" id="inn" th:field="*{inn}"/>
