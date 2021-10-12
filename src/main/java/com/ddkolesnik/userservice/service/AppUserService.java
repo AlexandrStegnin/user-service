@@ -8,6 +8,7 @@ import com.ddkolesnik.userservice.repository.AppUserRepository;
 import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
+import com.ddkolesnik.userservice.web.BitrixWebClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,6 +29,7 @@ import java.util.Objects;
 public class AppUserService {
 
   BitrixContactService bitrixContactService;
+  BitrixWebClient bitrixWebClient;
   AppUserRepository appUserRepository;
   RequisiteService requisiteService;
   AddressService addressService;
@@ -61,18 +63,15 @@ public class AppUserService {
   }
 
   public UserDTO findUser(String phone) {
-    var contact = bitrixContactService.findFirstContact(phone);
-    if (Objects.nonNull(contact)) {
-      var dto = userMapper.toDTO(contact);
-      var requisite = requisiteService.findRequisite(contact.getId().toString());
-      userMapper.updatePassport(requisite, dto);
-      if (Objects.nonNull(requisite)) {
-        var address = addressService.findAddress(requisite);
-        userMapper.updateAddress(address, dto);
-      }
-      return dto;
+    var contact = bitrixContactService.getContact(phone);
+    var dto = userMapper.toDTO(contact);
+    var requisite = requisiteService.findRequisite(contact.getId().toString());
+    userMapper.updatePassport(requisite, dto);
+    if (Objects.nonNull(requisite)) {
+      var address = bitrixWebClient.getAddress(requisite.getId());
+      userMapper.updateAddress(address, dto);
     }
-    return null;
+    return dto;
   }
 
   public void update(AppUser user) {

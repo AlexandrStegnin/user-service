@@ -2,7 +2,7 @@ package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.configuration.exception.BitrixException;
 import com.ddkolesnik.userservice.mapper.UserMapper;
-import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
+import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.AppUserDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
@@ -13,6 +13,7 @@ import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.BusinessProcessService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
+import com.ddkolesnik.userservice.web.BitrixWebClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -44,19 +44,14 @@ public class UserService {
   BitrixContactService bitrixContactService;
   SendMessageService sendMessageService;
   RequisiteService requisiteService;
+  BitrixWebClient bitrixWebClient;
   PasswordEncoder passwordEncoder;
   AddressService addressService;
   AppUserService appUserService;
   UserMapper userMapper;
 
   public UserDTO confirm(UserDTO dto) {
-    var contact = bitrixContactService.getById(dto.getBitrixId().toString());
-    if (Objects.isNull(contact)) {
-      throw BitrixException.builder()
-          .status(HttpStatus.NOT_FOUND)
-          .message("Ошибка. Контакт не найден")
-          .build();
-    }
+    var contact = bitrixContactService.getContact(dto);
     if (!dto.getConfirmCode().equalsIgnoreCase(contact.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.PRECONDITION_FAILED)
@@ -85,12 +80,7 @@ public class UserService {
   }
 
   public void updateAdditionalFields(UserDTO dto) {
-    var contact = bitrixContactService.findFirstContact(dto);
-    if (Objects.isNull(contact)) {
-      String message = String.format("Контакт не найден %s", dto.getPhone());
-      log.error(message);
-      throw new EntityNotFoundException(message);
-    }
+    var contact = bitrixContactService.getContact(dto);
     dto.setId(contact.getId());
     var requisite = requisiteService.findRequisite(dto);
     if (Objects.isNull(requisite)) {
@@ -99,7 +89,7 @@ public class UserService {
     } else {
       requisiteService.updateRequisite(requisite, dto);
     }
-    var address = addressService.findAddress(requisite);
+    var address = bitrixWebClient.getAddress(requisite.getId());
     if (Objects.isNull(address)) {
       addressService.createAddress(dto);
     } else {
@@ -119,7 +109,7 @@ public class UserService {
   public void sendRestoreMessage(UserDTO dto) {
     dto = findUserByPhone(dto);
     businessProcessService.sendRestoreMessage(dto);
-    var contact = bitrixContactService.findFirstContact(dto);
+    var contact = bitrixContactService.getContact(dto);
     if (Objects.isNull(contact.getRawPassword()) || contact.getRawPassword().isBlank()) {
       throw BitrixException.builder()
           .status(HttpStatus.PRECONDITION_FAILED)
@@ -171,13 +161,7 @@ public class UserService {
 
   public void checkConfirmCode(ChangePhoneDTO dto) {
     var phone = SecurityUtils.getCurrentUserPhone();
-    var contact = bitrixContactService.findFirstContact(phone);
-    if (Objects.isNull(contact)) {
-      throw BitrixException.builder()
-          .status(HttpStatus.NOT_FOUND)
-          .message("Не найден контакт Б24")
-          .build();
-    }
+    var contact = bitrixContactService.getContact(phone);
     if (Objects.isNull(contact.getConfirmCode()) || !Objects.equals(contact.getConfirmCode(), dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.PRECONDITION_FAILED)
@@ -203,7 +187,7 @@ public class UserService {
     var phone = SecurityUtils.getCurrentUserPhone();
     var userDTO = getUserDTO(phone);
     var id = userDTO.getId();
-    var contact = bitrixContactService.findFirstContact(userDTO);
+    var contact = bitrixContactService.getContact(userDTO);
     checkConfirmCode(contact, changePhoneDTO);
     bitrixContactService.updateContact(userDTO);
     var user = userMapper.toEntity(userDTO);
@@ -218,14 +202,14 @@ public class UserService {
     return userMapper.toDTO(appUserService.findByPhone(phone));
   }
 
-  private void checkConfirmCode(Contact contact, ChangePhoneDTO dto) {
-    if (Objects.isNull(contact.getConfirmCode()) || Objects.isNull(dto.getConfirmCode())) {
+  private void checkConfirmCode(BitrixContact bitrixContact, ChangePhoneDTO dto) {
+    if (Objects.isNull(bitrixContact.getConfirmCode()) || Objects.isNull(dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.BAD_REQUEST)
           .message("Не указан код подтверждения")
           .build();
     }
-    if (!contact.getConfirmCode().equals(dto.getConfirmCode())) {
+    if (!bitrixContact.getConfirmCode().equals(dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.PRECONDITION_FAILED)
           .message("Код подтверждения не верный")

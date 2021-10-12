@@ -72,6 +72,7 @@ function confirmByEmail() {
         showMessage('ВВЕДИТЕ НОВЫЙ ТЕЛЕФОН')
         return false
     }
+    changePhoneForm.modal('hide')
     sendConfirmEmailMessage(newPhone)
 }
 

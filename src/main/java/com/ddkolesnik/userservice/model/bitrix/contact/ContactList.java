@@ -1,10 +1,11 @@
 package com.ddkolesnik.userservice.model.bitrix.contact;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Aleksandr Stegnin on 05.07.2021
@@ -13,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ContactList {
 
-  List<Contact> result = new ArrayList<>();
+  List<BitrixContact> result = new ArrayList<>();
   String error;
   String total;
   String next;

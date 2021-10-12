@@ -3,8 +3,8 @@ package com.ddkolesnik.userservice.mapper;
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
 import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.enums.Gender;
-import com.ddkolesnik.userservice.model.bitrix.address.Address;
-import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
+import com.ddkolesnik.userservice.model.bitrix.address.BitrixAddress;
+import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
@@ -39,21 +39,21 @@ public abstract class UserMapper {
   public abstract UserDTO toDTO(AppUser user);
 
   @Mapping(target = "bitrixId", source = "id")
-  @Mapping(target = "email", expression = "java(extractEmail(contact))")
-  @Mapping(target = "gender", expression = "java(extractGender(contact))")
-  @Mapping(target = "birthdate", expression = "java(extractBirthdate(contact))")
-  @Mapping(target = "phone", expression = "java(extractPhone(contact))")
-  @Mapping(target = "taxStatus", expression = "java(convertTaxStatus(contact))")
-  public abstract UserDTO toDTO(Contact contact);
+  @Mapping(target = "email", expression = "java(extractEmail(bitrixContact))")
+  @Mapping(target = "gender", expression = "java(extractGender(bitrixContact))")
+  @Mapping(target = "birthdate", expression = "java(extractBirthdate(bitrixContact))")
+  @Mapping(target = "phone", expression = "java(extractPhone(bitrixContact))")
+  @Mapping(target = "taxStatus", expression = "java(convertTaxStatus(bitrixContact))")
+  public abstract UserDTO toDTO(BitrixContact bitrixContact);
 
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
   @Mapping(target = "address", expression = "java(extractAddress(address))")
-  public abstract void updateAddress(Address address, @MappingTarget UserDTO dto);
+  public abstract void updateAddress(BitrixAddress address, @MappingTarget UserDTO dto);
 
-  protected String extractBirthdate(Contact contact) {
-    return contact.getBirthdate().split("T")[0];
+  protected String extractBirthdate(BitrixContact bitrixContact) {
+    return bitrixContact.getBirthdate().split("T")[0];
   }
 
   protected Long getInvestorRole() {
@@ -68,16 +68,16 @@ public abstract class UserMapper {
     return profile;
   }
 
-  protected String extractEmail(Contact contact) {
-    return contact.getEmails().stream()
+  protected String extractEmail(BitrixContact bitrixContact) {
+    return bitrixContact.getEmails().stream()
         .findAny()
         .map(Email::getValue)
         .orElse(null);
   }
 
-  protected Gender extractGender(Contact contact) {
-    if (Objects.nonNull(contact.getGender()) && !contact.getGender().isEmpty()) {
-      return Gender.fromId(Integer.parseInt(contact.getGender()));
+  protected Gender extractGender(BitrixContact bitrixContact) {
+    if (Objects.nonNull(bitrixContact.getGender()) && !bitrixContact.getGender().isEmpty()) {
+      return Gender.fromId(Integer.parseInt(bitrixContact.getGender()));
     }
     return null;
   }
@@ -92,7 +92,7 @@ public abstract class UserMapper {
         .build();
   }
 
-  protected AddressDTO extractAddress(Address address) {
+  protected AddressDTO extractAddress(BitrixAddress address) {
     return AddressDTO.builder()
         .city(address.getCity())
         .streetAndHouse(address.getAddress1())
@@ -100,15 +100,15 @@ public abstract class UserMapper {
         .build();
   }
 
-  protected String extractPhone(Contact contact) {
-    return contact.getPhones().stream()
+  protected String extractPhone(BitrixContact bitrixContact) {
+    return bitrixContact.getPhones().stream()
         .findAny()
         .map(Phone::getValue)
         .orElse(null);
   }
 
-  protected TaxStatus convertTaxStatus(Contact contact) {
-    return TaxStatus.fromCode(contact.getTaxStatus());
+  protected TaxStatus convertTaxStatus(BitrixContact bitrixContact) {
+    return TaxStatus.fromCode(bitrixContact.getTaxStatus());
   }
 
 }

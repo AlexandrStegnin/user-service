@@ -21,4 +21,12 @@ public class BitrixException extends RuntimeException {
     return new BitrixException(message, HttpStatus.BAD_REQUEST);
   }
 
+  public static BitrixException build404Exception(String message) {
+    return new BitrixException(message, HttpStatus.NOT_FOUND);
+  }
+
+  public static BitrixException build500Exception(String message) {
+    return new BitrixException(message, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
 }

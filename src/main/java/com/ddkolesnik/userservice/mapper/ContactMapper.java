@@ -1,8 +1,7 @@
 package com.ddkolesnik.userservice.mapper;
 
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactCreate;
-import com.ddkolesnik.userservice.model.bitrix.contact.ContactUpdate;
+import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.enums.ValueType;
 import com.ddkolesnik.userservice.model.bitrix.file.FileData;
 import com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields;
@@ -31,10 +30,10 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 public abstract class ContactMapper {
 
   @Mapping(target = "fields", expression = "java(extractFields(dto, true))")
-  public abstract ContactCreate convertDtoToContactCreate(UserDTO dto);
+  public abstract Contact toContactCreate(UserDTO dto);
 
   @Mapping(target = "fields", expression = "java(extractFields(dto, false))")
-  public abstract ContactUpdate convertDtoToContactUpdate(UserDTO dto);
+  public abstract Contact toContactUpdate(UserDTO dto);
   
   protected Map<String, Object> extractFields(UserDTO dto, boolean isCreate) {
     var fields = new LinkedHashMap<String, Object>();
