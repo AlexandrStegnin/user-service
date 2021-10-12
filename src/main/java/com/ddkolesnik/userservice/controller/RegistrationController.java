@@ -11,7 +11,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,9 +51,7 @@ public class RegistrationController {
     log.info("Пользователь успешно подтверждён {}", dto);
     userService.authenticateUser(dto.getPhone(), dto.getConfirmCode());
     sendMessageService.sendMessage(dto.getPhone());
-    return ApiResponse.builder()
-        .message("OK")
-        .build();
+    return ApiResponse.build200Response("OK");
   }
 
   @ResponseBody
@@ -62,79 +59,56 @@ public class RegistrationController {
   public ApiResponse create(@RequestBody UserDTO dto) {
     dto = userService.create(dto);
     log.info("Пользователь успешно зарегистрирован {}", dto);
-    return ApiResponse.builder()
-        .message(dto.getBitrixId().toString())
-        .build();
+    return ApiResponse.build200Response(dto.getBitrixId().toString());
   }
 
   @ResponseBody
   @PostMapping(path = Location.CHANGE_PASSWORD)
   public ApiResponse changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
     userService.changePassword(changePasswordDTO);
-    return ApiResponse.builder()
-        .status(HttpStatus.OK)
-        .message("Пароль успешно изменён")
-        .build();
+    return ApiResponse.build200Response("Пароль успешно изменён");
   }
 
   @ResponseBody
   @PostMapping(path = Location.RESTORE_PASSWORD)
   public ApiResponse restorePassword(@RequestBody UserDTO dto) {
     userService.sendRestoreMessage(dto);
-    return ApiResponse.builder()
-        .status(HttpStatus.OK)
-        .message("Сообщение успешно отправлено")
-        .build();
+    return ApiResponse.build200Response("Сообщение успешно отправлено");
   }
 
   @ResponseBody
   @PostMapping(path = Location.CONFIRM_BY_EMAIL)
   public ApiResponse sendConfirmEmailMessage() {
     userService.sendConfirmEmailMessage();
-    return ApiResponse.builder()
-        .status(HttpStatus.OK)
-        .message(SUCCESSFUL_SEND_SMS)
-        .build();
+    return ApiResponse.build200Response(SUCCESSFUL_SEND_SMS);
   }
 
   @ResponseBody
   @PostMapping(path = Location.CONFIRM_OLD_PHONE)
   public ApiResponse confirmOldPhone(@RequestBody ChangePhoneDTO dto) {
     userService.sendConfirmOldPhoneMessage(dto);
-    return ApiResponse.builder()
-        .status(HttpStatus.OK)
-        .message(SUCCESSFUL_SEND_SMS)
-        .build();
+    return ApiResponse.build200Response(SUCCESSFUL_SEND_SMS);
   }
 
   @ResponseBody
   @PostMapping(path = Location.CHECK_CONFIRM_CODE)
   public ApiResponse checkConfirmCode(@RequestBody ChangePhoneDTO dto) {
     userService.checkConfirmCode(dto);
-    return ApiResponse.builder()
-        .status(HttpStatus.OK)
-        .message("Код подтверждён")
-        .build();
+    return ApiResponse.build200Response("Код подтверждён");
   }
 
   @ResponseBody
   @PostMapping(path = Location.CONFIRM_NEW_PHONE)
   public ApiResponse confirmNewPhone(@RequestBody ChangePhoneDTO dto) {
     userService.sendConfirmNewPhoneMessage(dto);
-    return ApiResponse.builder()
-        .status(HttpStatus.OK)
-        .message(SUCCESSFUL_SEND_SMS)
-        .build();
+    return ApiResponse.build200Response(SUCCESSFUL_SEND_SMS);
   }
 
   @ResponseBody
   @PostMapping(path = Location.CHANGE_PHONE)
   public ApiResponse changePhone(@RequestBody ChangePhoneDTO dto) {
     userService.changePhone(dto);
-    return ApiResponse.builder()
-        .status(HttpStatus.OK)
-        .message("Необходимо войти используя новый номер телефона.")
-        .build();
+    return ApiResponse.build200Response("Необходимо войти используя новый номер телефона.");
   }
 
 }

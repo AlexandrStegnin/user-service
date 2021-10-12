@@ -14,10 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -33,7 +31,6 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.CONTACT
 @Slf4j
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@PropertySource(value = "classpath:application.properties")
 public class BitrixContactService extends BitrixService {
 
   ObjectMapper objectMapper;
@@ -52,30 +49,18 @@ public class BitrixContactService extends BitrixService {
   public ApiResponse createOrUpdateContact(UserDTO dto) {
     var duplicate = duplicateService.findDuplicates(dto);
     if (Objects.isNull(duplicate)) {
-      throw BitrixException.builder()
-          .message("Поиск дубликатов по номеру телефона вернул неверный результат")
-          .status(HttpStatus.BAD_REQUEST)
-          .build();
+      throw BitrixException.build400Exception("Поиск дубликатов по номеру телефона вернул неверный результат");
     }
     if (responseEmpty(duplicate.getResult())) {
       Integer contactId = createContact(dto);
       if (Objects.isNull(contactId)) {
-        throw BitrixException.builder()
-            .message("Пользователь не создан")
-            .status(HttpStatus.BAD_REQUEST)
-            .build();
+        throw BitrixException.build400Exception("Пользователь не создан");
       }
       dto.setBitrixId(contactId);
-      return ApiResponse.builder()
-          .status(HttpStatus.CREATED)
-          .message("Пользователь успешно создан в Б24")
-          .build();
+      return ApiResponse.build201Response("Пользователь успешно создан в Б24");
     } else {
       updateContact(dto);
-      return ApiResponse.builder()
-          .status(HttpStatus.OK)
-          .message("Контакт Б24 успешно обновлён")
-          .build();
+      return ApiResponse.build200Response("Контакт Б24 успешно обновлён");
     }
   }
 
@@ -117,10 +102,9 @@ public class BitrixContactService extends BitrixService {
     var phones = new ArrayList<Phone>();
     var oldPhone = contact.getPhones().stream()
         .findAny()
-        .orElseThrow(() -> BitrixException.builder()
-            .message("Не удалось получить телефон из контакта")
-            .status(HttpStatus.BAD_REQUEST)
-            .build());
+        .orElseThrow(() ->
+            BitrixException.build400Exception("Не удалось получить телефон из контакта")
+        );
     oldPhone.setValue("");
     phones.add(oldPhone);
     var newPhone = Phone.builder()

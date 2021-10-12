@@ -1,23 +1,22 @@
 package com.ddkolesnik.userservice.service.bitrix;
 
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
+import com.ddkolesnik.userservice.mapper.RequisiteMapper;
 import com.ddkolesnik.userservice.model.bitrix.requisite.*;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
-import com.ddkolesnik.userservice.utils.DateUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 
-import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.ENTITY_ID;
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.ENTITY_TYPE_ID;
 
 /**
  * @author Alexandr Stegnin
@@ -25,11 +24,14 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 @Slf4j
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@PropertySource(value = "classpath:application.properties")
 public class RequisiteService extends BitrixService {
 
-  public RequisiteService(BitrixProperty bitrixProperty, RestTemplate restTemplate) {
+  RequisiteMapper requisiteMapper;
+
+  public RequisiteService(BitrixProperty bitrixProperty, RestTemplate restTemplate,
+                          RequisiteMapper requisiteMapper) {
     super(bitrixProperty, restTemplate);
+    this.requisiteMapper = requisiteMapper;
   }
 
   public Requisite findRequisite(String entityId) {
@@ -58,7 +60,7 @@ public class RequisiteService extends BitrixService {
 
   public void createRequisite(UserDTO dto) {
     var requisiteCreate = RequisiteCreate.builder()
-        .fields(prepareRequisiteFields(dto))
+        .fields(requisiteMapper.convertFields(dto))
         .build();
     var create = restTemplate.exchange(bitrixProperty.getRequisiteAdd(),
         HttpMethod.POST, new HttpEntity<>(requisiteCreate), Object.class);
@@ -69,29 +71,12 @@ public class RequisiteService extends BitrixService {
   public void updateRequisite(Requisite requisite, UserDTO dto) {
     var requisiteUpdate = RequisiteUpdate.builder()
         .id(Integer.parseInt(requisite.getId()))
-        .fields(prepareRequisiteFields(dto))
+        .fields(requisiteMapper.convertFields(dto))
         .build();
     var update = restTemplate.exchange(bitrixProperty.getRequisiteUpdate(),
         HttpMethod.POST, new HttpEntity<>(requisiteUpdate), Object.class);
     var updated = update.getBody();
     log.info("Результат обновления реквизита {}", updated);
-  }
-
-  private Map<String, Object> prepareRequisiteFields(UserDTO userDTO) {
-    var fields = new LinkedHashMap<String, Object>();
-    fields.put(CONTACT_INN, userDTO.getInn());
-    fields.put(CONTACT_SNILS, userDTO.getSnils());
-    fields.put(PASSPORT_SERIAL, userDTO.getPassport().getSerial());
-    fields.put(PASSPORT_NUMBER, userDTO.getPassport().getNumber());
-    fields.put(PASSPORT_DEP_CODE, userDTO.getPassport().getDepartmentCode());
-    fields.put(PASSPORT_ISSUED_BY, userDTO.getPassport().getIssuedBy());
-    fields.put(ENTITY_TYPE_ID, "3");
-    fields.put(PRESET_ID, "5");
-    fields.put(ENTITY_ID, userDTO.getId().toString());
-    fields.put(REQUISITE_NAME, "Реквизит");
-    fields.put(PASSPORT_ISSUED_AT, DateUtils.convertToDDMMYYYY(userDTO.getPassport().getIssuedAt()));
-    fields.put(IDENT_DOC_NAME, "Паспорт");
-    return fields;
   }
 
 }

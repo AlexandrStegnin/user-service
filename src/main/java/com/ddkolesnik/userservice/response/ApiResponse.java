@@ -21,4 +21,12 @@ public class ApiResponse {
   String message;
   HttpStatus status;
 
+  public static ApiResponse build200Response(String message) {
+    return new ApiResponse(message, HttpStatus.OK);
+  }
+
+  public static ApiResponse build201Response(String message) {
+    return new ApiResponse(message, HttpStatus.CREATED);
+  }
+
 }

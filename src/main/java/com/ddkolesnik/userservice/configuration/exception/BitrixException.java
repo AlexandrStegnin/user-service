@@ -17,4 +17,8 @@ public class BitrixException extends RuntimeException {
   String message;
   HttpStatus status;
 
+  public static BitrixException build400Exception(String message) {
+    return new BitrixException(message, HttpStatus.BAD_REQUEST);
+  }
+
 }

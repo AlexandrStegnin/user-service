@@ -7,7 +7,6 @@ import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 @Slf4j
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@PropertySource(value = "classpath:application.properties")
 public class AddressService extends BitrixService {
 
   RequisiteService requisiteService;
