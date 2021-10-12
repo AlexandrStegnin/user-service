@@ -125,8 +125,8 @@ function changePhone(changePhoneDTO) {
 }
 
 function getChangePhoneDTO(confirmCode) {
-    let method = confirmForm.find('#confirm-method')
-    if (method === ConfirmMethod.BY_PHONE) {
+    let method = confirmForm.find('#confirm-method').val()
+    if (parseInt(method) === ConfirmMethod.BY_PHONE) {
         return {
             oldPhone: oldPhoneField.val().trim(),
             newPhone: newPhoneField.val().trim(),
