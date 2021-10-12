@@ -19,5 +19,6 @@ public class ChangePhoneDTO {
   String newPhone;
   String confirmCode;
   Integer bitrixId;
+  String email;
 
 }

@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class RegistrationController {
 
+  private static final String SUCCESSFUL_SEND_SMS = "КОД УСПЕШНО ОТПРАВЛЕН";
+
   UserService userService;
   SendMessageService sendMessageService;
 
@@ -86,12 +88,22 @@ public class RegistrationController {
   }
 
   @ResponseBody
+  @PostMapping(path = Location.CONFIRM_BY_EMAIL)
+  public ApiResponse sendConfirmEmailMessage() {
+    userService.sendConfirmEmailMessage();
+    return ApiResponse.builder()
+        .status(HttpStatus.OK)
+        .message(SUCCESSFUL_SEND_SMS)
+        .build();
+  }
+
+  @ResponseBody
   @PostMapping(path = Location.CONFIRM_OLD_PHONE)
   public ApiResponse confirmOldPhone(@RequestBody ChangePhoneDTO dto) {
     userService.sendConfirmOldPhoneMessage(dto);
     return ApiResponse.builder()
         .status(HttpStatus.OK)
-        .message("Код успешно отправлен")
+        .message(SUCCESSFUL_SEND_SMS)
         .build();
   }
 
@@ -111,7 +123,7 @@ public class RegistrationController {
     userService.sendConfirmNewPhoneMessage(dto);
     return ApiResponse.builder()
         .status(HttpStatus.OK)
-        .message("Код успешно отправлен")
+        .message(SUCCESSFUL_SEND_SMS)
         .build();
   }
 

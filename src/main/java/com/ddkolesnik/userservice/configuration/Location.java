@@ -29,4 +29,6 @@ public class Location {
 
   public static final String CHANGE_PHONE = "change-phone";
 
+  public static final String CONFIRM_BY_EMAIL = "confirm-by-email";
+
 }

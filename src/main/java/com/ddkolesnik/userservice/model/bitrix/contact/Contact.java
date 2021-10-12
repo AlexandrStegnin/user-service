@@ -65,6 +65,9 @@ public class Contact {
   @JsonProperty(CONTACT_TAX_STATUS)
   Integer taxStatus;
 
+  @JsonProperty(CONTACT_NEW_PHONE)
+  String newPhone;
+
   @JsonCreator
   public Contact(@JsonProperty(CONTACT_ID) Integer id,
                  @JsonProperty(CONTACT_NAME) String name,
@@ -77,7 +80,8 @@ public class Contact {
                  @JsonProperty(CONTACT_PLACE_OF_BIRTH) String placeOfBirth,
                  @JsonProperty(CONTACT_CONFIRM_CODE) String confirmCode,
                  @JsonProperty(CONTACT_RAW_PASSWORD) String rawPassword,
-                 @JsonProperty(CONTACT_TAX_STATUS) Integer taxStatus) {
+                 @JsonProperty(CONTACT_TAX_STATUS) Integer taxStatus,
+                 @JsonProperty(CONTACT_NEW_PHONE) String newPhone) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
@@ -90,6 +94,7 @@ public class Contact {
     this.confirmCode = confirmCode;
     this.rawPassword = rawPassword;
     this.taxStatus = taxStatus;
+    this.newPhone = newPhone;
   }
 
 }

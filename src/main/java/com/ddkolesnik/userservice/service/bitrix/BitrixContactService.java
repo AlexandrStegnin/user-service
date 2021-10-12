@@ -24,6 +24,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.CONTACT_CONFIRM_CODE;
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.CONTACT_NEW_PHONE;
+
 /**
  * @author Aleksandr Stegnin on 05.07.2021
  */
@@ -128,14 +131,33 @@ public class BitrixContactService extends BitrixService {
 
     fields.put(BitrixFields.CONTACT_PHONE, phones);
 
-    var contactUpdate = ContactUpdate.builder()
-        .id(userDTO.getBitrixId())
-        .fields(fields)
-        .build();
+    var contactUpdate = getContactUpdate(userDTO, fields);
     var update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
         HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
     var updated = update.getBody();
     log.info("Результат обновления телефона контакта {}", updated);
+  }
+
+  public void updateContactConfirmCode(UserDTO userDTO) {
+    var fields = new HashMap<String, Object>();
+    fields.put(CONTACT_CONFIRM_CODE, userDTO.getConfirmCode());
+
+    var contactUpdate = getContactUpdate(userDTO, fields);
+    var update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
+        HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
+    var updated = update.getBody();
+    log.info("Результат обновления кода подтверждения контакта {}", updated);
+  }
+
+  public void addNewContactPhone(UserDTO userDTO, String newPhone) {
+    var fields = new HashMap<String, Object>();
+    fields.put(CONTACT_NEW_PHONE, newPhone);
+
+    var contactUpdate = getContactUpdate(userDTO, fields);
+    var update = restTemplate.exchange(bitrixProperty.getContactUpdate(),
+        HttpMethod.POST, new HttpEntity<>(contactUpdate), Object.class);
+    var updated = update.getBody();
+    log.info("Результат добавления нового телефона контакту контакта {}", updated);
   }
 
   public Contact getById(String id) {
@@ -190,6 +212,13 @@ public class BitrixContactService extends BitrixService {
       isEmpty = ((LinkedHashMap<?, ?>) result).isEmpty();
     }
     return isEmpty;
+  }
+
+  private ContactUpdate getContactUpdate(UserDTO userDTO, Map<String, Object> fields) {
+    return ContactUpdate.builder()
+        .id(userDTO.getBitrixId())
+        .fields(fields)
+        .build();
   }
 
 }

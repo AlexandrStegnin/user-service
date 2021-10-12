@@ -25,6 +25,7 @@ public class BitrixFields {
   public static final String CONTACT_SNILS = "UF_CRM_1569583111";
   public static final String CONTACT_IS_INDIVIDUAL ="UF_CRM_1623241031";
   public static final String CONTACT_IS_SELF_EMPLOYED = "UF_CRM_1623241054";
+  public static final String CONTACT_NEW_PHONE = "UF_CRM_1630478597";
   public static final String PASSPORT_SERIAL = "RQ_IDENT_DOC_SER";
   public static final String PASSPORT_NUMBER = "RQ_IDENT_DOC_NUM";
   public static final String PASSPORT_DEP_CODE = "RQ_IDENT_DOC_DEP_CODE";

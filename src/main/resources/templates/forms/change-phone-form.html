@@ -9,21 +9,43 @@
       </div>
       <div class="modal-body">
         <div class="container">
-          <form method="POST" action="#" class="form-horizontal"
-                style="margin: 10px 0 10px 0" id="change-phone-form">
-            <div class="form-group row">
-              <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="old-phone">СТАРЫЙ ТЕЛЕФОН:</label>
-              <div class="col-sm-4">
-                <input type="text" id="old-phone" class="form-control input-sm" required/>
+          <div class="p-2" style="text-align: center">КАК ВАМ УДОБНЕЕ ПОЛУЧИТЬ КОД ПОДТВЕРЖДЕНИЯ?</div>
+          <ul class="nav nav-tabs nav-justified" id="change">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#by-phone">ПО СТАРОМУ НОМЕРУ ТЕЛЕФОНУ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#by-email">ПО EMAIL</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="by-phone">
+              <div class="form-group row" style="padding-top: 10px">
+                <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="old-phone">ВВЕДИТЕ СТАРЫЙ НОМЕР:</label>
+                <div class="col-sm-4">
+                  <input type="text" id="old-phone" class="form-control input-sm" required/>
+                </div>
+              </div>
+              <div class="form-group row" style="padding-top: 10px">
+                <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="new-phone">ВВЕДИТЕ НОВЫЙ НОМЕР:</label>
+                <div class="col-sm-4">
+                  <input type="text" id="new-phone" class="form-control input-sm" required/>
+                </div>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="new-phone">НОВЫЙ ТЕЛЕФОН:</label>
-              <div class="col-sm-4">
-                <input type="text" id="new-phone" class="form-control input-sm" required/>
+            <div class="tab-pane fade" id="by-email">
+              <div class="form-group row" style="padding-top: 10px">
+                <label class="col-sm offset-sm-2 col-form-label-sm">НА УКАЗАННЫЙ В ПРОФИЛЕ EMAIL БУДЕТ ОТПРАВЛЕН КОД ПОДТВЕРЖДЕНИЯ</label>
+              </div>
+              <div class="form-group row" style="padding-top: 10px">
+                <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="new-phone-by-email">ВВЕДИТЕ НОВЫЙ НОМЕР:</label>
+                <div class="col-sm-4">
+                  <input type="tel" id="new-phone-by-email" class="form-control input-sm" required/>
+                </div>
               </div>
             </div>
-          </form>
+          </div>
+
         </div>
       </div>
       <div class="modal-footer">

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 /**
  * @author Alexandr Stegnin
  */
@@ -23,21 +25,24 @@ import reactor.core.publisher.Mono;
 public class SendMessageService {
 
   @Value("${spring.mail.app.token}")
-  String MAIL_APP_TOKEN;
+  String mailAppToken;
 
   @Value("${spring.mail.app.base.url}")
-  String MAIL_APP_BASE_URL;
+  String mailAppBaseUrl;
 
   @Value("${spring.mail.app.welcome.path}")
-  String MAIL_APP_WELCOME_PATH;
+  String mailAppWelcomePath;
+
+  @Value("${spring.mail.app.send.confirm.path}")
+  String mailAppSendConfirmPath;
 
   final AppUserService appUserService;
 
   public void sendMessage(String login) {
-    if (MAIL_APP_TOKEN == null || MAIL_APP_TOKEN.isEmpty()) {
+    WebClient webClient = getWebClient();
+    if (Objects.isNull(webClient)) {
       return;
     }
-    WebClient webClient = WebClient.create(MAIL_APP_BASE_URL);
     AppUser user = appUserService.findByPhone(login);
     if (user.getProfile().getEmail() == null) {
       return;
@@ -45,12 +50,33 @@ public class SendMessageService {
     AppUserDTO userDTO = new AppUserDTO();
     userDTO.setEmail(user.getProfile().getEmail());
     webClient.post()
-        .uri(MAIL_APP_TOKEN + MAIL_APP_WELCOME_PATH)
+        .uri(mailAppToken + mailAppWelcomePath)
         .contentType(MediaType.APPLICATION_JSON)
         .body(Mono.just(userDTO), AppUserDTO.class)
         .retrieve()
         .bodyToMono(Void.class)
         .subscribe();
+  }
+
+  public void sendConfirmEmailMessage(AppUserDTO dto) {
+    WebClient webClient = getWebClient();
+    if (Objects.isNull(webClient)) {
+      return;
+    }
+    webClient.post()
+        .uri(mailAppToken + mailAppSendConfirmPath)
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(Mono.just(dto), AppUserDTO.class)
+        .retrieve()
+        .bodyToMono(Void.class)
+        .subscribe();
+  }
+
+  private WebClient getWebClient() {
+    if (mailAppToken == null || mailAppToken.isEmpty()) {
+      return null;
+    }
+    return WebClient.create(mailAppBaseUrl);
   }
 
 }

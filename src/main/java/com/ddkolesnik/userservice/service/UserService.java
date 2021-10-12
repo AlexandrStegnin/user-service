@@ -3,6 +3,8 @@ package com.ddkolesnik.userservice.service;
 import com.ddkolesnik.userservice.configuration.exception.BitrixException;
 import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
+import com.ddkolesnik.userservice.model.domain.AppUser;
+import com.ddkolesnik.userservice.model.dto.AppUserDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
@@ -10,6 +12,7 @@ import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.BusinessProcessService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
+import com.ddkolesnik.userservice.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -39,6 +42,7 @@ public class UserService {
   BusinessProcessService businessProcessService;
   AuthenticationManager authenticationManager;
   BitrixContactService bitrixContactService;
+  SendMessageService sendMessageService;
   RequisiteService requisiteService;
   PasswordEncoder passwordEncoder;
   AddressService addressService;
@@ -147,13 +151,27 @@ public class UserService {
     appUserService.update(user);
   }
 
+  public void sendConfirmEmailMessage() {
+    String phone = SecurityUtils.getCurrentUserPhone();
+    AppUser user = appUserService.findByPhone(phone);
+    AppUserDTO dto = AppUserDTO.builder()
+        .email(user.getProfile().getEmail())
+        .confirmCode(UUID.randomUUID().toString().substring(0, 8))
+        .build();
+    sendMessageService.sendConfirmEmailMessage(dto);
+    var userDTO = getUserDTO(phone);
+    userDTO.setConfirmCode(dto.getConfirmCode());
+    bitrixContactService.updateContactConfirmCode(userDTO);
+  }
+
   public void sendConfirmOldPhoneMessage(ChangePhoneDTO dto) {
     var userDTO = getUserDTO(dto.getOldPhone());
     businessProcessService.sendConfirmOldPhoneMessage(userDTO);
   }
 
   public void checkConfirmCode(ChangePhoneDTO dto) {
-    var contact = bitrixContactService.findFirstContact(dto.getOldPhone());
+    var phone = SecurityUtils.getCurrentUserPhone();
+    var contact = bitrixContactService.findFirstContact(phone);
     if (Objects.isNull(contact)) {
       throw BitrixException.builder()
           .status(HttpStatus.NOT_FOUND)
@@ -169,12 +187,21 @@ public class UserService {
   }
 
   public void sendConfirmNewPhoneMessage(ChangePhoneDTO dto) {
-    var userDTO = getUserDTO(dto.getOldPhone());
+    var phone = SecurityUtils.getCurrentUserPhone();
+    var userDTO = getUserDTO(phone);
+    addNewPhoneToContact(dto);
     businessProcessService.sendConfirmNewPhoneMessage(userDTO);
   }
 
+  private void addNewPhoneToContact(ChangePhoneDTO dto) {
+    var phone = SecurityUtils.getCurrentUserPhone();
+    var userDTO = getUserDTO(phone);
+    bitrixContactService.addNewContactPhone(userDTO, dto.getNewPhone());
+  }
+
   public void changePhone(ChangePhoneDTO changePhoneDTO) {
-    var userDTO = getUserDTO(changePhoneDTO.getOldPhone());
+    var phone = SecurityUtils.getCurrentUserPhone();
+    var userDTO = getUserDTO(phone);
     var id = userDTO.getId();
     var contact = bitrixContactService.findFirstContact(userDTO);
     checkConfirmCode(contact, changePhoneDTO);

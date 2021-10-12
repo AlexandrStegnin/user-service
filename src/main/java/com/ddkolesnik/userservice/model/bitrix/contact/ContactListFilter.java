@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
+
 /**
  * @author Aleksandr Stegnin on 05.07.2021
  */
@@ -25,24 +27,25 @@ public class ContactListFilter {
   Map<String, String[]> filter = new HashMap<>(1);
 
   public ContactListFilter() {
-    select.add("NAME");
-    select.add("SECOND_NAME");
-    select.add("LAST_NAME");
-    select.add("EMAIL");
-    select.add("UF_CRM_1554359872664");
-    select.add("UF_CRM_1623241031");
-    select.add("UF_CRM_1623241054");
-    select.add("BIRTHDATE");
-    select.add("UF_CRM_1623241366");
-    select.add("RQ_IDENT_DOC");
-    select.add("RQ_IDENT_DOC_DATE");
-    select.add("CITY");
-    select.add("ADDRESS_1");
-    select.add("ADDRESS_2");
-    select.add("UF_CRM_1627978615");
-    select.add("UF_CRM_1632722824");
-    select.add("PHONE");
-    select.add("UF_CRM_1633509856");
+    select.add(CONTACT_NAME);
+    select.add(CONTACT_SECOND_NAME);
+    select.add(CONTACT_LAST_NAME);
+    select.add(CONTACT_EMAIL);
+    select.add(CONTACT_GENDER);
+    select.add(CONTACT_IS_INDIVIDUAL);
+    select.add(CONTACT_IS_SELF_EMPLOYED);
+    select.add(CONTACT_BIRTHDATE);
+    select.add(CONTACT_PLACE_OF_BIRTH);
+    select.add(IDENT_DOC_NAME);
+    select.add(PASSPORT_ISSUED_AT);
+    select.add(CITY);
+    select.add(ADDRESS_1);
+    select.add(ADDRESS_2);
+    select.add(CONTACT_CONFIRM_CODE);
+    select.add(CONTACT_RAW_PASSWORD);
+    select.add(CONTACT_PHONE);
+    select.add(CONTACT_TAX_STATUS);
+    select.add(CONTACT_NEW_PHONE);
   }
 
   public ContactListFilter(Map<String, String[]> filter) {
