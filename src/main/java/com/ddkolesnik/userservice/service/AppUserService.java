@@ -74,6 +74,15 @@ public class AppUserService {
 
   public void update(AppUser user) {
     appUserRepository.save(user);
+    updateAccount(user);
+  }
+
+  private void updateAccount(AppUser user) {
+    var account = accountService.findByOwnerId(user.getId(), OwnerType.INVESTOR);
+    if (Objects.nonNull(account)) {
+      account.setAccountNumber(user.getPhone());
+      accountService.update(account);
+    }
   }
 
 }

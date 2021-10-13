@@ -114,6 +114,9 @@ function changePhone(changePhoneDTO) {
             if (data.status === 'OK') {
                 confirmForm.modal('hide')
                 showMessage(data.message.toUpperCase())
+                window.setTimeout(function () {
+                    window.location.href = '/'
+                }, 1000)
             }
         })
         .fail(function (jqXHR) {

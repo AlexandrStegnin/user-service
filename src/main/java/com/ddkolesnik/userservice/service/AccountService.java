@@ -20,23 +20,27 @@ import org.springframework.transaction.annotation.Transactional;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AccountService {
 
-    AccountRepository accountRepository;
+  AccountRepository accountRepository;
 
-    public void createAccount(AppUser user) {
-        Account account = new Account();
-        account.setAccountNumber(generateAccountNumber(user));
-        account.setOwnerId(user.getId());
-        account.setOwnerType(OwnerType.INVESTOR);
-        account.setOwnerName(user.getLogin());
-        accountRepository.save(account);
-    }
+  public void createAccount(AppUser user) {
+    Account account = new Account();
+    account.setAccountNumber(generateAccountNumber(user));
+    account.setOwnerId(user.getId());
+    account.setOwnerType(OwnerType.INVESTOR);
+    account.setOwnerName(user.getLogin());
+    accountRepository.save(account);
+  }
 
-    private String generateAccountNumber(AppUser user) {
-        return user.getPhone();
-    }
+  private String generateAccountNumber(AppUser user) {
+    return user.getPhone();
+  }
 
-    public Account findByOwnerId(Long ownerId, OwnerType ownerType) {
-        return accountRepository.findByOwnerIdAndOwnerType(ownerId, ownerType);
-    }
+  public Account findByOwnerId(Long ownerId, OwnerType ownerType) {
+    return accountRepository.findByOwnerIdAndOwnerType(ownerId, ownerType);
+  }
+
+  public void update(Account account) {
+    accountRepository.save(account);
+  }
 
 }
