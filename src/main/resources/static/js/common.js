@@ -18,7 +18,7 @@ function showMessage(message) {
 
 function onEnterKeyPressed() {
     $(document).keypress(function(e) {
-        if ($("#confirm-form-modal").hasClass('show')
+        if ($('#confirm-form-modal').hasClass('show')
             && (e.keycode === 13 || e.which === 13)) {
             e.preventDefault()
             confirmButton.click()

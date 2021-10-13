@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/favicon.ico", "/js/**", "/css/**",
             "/", "/registration", "/confirm", "/create", "/restore-password",
             "/change-password", "/confirm-old-phone", "/check-confirm-code",
-            "/confirm-new-phone", "/change-phone").permitAll()
+            "/confirm-new-phone", "/change-phone", "/confirm-by-email").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin()

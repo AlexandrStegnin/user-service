@@ -26,6 +26,7 @@ jQuery(document).ready(function ($) {
     onChangePhoneClick()
     onChangePhoneFormSubmit()
     onConfirmPhone()
+    onEnterKeyPressed()
 })
 
 function onChangePhoneClick() {
@@ -263,4 +264,14 @@ function showConfirmForm(isOld, method) {
     confirmForm.find('#title').text(title)
     confirmForm.find('#confirm-code').val('')
     confirmForm.modal('show')
+}
+
+function onEnterKeyPressed() {
+    $(document).keypress(function(e) {
+        if ($('#confirm-form-modal').hasClass('show')
+            && (e.keycode === 13 || e.which === 13)) {
+            e.preventDefault()
+            confirmButton.click()
+        }
+    });
 }

@@ -5,7 +5,6 @@ import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
-import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
 import com.ddkolesnik.userservice.web.BitrixWebClient;
@@ -32,7 +31,6 @@ public class AppUserService {
   BitrixWebClient bitrixWebClient;
   AppUserRepository appUserRepository;
   RequisiteService requisiteService;
-  AddressService addressService;
   AccountService accountService;
   PasswordEncoder encoder;
   UserMapper userMapper;
