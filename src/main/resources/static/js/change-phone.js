@@ -127,20 +127,25 @@ function changePhone(changePhoneDTO) {
 
 function getChangePhoneDTO(confirmCode) {
     let method = confirmForm.find('#confirm-method').val()
+    let changePhoneDTO
     if (parseInt(method) === ConfirmMethod.BY_PHONE) {
-        return {
+        changePhoneDTO = {
             oldPhone: oldPhoneField.val().trim(),
             newPhone: newPhoneField.val().trim(),
             confirmCode: confirmCode,
             bitrixId: $('#client-id').val()
         }
     } else {
-        return {
+        changePhoneDTO = {
             newPhone: newPhoneFieldByEmail.val().trim(),
             confirmCode: confirmCode,
             bitrixId: $('#client-id').val()
         }
     }
+    if (changePhoneDTO.newPhone === '') {
+        changePhoneDTO.newPhone = newPhoneFieldByEmail.val().trim()
+    }
+    return changePhoneDTO
 }
 
 function sendConfirmPhoneMessage(oldPhone, newPhone, isOld) {
