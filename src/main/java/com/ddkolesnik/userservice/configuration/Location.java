@@ -14,6 +14,7 @@ public class Location {
   public final String REGISTRATION_URL = "/registration";
   public final String CONFIRM_URL = "/confirm";
   public final String CREATE_USER = "/create";
+  public final String UPDATE_USER = "/update";
   public final String RESTORE_PASSWORD = "/restore-password";
   public final String CHANGE_PASSWORD = "/change-password";
   public final String CONFIRM_OLD_PHONE = "/confirm-old-phone";
