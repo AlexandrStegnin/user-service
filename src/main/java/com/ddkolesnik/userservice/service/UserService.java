@@ -13,7 +13,6 @@ import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.BusinessProcessService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
-import com.ddkolesnik.userservice.web.BitrixWebClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -44,7 +43,6 @@ public class UserService {
   BitrixContactService bitrixContactService;
   SendMessageService sendMessageService;
   RequisiteService requisiteService;
-  BitrixWebClient bitrixWebClient;
   PasswordEncoder passwordEncoder;
   AddressService addressService;
   AppUserService appUserService;
@@ -92,7 +90,7 @@ public class UserService {
     } else {
       requisiteService.updateRequisite(requisite, dto);
     }
-    var address = bitrixWebClient.getAddress(requisite.getId());
+    var address = addressService.findAddress(requisite);
     if (Objects.isNull(address)) {
       addressService.createAddress(dto);
     } else {

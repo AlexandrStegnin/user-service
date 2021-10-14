@@ -5,6 +5,7 @@ import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
+import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
 import com.ddkolesnik.userservice.web.BitrixWebClient;
@@ -32,6 +33,7 @@ public class AppUserService {
   AppUserRepository appUserRepository;
   RequisiteService requisiteService;
   AccountService accountService;
+  AddressService addressService;
   PasswordEncoder encoder;
   UserMapper userMapper;
 
@@ -66,7 +68,7 @@ public class AppUserService {
     var requisite = requisiteService.findRequisite(contact.getId().toString());
     userMapper.updatePassport(requisite, dto);
     if (Objects.nonNull(requisite)) {
-      var address = bitrixWebClient.getAddress(requisite.getId());
+      var address = addressService.findAddress(requisite);
       userMapper.updateAddress(address, dto);
     }
     return dto;

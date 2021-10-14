@@ -2,10 +2,6 @@ package com.ddkolesnik.userservice.web;
 
 import com.ddkolesnik.userservice.configuration.exception.BitrixException;
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
-import com.ddkolesnik.userservice.model.bitrix.address.Address;
-import com.ddkolesnik.userservice.model.bitrix.address.AddressFilter;
-import com.ddkolesnik.userservice.model.bitrix.address.AddressResult;
-import com.ddkolesnik.userservice.model.bitrix.address.BitrixAddress;
 import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.contact.ContactList;
@@ -24,8 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
-
-import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 
 /**
  * @author Alexandr Stegnin
@@ -123,48 +117,6 @@ public class BitrixWebClient {
     } catch (Exception e) {
       log.error("При поиске дубликатов по номеру телефона {} произошла ошибка {}", phone, e.toString());
       return true;
-    }
-  }
-
-  public BitrixAddress getAddress(String requisiteId) {
-    try {
-      var filter = new LinkedHashMap<String, String>();
-      filter.put(ENTITY_TYPE_ID, "8");
-      filter.put(TYPE_ID, "1");
-      filter.put(ENTITY_ID, requisiteId);
-      var addressFilter = new AddressFilter(filter);
-      var address = restTemplate.exchange(bitrixProperty.getAddressList(),
-          HttpMethod.POST, new HttpEntity<>(addressFilter), AddressResult.class);
-      var response = address.getBody();
-      if (Objects.isNull(response) || response.getTotal() == 0) {
-        return null;
-      }
-      var addresses = response.getResult();
-      if (addresses.isEmpty()) {
-        return null;
-      }
-      return addresses.get(0);
-    } catch (Exception e) {
-      log.error("При получении адреса произошла ошибка {}", e.toString());
-      throw BitrixException.build500Exception("При получении адреса произошла ошибка");
-    }
-  }
-
-  public boolean createAddress(Address address) {
-    try {
-      ParameterizedTypeReference<LinkedHashMap<String, Object>> responseType =
-          new ParameterizedTypeReference<>() {
-          };
-      var create = restTemplate.exchange(bitrixProperty.getAddressAdd(),
-          HttpMethod.POST, new HttpEntity<>(address), responseType);
-      var created = create.getBody();
-      if (Objects.isNull(created)) {
-        throw BitrixException.build400Exception("При создании адреса произошла ошибка");
-      }
-      return (Boolean) created.get(BITRIX_SUCCESS_RESPONSE_KEY);
-    } catch (Exception e) {
-      log.error("При создании адреса произошла ошибка {}", e.toString());
-      throw BitrixException.build500Exception("При создании адреса произошла ошибка");
     }
   }
 
