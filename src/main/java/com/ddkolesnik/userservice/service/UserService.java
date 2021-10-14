@@ -50,7 +50,7 @@ public class UserService {
   AppUserService appUserService;
   UserMapper userMapper;
 
-  public UserDTO confirm(UserDTO dto) {
+  public void confirm(UserDTO dto) {
     var contact = bitrixContactService.getContact(dto);
     if (!dto.getConfirmCode().equalsIgnoreCase(contact.getConfirmCode())) {
       throw BitrixException.builder()
@@ -58,8 +58,10 @@ public class UserService {
           .message("Ошибка. Контакт не подтверждён")
           .build();
     }
+    log.info("Пользователь успешно подтверждён {}", dto);
     appUserService.updatePassword(dto.getPhone(), dto.getConfirmCode());
-    return dto;
+    authenticateUser(dto.getPhone(), dto.getConfirmCode());
+    sendMessageService.sendMessage(dto.getPhone());
   }
 
   public UserDTO create(UserDTO dto) {
@@ -68,6 +70,7 @@ public class UserService {
       createAppUser(dto);
     }
     businessProcessService.sendConfirmMessage(dto);
+    log.info("Пользователь успешно зарегистрирован {}", dto);
     return dto;
   }
 
