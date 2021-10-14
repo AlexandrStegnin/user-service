@@ -1,6 +1,5 @@
 package com.ddkolesnik.userservice.controller;
 
-import com.ddkolesnik.userservice.configuration.Location;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static com.ddkolesnik.userservice.configuration.Location.*;
+
 /**
  * @author Aleksandr Stegnin on 08.07.2021
  */
@@ -33,19 +34,19 @@ public class RegistrationController {
   UserService userService;
   SendMessageService sendMessageService;
 
-  @GetMapping(path = Location.HOME_URL)
+  @GetMapping(path = HOME_URL)
   public String redirect() {
-    return "redirect:/login";
+    return "redirect:" + LOGIN_URL;
   }
 
-  @GetMapping(path = Location.REGISTRATION_URL)
+  @GetMapping(path = REGISTRATION_URL)
   public String registrationPage(Model model) {
     model.addAttribute("userDTO", UserDTO.builder().build());
     return "registration";
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CONFIRM_URL, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = CONFIRM_URL, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponse confirmUser(@RequestBody UserDTO dto) {
     dto = userService.confirm(dto);
     log.info("Пользователь успешно подтверждён {}", dto);
@@ -55,7 +56,7 @@ public class RegistrationController {
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CREATE_USER, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = CREATE_USER, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ApiResponse create(@RequestBody UserDTO dto) {
     dto = userService.create(dto);
     log.info("Пользователь успешно зарегистрирован {}", dto);
@@ -63,49 +64,49 @@ public class RegistrationController {
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CHANGE_PASSWORD)
+  @PostMapping(path = CHANGE_PASSWORD)
   public ApiResponse changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
     userService.changePassword(changePasswordDTO);
     return ApiResponse.build200Response("Пароль успешно изменён");
   }
 
   @ResponseBody
-  @PostMapping(path = Location.RESTORE_PASSWORD)
+  @PostMapping(path = RESTORE_PASSWORD)
   public ApiResponse restorePassword(@RequestBody UserDTO dto) {
     userService.sendRestoreMessage(dto);
     return ApiResponse.build200Response("Сообщение успешно отправлено");
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CONFIRM_BY_EMAIL)
+  @PostMapping(path = CONFIRM_BY_EMAIL)
   public ApiResponse sendConfirmEmailMessage() {
     userService.sendConfirmEmailMessage();
     return ApiResponse.build200Response(SUCCESSFUL_SEND_SMS);
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CONFIRM_OLD_PHONE)
+  @PostMapping(path = CONFIRM_OLD_PHONE)
   public ApiResponse confirmOldPhone(@RequestBody ChangePhoneDTO dto) {
     userService.sendConfirmOldPhoneMessage(dto);
     return ApiResponse.build200Response(SUCCESSFUL_SEND_SMS);
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CHECK_CONFIRM_CODE)
+  @PostMapping(path = CHECK_CONFIRM_CODE)
   public ApiResponse checkConfirmCode(@RequestBody ChangePhoneDTO dto) {
     userService.checkConfirmCode(dto);
     return ApiResponse.build200Response("Код подтверждён");
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CONFIRM_NEW_PHONE)
+  @PostMapping(path = CONFIRM_NEW_PHONE)
   public ApiResponse confirmNewPhone(@RequestBody ChangePhoneDTO dto) {
     userService.sendConfirmNewPhoneMessage(dto);
     return ApiResponse.build200Response(SUCCESSFUL_SEND_SMS);
   }
 
   @ResponseBody
-  @PostMapping(path = Location.CHANGE_PHONE)
+  @PostMapping(path = CHANGE_PHONE)
   public ApiResponse changePhone(@RequestBody ChangePhoneDTO dto) {
     userService.changePhone(dto);
     return ApiResponse.build200Response("Необходимо войти используя новый номер телефона.");

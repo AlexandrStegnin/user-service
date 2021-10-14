@@ -1,14 +1,14 @@
 package com.ddkolesnik.userservice.configuration;
 
+import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
@@ -18,23 +18,16 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
  * @author Aleksandr Stegnin on 05.07.2021
  */
 @Configuration
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@PropertySource(value = "classpath:private.properties")
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AppConfiguration {
 
-  @Value("${bitrix.default.url}")
-  String bitrixApiBaseUrl;
-
-  @Value("${bitrix.webhook.user.id}")
-  String bitrixWebhookUserId;
-
-  @Value("${bitrix.access.key}")
-  String bitrixAccessKey;
+  BitrixProperty bitrixProperty;
 
   @Bean
   public RestTemplate getRestTemplate() {
     RestTemplateBuilder builder = new RestTemplateBuilder();
-    DefaultUriBuilderFactory builderFactory = new DefaultUriBuilderFactory(getBaseUrl());
+    DefaultUriBuilderFactory builderFactory = new DefaultUriBuilderFactory(bitrixProperty.getApiUrl());
     builder.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     RestTemplate restTemplate = builder.build();
     restTemplate.setUriTemplateHandler(builderFactory);
@@ -46,10 +39,6 @@ public class AppConfiguration {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
     return mapper;
-  }
-
-  private String getBaseUrl() {
-    return bitrixApiBaseUrl + bitrixWebhookUserId + bitrixAccessKey;
   }
 
 }

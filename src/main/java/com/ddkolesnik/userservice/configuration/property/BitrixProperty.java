@@ -20,6 +20,15 @@ import javax.validation.constraints.NotBlank;
 public class BitrixProperty {
 
   @NotBlank
+  String defaultUrl;
+
+  @NotBlank
+  String webhookUserId;
+
+  @NotBlank
+  String accessKey;
+
+  @NotBlank
   String duplicateFindByComm;
 
   @NotBlank
@@ -57,5 +66,9 @@ public class BitrixProperty {
 
   @NotBlank
   String businessProcessStart;
+
+  public String getApiUrl() {
+    return defaultUrl + webhookUserId + accessKey;
+  }
 
 }

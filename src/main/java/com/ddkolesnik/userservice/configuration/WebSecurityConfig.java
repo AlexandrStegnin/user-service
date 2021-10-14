@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.ddkolesnik.userservice.configuration.Location.*;
+
 /**
  * @author Aleksandr Stegnin on 08.07.2021
  */
@@ -20,16 +22,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .authorizeRequests()
-        .antMatchers("/favicon.ico", "/js/**", "/css/**",
-            "/", "/registration", "/confirm", "/create", "/restore-password",
-            "/change-password", "/confirm-old-phone", "/check-confirm-code",
-            "/confirm-new-phone", "/change-phone", "/confirm-by-email").permitAll()
+        .antMatchers("/favicon.ico", "/js/**", "/css/**", PERMITTED_ALL).permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin()
-        .loginPage("/login")
+        .loginPage(LOGIN_URL)
         .usernameParameter("username").passwordParameter("password")
-        .defaultSuccessUrl("/profile")
+        .defaultSuccessUrl(PROFILE)
         .permitAll()
         .and()
         .logout()
