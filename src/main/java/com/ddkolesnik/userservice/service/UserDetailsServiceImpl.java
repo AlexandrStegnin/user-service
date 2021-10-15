@@ -2,6 +2,7 @@ package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
+import com.ddkolesnik.userservice.utils.PhoneUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,13 +25,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-    phone = clearPhone(phone);
+    phone = PhoneUtils.clearPhone(phone);
     Optional<AppUser> optionalAppUser = appUserRepository.findByPhone(phone);
     return optionalAppUser
         .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
   }
 
-  private String clearPhone(String phone) {
-    return phone.replaceAll("(\\+)|\\D", "$1");
-  }
 }

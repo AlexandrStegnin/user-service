@@ -12,6 +12,7 @@ import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.BusinessProcessService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
+import com.ddkolesnik.userservice.utils.PhoneUtils;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -108,7 +109,8 @@ public class UserService {
   }
 
   public void sendRestoreMessage(UserDTO dto) {
-    dto = findUserByPhone(dto);
+    var phone = PhoneUtils.clearPhone(dto.getPhone());
+    dto = findUserByPhone(phone);
     businessProcessService.sendRestoreMessage(dto);
     var contact = bitrixContactService.getContact(dto);
     if (Objects.isNull(contact.getRawPassword()) || contact.getRawPassword().isBlank()) {
@@ -121,8 +123,8 @@ public class UserService {
     appUserService.updatePassword(dto);
   }
 
-  private UserDTO findUserByPhone(UserDTO dto) {
-    var user = appUserService.findByPhone(dto.getPhone());
+  private UserDTO findUserByPhone(String phone) {
+    var user = appUserService.findByPhone(phone);
     return userMapper.toDTO(user);
   }
 

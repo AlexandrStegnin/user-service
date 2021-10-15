@@ -24,7 +24,4 @@ public class Location {
   public final String CONFIRM_BY_EMAIL = "/confirm-by-email";
   public final String PROFILE = "/profile";
 
-  public final String PERMITTED_ALL = String.join(",", HOME_URL, LOGIN_URL, LOGOUT_URL, CONFIRM_URL, CREATE_USER,
-      RESTORE_PASSWORD, CHANGE_PASSWORD, CONFIRM_OLD_PHONE, CHECK_CONFIRM_CODE, CONFIRM_NEW_PHONE, CHANGE_PHONE, CONFIRM_BY_EMAIL);
-
 }

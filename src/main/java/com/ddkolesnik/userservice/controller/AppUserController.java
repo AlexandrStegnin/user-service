@@ -40,7 +40,7 @@ public class AppUserController {
 
   @GetMapping(path = LOGIN_URL)
   public String login() {
-    return "auth";
+    return LOGIN;
   }
 
   @GetMapping(path = LOGOUT_URL)

@@ -30,18 +30,9 @@ function onRestoreFormSubmit() {
             showMessage('НОМЕР ТЕЛЕФОНА ДОЛЖЕН БЫТЬ УКАЗАН')
             return false
         }
-        if (validPhoneNumber(phoneNumber)) {
-            restoreForm.modal('hide')
-            restorePassword(phoneNumber)
-        } else {
-            showMessage('ВВЕДИТЕ НОМЕР ТЕЛЕФОНА В ФОРМАТЕ +79999999999')
-        }
+        restoreForm.modal('hide')
+        restorePassword(phoneNumber)
     })
-}
-
-function validPhoneNumber(phone) {
-    let pattern = /^\+?([0-9]{11})$/;
-    return !!phone.match(pattern);
 }
 
 /**
@@ -57,7 +48,7 @@ function restorePassword(phoneNumber) {
     }
 
     $.post({
-        url: "restore-password",
+        url: "/restore-password",
         data: JSON.stringify(userDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
@@ -70,7 +61,9 @@ function restorePassword(phoneNumber) {
                 showMessage('ВАМ ОТПРАВЛЕНО СМС С ВРЕМЕННЫМ ПАРОЛЕМ. ИСПОЛЬЗУЙТЕ ЕГО ДЛЯ АВТОРИЗАЦИИ.')
             }
         })
-        .fail(function (jqXHR) {
+        .fail(function (jqXHR, status, error) {
+            console.log(status)
+            console.log(error)
             let errorMessage = (jqXHR.responseJSON.message).toUpperCase()
             console.log(errorMessage);
             showMessage(errorMessage)
