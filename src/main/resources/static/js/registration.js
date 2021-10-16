@@ -8,6 +8,7 @@ jQuery(document).ready(function ($) {
     onSubmitRegistration()
     onConfirmPhone()
     onEnterKeyPressed()
+    onRetrySendClick()
 })
 
 function init() {
@@ -72,6 +73,7 @@ function create() {
             console.log("FINISHED")
         })
 }
+
 function confirm(confirmCode, clientBitrixId) {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
@@ -87,8 +89,44 @@ function confirm(confirmCode, clientBitrixId) {
             xhr.setRequestHeader(header, token);
         }})
         .done(function (data) {
+            confirmModal.find('#response-state').removeClass('error')
             confirmModal.modal('hide')
             window.location.href="/profile"
+        })
+        .fail(function (jqXHR) {
+            confirmModal.find('#response-state').addClass('error')
+            console.log(jqXHR.responseJSON.message)
+            console.log(jqXHR.status)
+        })
+        .always(function () {
+            console.log("FINISHED")
+        })
+}
+
+function onRetrySendClick() {
+    $('a.retry-send').on('click', function (event) {
+        event.preventDefault()
+        confirmModal.find('#response-state').removeClass('error')
+        confirmModal.find('#confirm-code').val('')
+        retrySendConfirmMessage()
+    })
+}
+
+function retrySendConfirmMessage() {
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+
+    let userDTO = getUserDTO(null, null)
+
+    $.post({
+        url: "retry-send",
+        data: JSON.stringify(userDTO),
+        dataType: 'json',
+        contentType: "application/json;charset=utf-8",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+        }})
+        .done(function (data) {
         })
         .fail(function (jqXHR) {
             console.log(jqXHR.responseText);

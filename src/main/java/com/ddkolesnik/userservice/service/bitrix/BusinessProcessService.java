@@ -24,9 +24,7 @@ public class BusinessProcessService extends BitrixService {
   }
 
   public void sendConfirmMessage(UserDTO dto) {
-    var businessProcess = BusinessProcess.builder()
-        .templateId(BusinessProcessTemplate.CONFIRM_PHONE.getId())
-        .build();
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.CONFIRM_PHONE);
     businessProcess.addDocumentId(CONTACT_PREFIX.concat(dto.getBitrixId().toString()));
     var start = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
@@ -35,9 +33,7 @@ public class BusinessProcessService extends BitrixService {
   }
 
   public void sendRestoreMessage(UserDTO dto) {
-    var businessProcess = BusinessProcess.builder()
-        .templateId(BusinessProcessTemplate.RESTORE_PASSWORD.getId())
-        .build();
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.RESTORE_PASSWORD);
     businessProcess.addDocumentId(CONTACT_PREFIX.concat(dto.getBitrixId().toString()));
     var restore = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
@@ -46,9 +42,7 @@ public class BusinessProcessService extends BitrixService {
   }
 
   public void sendConfirmOldPhoneMessage(UserDTO dto) {
-    var businessProcess = BusinessProcess.builder()
-        .templateId(BusinessProcessTemplate.CONFIRM_OLD_PHONE.getId())
-        .build();
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.CONFIRM_OLD_PHONE);
     businessProcess.addDocumentId(CONTACT_PREFIX.concat(dto.getBitrixId().toString()));
     var confirmChangePhone = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
@@ -57,14 +51,27 @@ public class BusinessProcessService extends BitrixService {
   }
 
   public void sendConfirmNewPhoneMessage(UserDTO dto) {
-    var businessProcess = BusinessProcess.builder()
-        .templateId(BusinessProcessTemplate.CONFIRM_NEW_PHONE.getId())
-        .build();
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.CONFIRM_NEW_PHONE);
     businessProcess.addDocumentId(CONTACT_PREFIX.concat(dto.getBitrixId().toString()));
     var confirmChangePhone = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
     var confirmedChangePhone = confirmChangePhone.getBody();
     log.info("Результат отправки смс для подтверждения нового телефона {}", confirmedChangePhone);
+  }
+
+  public void retrySendConfirmMessage(UserDTO dto) {
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.CONFIRM_PHONE);
+    businessProcess.addDocumentId(CONTACT_PREFIX.concat(dto.getBitrixId().toString()));
+    var confirm = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
+        HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
+    var confirmed = confirm.getBody();
+    log.info("Результат повторной отправки смс для подтверждения телефона {}", confirmed);
+  }
+
+  private BusinessProcess buildBusinessProcess(BusinessProcessTemplate template) {
+    return BusinessProcess.builder()
+        .templateId(template.getId())
+        .build();
   }
 
 }

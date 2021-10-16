@@ -180,6 +180,12 @@ public class UserService {
     businessProcessService.sendConfirmNewPhoneMessage(userDTO);
   }
 
+  public void retrySendConfirmMessage(UserDTO dto) {
+    var contact = bitrixContactService.getContact(dto);
+    dto.setBitrixId(contact.getId());
+    businessProcessService.retrySendConfirmMessage(dto);
+  }
+
   private void addNewPhoneToContact(ChangePhoneDTO dto) {
     var phone = SecurityUtils.getCurrentUserPhone();
     var userDTO = getUserDTO(phone);

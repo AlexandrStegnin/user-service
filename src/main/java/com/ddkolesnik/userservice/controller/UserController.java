@@ -81,4 +81,10 @@ public class UserController {
     return ApiResponse.build200Response("Необходимо войти используя новый номер телефона.");
   }
 
+  @PostMapping(path = RETRY_SEND_CONFIRM_MESSAGE)
+  public ApiResponse retrySendConfirmMessage(@RequestBody UserDTO userDTO) {
+    userService.retrySendConfirmMessage(userDTO);
+    return ApiResponse.build200Response("Сообщение успешно отправлено");
+  }
+
 }

@@ -22,6 +22,7 @@ public class Location {
   public final String CONFIRM_NEW_PHONE = "/confirm-new-phone";
   public final String CHANGE_PHONE = "/change-phone";
   public final String CONFIRM_BY_EMAIL = "/confirm-by-email";
+  public final String RETRY_SEND_CONFIRM_MESSAGE = "/retry-send";
   public final String PROFILE = "/profile";
 
 }
