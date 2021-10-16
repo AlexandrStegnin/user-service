@@ -3,6 +3,7 @@ package com.ddkolesnik.userservice.configuration;
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -38,6 +39,7 @@ public class AppConfiguration {
   public ObjectMapper getObjectMapper() {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+    mapper.registerModule(new JavaTimeModule());
     return mapper;
   }
 

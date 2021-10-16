@@ -42,7 +42,7 @@ public class BitrixContactService extends BitrixService {
   }
 
   public ApiResponse createOrUpdateContact(UserDTO dto) {
-    if (bitrixWebClient.isContactExists(dto.getPhone())) {
+     if (bitrixWebClient.isContactExists(dto.getPhone())) {
       updateContact(dto);
       return ApiResponse.build200Response("Контакт Б24 успешно обновлён");
     } else {
