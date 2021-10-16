@@ -22,8 +22,12 @@ function onSubmitRegistration() {
         event.preventDefault()
         let agreementPersonalData = $('#agreement-personal-data').prop('checked')
         let agreementRules = $('#agreement-rules').prop('checked')
-        if (!agreementPersonalData || !agreementRules) {
-            console.log("Нужно принять правила и согласиться с обработкой и хранением ПД")
+        if (!agreementPersonalData) {
+            showMessage("Нужно согласие с обработкой и хранением персональных данных")
+            return false
+        }
+        if (!agreementRules) {
+            showMessage("Нужно принять правила платформы")
             return false
         }
         create()

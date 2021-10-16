@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
         .antMatchers("/img/**", "/fonts/**", "/js/**", "/css/**", "/favicon.ico",
-            HOME_URL, LOGIN_URL, LOGOUT_URL, CONFIRM_URL, CREATE_USER,
+            HOME_URL, LOGIN_URL, LOGOUT_URL, REGISTRATION_URL, CONFIRM_URL, CREATE_USER,
             RESTORE_PASSWORD, CHANGE_PASSWORD, CONFIRM_OLD_PHONE, CHECK_CONFIRM_CODE,
             CONFIRM_NEW_PHONE, CHANGE_PHONE, CONFIRM_BY_EMAIL).permitAll()
         .anyRequest().authenticated()

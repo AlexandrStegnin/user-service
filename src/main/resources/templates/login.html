@@ -46,11 +46,6 @@
             <a class="header__link" href="/">Колесник. Недвижимость</a>
             <a class="header__link" href="/">Инвестиционные предложения</a>
         </div>
-        <div class="header__btn">
-            <a href="/" class="button button--header ">
-                <span>Войти</span>
-            </a>
-        </div>
     </header>
     <main class="page__inner ">
         <section class="section section--auth">
@@ -86,7 +81,7 @@
                                     <a href="" class="link link--colored link--clear" onclick="event.preventDefault()">Вспомнить
                                         пароль</a>
                                 </div>
-                                <a href="" class="link link--colored link--clear">Создать личный кабинет</a>
+                                <a th:href="@{/registration}" class="link link--colored link--clear">Создать личный кабинет</a>
                             </div>
                         </div>
                     </form>

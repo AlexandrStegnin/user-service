@@ -2,9 +2,12 @@ package com.ddkolesnik.userservice.model.dto;
 
 import com.ddkolesnik.userservice.enums.Gender;
 import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
+import com.ddkolesnik.userservice.utils.PhoneUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Objects;
 
 /**
  * @author Aleksandr Stegnin on 05.07.2021
@@ -39,5 +42,12 @@ public class UserDTO {
   String placeOfBirth;
   Integer bitrixId;
   TaxStatus taxStatus;
+
+  public String getPhone() {
+    if (Objects.nonNull(this.phone)) {
+      return PhoneUtils.clearPhone(this.phone);
+    }
+    return null;
+  }
 
 }

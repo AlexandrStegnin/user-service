@@ -8,7 +8,6 @@ import com.ddkolesnik.userservice.repository.AppUserRepository;
 import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
-import com.ddkolesnik.userservice.web.BitrixWebClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +28,6 @@ import java.util.Objects;
 public class AppUserService {
 
   BitrixContactService bitrixContactService;
-  BitrixWebClient bitrixWebClient;
   AppUserRepository appUserRepository;
   RequisiteService requisiteService;
   AccountService accountService;
