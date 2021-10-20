@@ -22,13 +22,8 @@ function onSubmitRegistration() {
     registration.on('submit', function (event) {
         event.preventDefault()
         let agreementPersonalData = $('#agreement-personal-data').prop('checked')
-        let agreementRules = $('#agreement-rules').prop('checked')
         if (!agreementPersonalData) {
             showMessage("Нужно согласие с обработкой и хранением персональных данных")
-            return false
-        }
-        if (!agreementRules) {
-            showMessage("Нужно принять правила платформы")
             return false
         }
         create()
@@ -144,10 +139,7 @@ function getUserDTO(confirmCode, clientBitrixId) {
         email: $('#email').val(),
         phone: $('#phone').val(),
         confirmCode: confirmCode,
-        individual: $('#individual').prop('checked'),
-        selfEmployed: $('#self-employed').prop('checked'),
         agreementPersonalData: $('#agreement-personal-data').prop('checked'),
-        agreementRules: $('#agreement-rules').prop('checked'),
         bitrixId: clientBitrixId
     }
 }

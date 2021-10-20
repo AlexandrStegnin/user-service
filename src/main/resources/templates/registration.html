@@ -33,23 +33,7 @@
 </head>
 <body class="page page--colored">
 <div class="page__top page__top--colored">
-    <header class="header ">
-        <div class="header__logo">
-            <svg class="icon__logo" width="155px" height="22px">
-                <use xlink:href="/img/svg-symbols.svg#logo"></use>
-            </svg>
-            <a href="/"></a>
-        </div>
-        <div class="header__menu">
-            <a class="header__link" href="/">Колесник. Недвижимость</a>
-            <a class="header__link" href="/">Инвестиционные предложения</a>
-        </div>
-        <div class="header__btn">
-            <a href="/" class="button button--header ">
-                <span>Войти</span>
-            </a>
-        </div>
-    </header>
+    <div th:replace="~{fragments/header.html :: #header}"></div>
     <main class="page__inner ">
         <section class="section section--registration">
             <div class="container">
@@ -108,26 +92,8 @@
                         <div class="registration__accept">
                             <div class="registration__accept-item">
                                 <label class="f-checkbox ">
-                                    <input type="checkbox" id="individual" th:checked="${userDTO.individual}"
-                                           name="individual">Имею статус индивидуальный предприниматель
-                                </label>
-                            </div>
-                            <div class="registration__accept-item">
-                                <label class="f-checkbox ">
-                                    <input type="checkbox" id="self-employed" th:checked="${userDTO.selfEmployed}"
-                                           name="selfEmployed">Имею статус самозанятый
-                                </label>
-                            </div>
-                            <div class="registration__accept-item">
-                                <label class="f-checkbox ">
                                     <input type="checkbox" id="agreement-personal-data">Согласен на <a href="/">обработку
                                     и хранение персональных данных</a>
-                                </label>
-                            </div>
-                            <div class="registration__accept-item">
-                                <label class="f-checkbox ">
-                                    <input type="checkbox" id="agreement-rules">Принимаю <a href="/">правила Платформы и
-                                    Декларацию о рисках</a>
                                 </label>
                             </div>
                         </div>
@@ -146,34 +112,7 @@
     </main>
 </div>
 <aside class="page__bottom">
-    <footer class="footer">
-        <div class="footer__info">
-            <div class="footer__info-text">ООО "Колесник. Инвестиции"</div>
-            <a href="https://kapitol-invest.ru/docs" class="footer__info-text">Документы Платформы</a>
-            <div class="footer__info-socials">
-                <div class="footer__info-socials--item">
-                    <svg class="icon__tg" width="30px" height="30px">
-                        <use xlink:href="/img/svg-symbols.svg#tg"></use>
-                    </svg>
-                    <a href="/"></a>
-                </div>
-                <div class="footer__info-socials--item">
-                    <svg class="icon__inst" width="30px" height="30px">
-                        <use xlink:href="/img/svg-symbols.svg#inst"></use>
-                    </svg>
-                    <a href="/"></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer__questions">
-            <div class="footer__questions-name">Есть вопрос?</div>
-            <a href="mailto:sale@kapitol-invest.ru" class="link  ">sale@kapitol-invest.ru</a>
-            <a href="https://t.me/ddkclient_bot" class="link  ">Чат-бот в телеграм</a>
-
-            <a href="" class="footer__questions-link"></a>
-            <a href="" class="footer__questions-link"></a>
-        </div>
-    </footer>
+    <div th:replace="~{fragments/footer.html :: #footer}"></div>
     <script th:src="@{/js/separate-js/svg4everybody.min.js}"></script>
     <script>
         svg4everybody();

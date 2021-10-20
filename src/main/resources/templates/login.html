@@ -35,18 +35,7 @@
 
 <body class="page page--colored">
 <div class="page__top page__top--colored">
-    <header class="header ">
-        <div class="header__logo">
-            <svg class="icon__logo" width="155px" height="22px">
-                <use xlink:href="/img/svg-symbols.svg#logo"></use>
-            </svg>
-            <a href="/"></a>
-        </div>
-        <div class="header__menu">
-            <a class="header__link" href="/">Колесник. Недвижимость</a>
-            <a class="header__link" href="/">Инвестиционные предложения</a>
-        </div>
-    </header>
+    <div th:replace="~{fragments/header.html :: #header}"></div>
     <main class="page__inner ">
         <section class="section section--auth">
             <div class="container">
@@ -91,34 +80,7 @@
     </main>
 </div>
 <aside class="page__bottom">
-    <footer class="footer">
-        <div class="footer__info">
-            <div class="footer__info-text">ООО "Колесник. Инвестиции"</div>
-            <a href="https://kapitol-invest.ru/docs" class="footer__info-text">Документы Платформы</a>
-            <div class="footer__info-socials">
-                <div class="footer__info-socials--item">
-                    <svg class="icon__tg" width="30px" height="30px">
-                        <use xlink:href="/img/svg-symbols.svg#tg"></use>
-                    </svg>
-                    <a href="/"></a>
-                </div>
-                <div class="footer__info-socials--item">
-                    <svg class="icon__inst" width="30px" height="30px">
-                        <use xlink:href="/img/svg-symbols.svg#inst"></use>
-                    </svg>
-                    <a href="/"></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer__questions">
-            <div class="footer__questions-name">Есть вопрос?</div>
-            <a href="mailto:sale@kapitol-invest.ru" class="link  ">sale@kapitol-invest.ru</a>
-            <a href="https://t.me/ddkclient_bot" class="link  ">Чат-бот в телеграм</a>
-
-            <a href="" class="footer__questions-link"></a>
-            <a href="" class="footer__questions-link"></a>
-        </div>
-    </footer>
+    <div th:replace="~{fragments/footer.html :: #footer}"></div>
     <script th:src="@{/js/separate-js/svg4everybody.min.js}"></script>
     <script>
         svg4everybody();
