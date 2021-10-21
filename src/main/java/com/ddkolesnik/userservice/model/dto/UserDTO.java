@@ -45,7 +45,7 @@ public class UserDTO {
   Integer bitrixId;
   TaxStatus taxStatus;
   @Builder.Default
-  boolean accredited = false;
+  boolean accredited = true;
 
   public String getPhone() {
     return PhoneUtils.cleanPhone(this.phone);

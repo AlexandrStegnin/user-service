@@ -41,9 +41,9 @@ public class AppUserController {
   @GetMapping(path = PROFILE_ACCREDITED)
   public String profileAccredited(Model model) {
     UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
-    model.addAttribute("userDTO", userDTO);
+    model.addAttribute("user", userDTO);
     model.addAttribute(LOGIN, userDTO.getFormattedPhone());
-    return "profile";
+    return "accredited";
   }
 
   @GetMapping(path = LOGIN_URL)

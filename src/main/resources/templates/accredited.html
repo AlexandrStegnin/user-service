@@ -1,0 +1,231 @@
+<!doctype html>
+<html class="no-js" lang="ru">
+    <head>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Колесник</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="telephone=no" name="format-detection">
+        <!-- This make sence for mobile browsers. It means, that content has been optimized for mobile browsers -->
+        <meta name="HandheldFriendly" content="true">
+
+        <!--[if (gt IE 9)|!(IE)]><!-->
+        <link th:href="@{/css/main.min.css}" rel="stylesheet" type="text/css">
+        <!--<![endif]-->
+        <meta property="og:title" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:description" content="" />
+        <meta property="og:image" content="" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="500" />
+        <meta property="og:image:height" content="300" />
+        <meta property="twitter:description" content="" />
+        <link rel="image_src" href="" />
+        <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+        <script>
+            (function (H) { H.className = H.className.replace(/\bno-js\b/, 'js') })(document.documentElement)
+        </script>
+    </head>
+    <body class="page ">
+        <div class="page__top ">
+            <div th:replace="~{fragments/header.html :: #header}"></div>
+            <main class="page__inner page__inner--light">
+                <section class="section section--pb">
+                    <div class="container">
+                        <div class="section__header">Личный кабинет
+                            <br>инвестора</div>
+                        <div class="section__body">
+                            <div class="row gy-lg-6 gy-7">
+                                <div class="col-xl-3">
+                                    <div class="row gy-xl-2 g-lg-1 g-1">
+                                        <div class="col-xl-12 col-lg-6">
+                                            <div class="row gy-xl-2 g-lg-1 g-1">
+                                                <div class="col-12">
+                                                    <div class="info-card">
+                                                        <div class="info-card__header">
+                                                            <div class="info-card__name" th:text="*{user.fullName}"></div>
+                                                            <div class="info-card__desc">Аккредитован</div>
+                                                        </div>
+                                                        <div class="info-card__link">
+                                                            <a href="" class="link link--light ">Анкетные данные</a>
+                                                            <a href="" class="link link--light link--clear">Мои инвестиции</a>
+                                                            <a href="" class="link link--light link--clear">Банковские реквизиты</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="info-card info-card--flex info-card--l">
+                                                        <div class="info-card__name">Счет инвестора №791231</div>
+                                                        <div class="info-card__item">
+                                                            <span>Свободно</span><span>150 000 руб.</span>
+                                                        </div>
+                                                        <div class="info-card__item">
+                                                            <span>В инвестициях</span><span>150 000 руб.</span>
+                                                        </div>
+                                                        <div class="info-card__item">
+                                                            <span>Заработано</span><span>0 руб.</span>
+                                                        </div>
+<!--                                                        <div class="info-card__action">-->
+<!--                                                            <a href="/" class="button button&#45;&#45;light ">-->
+<!--                                                                <span>Пополнить</span>-->
+<!--                                                            </a>-->
+<!--                                                            <button class="button button&#45;&#45;light ">-->
+<!--                                                                <span>Вывести</span>-->
+<!--                                                            </button>-->
+<!--                                                        </div>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+<!--                                        <div class="col-xl-12 col-lg-6">-->
+<!--                                            <div class="row gy-xl-2 g-lg-1 g-1">-->
+
+<!--                                                <div class="col-12">-->
+<!--                                                    <div class="info-card info-card&#45;&#45;l">-->
+<!--                                                        <div class="info-card__name">Статус квалифицированного инвестора</div>-->
+<!--                                                        <div class="info-card__desc">-->
+<!--                                                            <p>Если вы хотите инвестировать как физ.лицо более 600 000 р. в год, вам необходимо получить статус квалифицированного инвестора. Данная норма регулируется статьей 7 N 259-ФЗ.</p>-->
+<!--                                                            <p><a href="" class="link link&#45;&#45;light ">Подробнее</a>-->
+<!--                                                                об условиях получения статуса.</p>-->
+<!--                                                            <p>Если вы уже имеете данный статус, то загрузите подтверждение наличия квалификации.</p>-->
+<!--                                                        </div>-->
+<!--                                                        <div class="info-card__action">-->
+<!--                                                            <a href="/" class="button button&#45;&#45;light ">-->
+<!--                                                                <span>Загрузить</span>-->
+<!--                                                            </a>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                    </div>
+                                </div>
+                                <div class="col-xl-8 offset-xl-1">
+                                    <div class="info">
+                                        <div class="info__name">
+                                            Анкетные данные
+                                        </div>
+                                        <div class="info__group">
+                                            <div class="info__row">
+                                                <div class="info__item">ФИО</div>
+                                                <div class="info__item" th:text="*{user.fullName}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Налоговый статус</div>
+                                                <div class="info__item" th:text="*{user.taxStatus.title}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Телефон</div>
+                                                <div class="info__item" th:text="*{login}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Электронная почта</div>
+                                                <div class="info__item" th:text="*{user.email}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">ИНН</div>
+                                                <div class="info__item" th:text="*{user.inn}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">СНИЛС</div>
+                                                <div class="info__item" th:text="*{user.snils}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Дата рождения</div>
+                                                <div class="info__item" th:text="*{user.birthdate}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Место рождения</div>
+                                                <div class="info__item" th:text="*{user.placeOfBirth}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="info__name">
+                                            Паспортные данные
+                                        </div>
+                                        <div class="info__group">
+                                            <div class="info__row">
+                                                <div class="info__item">Серия и номер</div>
+                                                <div class="info__item" th:text="*{user.passport.serial + ' ' + user.passport.number}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Дата выдачи</div>
+                                                <div class="info__item" th:text="*{user.passport.issuedAt}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Код подразделения</div>
+                                                <div class="info__item" th:text="*{user.passport.departmentCode}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Кем выдан</div>
+                                                <div class="info__item" th:text="*{user.passport.issuedBy}"></div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">Адрес регистрации</div>
+                                                <div class="info__item">г. Тюмень, ул. Ивана Захарова д. 37, кв. 12</div>
+                                            </div>
+                                        </div>
+                                        <div class="info__name">
+                                            Сканы паспорта
+                                        </div>
+                                        <div class="info__group">
+                                            <div class="info__row">
+                                                <div class="info__item">
+                                                    <a href="" class="link link--colored ">Passport 1 stranica.jpg </a>
+                                                </div>
+                                            </div>
+                                            <div class="info__row">
+                                                <div class="info__item">
+                                                    <a href="" class="link link--colored ">Passport propiska.jpg </a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="info__name">
+                                            Скан снилс
+                                        </div>
+                                        <div class="info__group">
+                                            <div class="info__row">
+                                                <div class="info__item">
+                                                    <a href="" class="link link--colored ">Snils.jpg </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="info__name">
+                                            Банковские реквизиты
+                                        </div>
+                                        <div class="info__group">
+                                            <div class="info__row">
+                                                <div class="info__item">
+                                                    <a href="" class="link link--colored ">Payment_87229482.jpg </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="info__action">
+                                            <button class="button  ">
+                                                <span>Редактировать</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+        <aside class="page__bottom">
+            <div th:replace="~{fragments/footer.html :: #footer}"></div>
+            <script th:src="@{/js/separate-js/svg4everybody.min.js}"></script>
+            <script>
+                svg4everybody();
+            </script>
+            <script th:src="@{/js/main.min.js}"></script>
+        </aside>
+
+    </body>
+
+</html>
