@@ -48,10 +48,7 @@ public class UserDTO {
   boolean accredited = false;
 
   public String getPhone() {
-    if (Objects.nonNull(this.phone)) {
-      return PhoneUtils.clearPhone(this.phone);
-    }
-    return null;
+    return PhoneUtils.cleanPhone(this.phone);
   }
 
   public String getFullName() {
@@ -61,12 +58,12 @@ public class UserDTO {
 
   public String getFormattedPhone() {
     if (Objects.nonNull(this.phone)) {
-      var clearPhone = PhoneUtils.clearPhone(this.phone);
-      var countryCode = clearPhone.substring(0, 2);
-      var operatorPart = clearPhone.substring(2, 5);
+      var cleanPhone = PhoneUtils.cleanPhone(this.phone);
+      var countryCode = cleanPhone.substring(0, 2);
+      var operatorPart = cleanPhone.substring(2, 5);
       return String.format("%s (%s) %s-%s-%s",
-          countryCode, operatorPart, clearPhone.substring(5, 8),
-          clearPhone.substring(8, 10), clearPhone.substring(10, 12));
+          countryCode, operatorPart, cleanPhone.substring(5, 8),
+          cleanPhone.substring(8, 10), cleanPhone.substring(10, 12));
     }
     return null;
   }

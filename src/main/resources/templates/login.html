@@ -87,42 +87,7 @@
     </script>
     <script th:src="@{/js/main.min.js}"></script>
 </aside>
-<div class="modal modal--password fade" id="number" tabindex="-1" aria-labelledby="number" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            <h2 class="registration__title">Смена номера телефона</h2>
-            <form class="registration__body">
-                <div class="registration__field">
-                    <div class="registration__field-name">Старый номер телефона
-                    </div>
-                    <div class="registration__field-item">
-                        <div class="f-input__wrapper ">
-                            <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text"
-                                   placeholder="+7 (999) 999-99-99" class="f-input  ">
-                        </div>
-                    </div>
-                </div>
-                <div class="registration__field">
-                    <div class="registration__field-name">Новый номер телефона
-                    </div>
-                    <div class="registration__field-item">
-                        <div class="f-input__wrapper ">
-                            <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text"
-                                   placeholder="+7 (999) 999-99-99" class="f-input  ">
-                        </div>
-                    </div>
-                </div>
-                <div class="registration__action" data-bs-dismiss="modal">
-                    <button class="button  " onclick="event.preventDefault()" data-bs-toggle="modal"
-                            data-bs-target="#send-number">
-                        <span>Изменить</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 <div class="modal modal--send-number fade" id="send-number" tabindex="-1" aria-labelledby="send-number"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

@@ -10,8 +10,11 @@ import java.util.Objects;
 @UtilityClass
 public class PhoneUtils {
 
-  public String clearPhone(String phone) {
-    return phone.replaceAll("(\\+)|\\D", "$1");
+  public String cleanPhone(String phone) {
+    if (Objects.nonNull(phone)) {
+      return phone.replaceAll("(\\+)|\\D", "$1");
+    }
+    return null;
   }
 
   public boolean isWrongFormat(String phone) {

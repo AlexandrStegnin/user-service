@@ -8,6 +8,7 @@ import com.ddkolesnik.userservice.repository.AppUserRepository;
 import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
+import com.ddkolesnik.userservice.utils.PhoneUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -36,7 +37,8 @@ public class AppUserService {
   UserMapper userMapper;
 
   public AppUser findByPhone(String phone) {
-    return appUserRepository.findByPhone(phone)
+    var cleanPhone = PhoneUtils.cleanPhone(phone);
+    return appUserRepository.findByPhone(cleanPhone)
         .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
   }
 

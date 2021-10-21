@@ -37,9 +37,10 @@ function onChangePhoneClick() {
 }
 
 function onChangePhoneFormSubmit() {
-    changePhoneButton.on('click', function () {
-        let method = $('ul#change li > a.active').attr('href')
-        if (method === '#by-phone') {
+    changePhoneButton.on('click', function (e) {
+        e.preventDefault()
+        let method = $('#by-phone').data('method')
+        if (method === 'by-phone') {
             confirmByPhone()
         } else {
             confirmByEmail()

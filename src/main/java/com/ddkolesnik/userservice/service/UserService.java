@@ -111,7 +111,7 @@ public class UserService {
   }
 
   public void sendRestoreMessage(UserDTO dto) {
-    var phone = PhoneUtils.clearPhone(dto.getPhone());
+    var phone = PhoneUtils.cleanPhone(dto.getPhone());
     dto = findUserByPhone(phone);
     businessProcessService.sendRestoreMessage(dto);
     var contact = bitrixContactService.getContact(dto);

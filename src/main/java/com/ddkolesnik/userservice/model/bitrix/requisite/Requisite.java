@@ -2,11 +2,7 @@ package com.ddkolesnik.userservice.model.bitrix.requisite;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -16,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(of = {"id", "contactId"})
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Requisite {
 

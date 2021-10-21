@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-    phone = PhoneUtils.clearPhone(phone);
+    phone = PhoneUtils.cleanPhone(phone);
     Optional<AppUser> optionalAppUser = appUserRepository.findByPhone(phone);
     return optionalAppUser
         .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));

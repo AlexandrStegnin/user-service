@@ -1,56 +1,35 @@
-<div class="modal" tabindex="-1" role="dialog" id="change-phone-form-modal">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="title">ИЗМЕНЕНИЕ ТЕЛЕФОНА</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="container">
-          <div class="p-2" style="text-align: center">КАК ВАМ УДОБНЕЕ ПОЛУЧИТЬ КОД ПОДТВЕРЖДЕНИЯ?</div>
-          <ul class="nav nav-tabs nav-justified" id="change">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#by-phone">ПО СТАРОМУ НОМЕРУ ТЕЛЕФОНУ</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#by-email">ПО EMAIL</a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane fade show active" id="by-phone">
-              <div class="form-group row" style="padding-top: 10px">
-                <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="old-phone">ВВЕДИТЕ СТАРЫЙ НОМЕР:</label>
-                <div class="col-sm-4">
-                  <input type="text" id="old-phone" class="form-control input-sm" required/>
+<div class="modal modal--password fade" id="change-phone-form-modal" tabindex="-1" aria-labelledby="number" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+            <h2 class="registration__title" id="title">Смена номера телефона</h2>
+            <form class="registration__body" id="by-phone" data-method="by-phone">
+                <div class="registration__field">
+                    <div class="registration__field-name">Старый номер телефона
+                    </div>
+                    <div class="registration__field-item">
+                        <div class="f-input__wrapper ">
+                            <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text"
+                                   placeholder="+7 (999) 999-99-99" class="f-input  " id="old-phone">
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="form-group row" style="padding-top: 10px">
-                <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="new-phone">ВВЕДИТЕ НОВЫЙ НОМЕР:</label>
-                <div class="col-sm-4">
-                  <input type="text" id="new-phone" class="form-control input-sm" required/>
+                <div class="registration__field">
+                    <div class="registration__field-name">Новый номер телефона
+                    </div>
+                    <div class="registration__field-item">
+                        <div class="f-input__wrapper ">
+                            <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text"
+                                   placeholder="+7 (999) 999-99-99" class="f-input  " id="new-phone">
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="by-email">
-              <div class="form-group row" style="padding-top: 10px">
-                <label class="col-sm offset-sm-2 col-form-label-sm">НА УКАЗАННЫЙ В ПРОФИЛЕ EMAIL БУДЕТ ОТПРАВЛЕН КОД ПОДТВЕРЖДЕНИЯ</label>
-              </div>
-              <div class="form-group row" style="padding-top: 10px">
-                <label class="col-sm-4 offset-sm-2 col-form-label-sm" for="new-phone-by-email">ВВЕДИТЕ НОВЫЙ НОМЕР:</label>
-                <div class="col-sm-4">
-                  <input type="tel" id="new-phone-by-email" class="form-control input-sm" required/>
+                <div class="registration__action">
+                    <button class="button  " id="change-phone">
+                        <span>Изменить</span>
+                    </button>
                 </div>
-              </div>
-            </div>
-          </div>
-
+            </form>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="change-phone">ИЗМЕНИТЬ</button>
-      </div>
     </div>
-  </div>
 </div>
