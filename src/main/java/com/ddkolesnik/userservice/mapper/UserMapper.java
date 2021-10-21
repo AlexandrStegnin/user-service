@@ -53,7 +53,7 @@ public abstract class UserMapper {
   public abstract void updateAddress(BitrixAddress address, @MappingTarget UserDTO dto);
 
   protected String extractBirthdate(BitrixContact bitrixContact) {
-    return bitrixContact.getBirthdate().split("T")[0];
+    return DateUtils.convertToDDMMYYYY(bitrixContact.getBirthdate().split("T")[0]);
   }
 
   protected Long getInvestorRole() {
@@ -88,7 +88,7 @@ public abstract class UserMapper {
         .issuedBy(requisite.getIssuedBy())
         .departmentCode(requisite.getDepartmentCode())
         .number(requisite.getNumber())
-        .issuedAt(DateUtils.convertToYYYYMMDD(requisite.getIssuedAt()))
+        .issuedAt(requisite.getIssuedAt())
         .build();
   }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="RU" xmlns:th="http://www.thymeleaf.org">
+<html lang="RU" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 
 </head>
@@ -13,12 +13,43 @@
     </div>
     <div class="header__menu">
     </div>
-    <div th:if="${!#request.getServletPath().contains('/login')}">
+    <div th:if="${!#request.getServletPath().contains('/login') and #request.getServletPath().contains('/registration')}">
         <div class="header__btn">
             <a href="/" class="button button--header ">
                 <span>Войти</span>
             </a>
         </div>
+    </div>
+    <div sec:authorize="isFullyAuthenticated()">
+        <div class="header__user">
+
+        <svg class="icon__user" width="32px" height="32px">
+            <use xlink:href="/img/svg-symbols.svg#user"></use>
+        </svg>
+
+        <div class="header__user-menu--shell">
+            <div class="header__user-menu">
+                <div class="header__user-name">
+                    <div class="header__user-info">
+                        <span>Аккаунт</span>
+                        <span th:text="${login}"></span>
+                    </div>
+                    <div class="header__user-logo">
+
+                        <svg class="icon__user2" width="32px" height="32px">
+                            <use xlink:href="/img/svg-symbols.svg#user2"></use>
+                        </svg>
+
+                    </div>
+                </div>
+                <div class="header__user-links">
+                    <span data-bs-toggle="modal" data-bs-target="#password">Сменить пароль</span>
+                    <span data-bs-toggle="modal" data-bs-target="#number">Сменить номер телефона</span>
+                    <a href="/">Выйти</a>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </header>
 </body>

@@ -7,7 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Aleksandr Stegnin on 05.07.2021
@@ -42,10 +44,29 @@ public class UserDTO {
   String placeOfBirth;
   Integer bitrixId;
   TaxStatus taxStatus;
+  @Builder.Default
+  boolean accredited = false;
 
   public String getPhone() {
     if (Objects.nonNull(this.phone)) {
       return PhoneUtils.clearPhone(this.phone);
+    }
+    return null;
+  }
+
+  public String getFullName() {
+    var fullName = this.lastName + " " + this.name + " ";
+    return (fullName + Optional.ofNullable(this.secondName).orElse("")).trim().toUpperCase(Locale.ROOT);
+  }
+
+  public String getFormattedPhone() {
+    if (Objects.nonNull(this.phone)) {
+      var clearPhone = PhoneUtils.clearPhone(this.phone);
+      var countryCode = clearPhone.substring(0, 2);
+      var operatorPart = clearPhone.substring(2, 5);
+      return String.format("%s (%s) %s-%s-%s",
+          countryCode, operatorPart, clearPhone.substring(5, 8),
+          clearPhone.substring(8, 10), clearPhone.substring(10, 12));
     }
     return null;
   }

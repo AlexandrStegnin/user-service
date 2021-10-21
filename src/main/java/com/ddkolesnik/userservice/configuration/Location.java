@@ -24,5 +24,6 @@ public class Location {
   public final String CONFIRM_BY_EMAIL = "/confirm-by-email";
   public final String RETRY_SEND_CONFIRM_MESSAGE = "/retry-send";
   public final String PROFILE = "/profile";
+  public final String PROFILE_ACCREDITED = "/profile/accredited";
 
 }

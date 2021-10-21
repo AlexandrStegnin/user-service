@@ -91,11 +91,13 @@ public class UserService {
     } else {
       requisiteService.updateRequisite(requisite, dto);
     }
-    var address = addressService.findAddress(requisite);
-    if (Objects.isNull(address)) {
-      addressService.createAddress(dto);
-    } else {
-      addressService.updateAddress(dto);
+    if (Objects.nonNull(dto.getAddress())) {
+      var address = addressService.findAddress(requisite);
+      if (Objects.isNull(address)) {
+        addressService.createAddress(dto);
+      } else {
+        addressService.updateAddress(dto);
+      }
     }
     bitrixContactService.updateContact(dto);
   }

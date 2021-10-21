@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Objects;
-
 import static com.ddkolesnik.userservice.configuration.Location.*;
 
 /**
@@ -24,17 +22,27 @@ import static com.ddkolesnik.userservice.configuration.Location.*;
 public class AppUserController {
 
   private static final String LOGIN = "login";
+  private static final String REDIRECT = "redirect:";
 
   AppUserService appUserService;
 
   @GetMapping(path = PROFILE)
   public String profile(Model model) {
     UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
-    if (Objects.isNull(userDTO)) {
-      return "redirect:" + LOGIN_URL;
+    if (userDTO.isAccredited()) {
+      return REDIRECT + PROFILE_ACCREDITED;
     }
     model.addAttribute("userDTO", userDTO);
-    model.addAttribute(LOGIN, userDTO.getPhone());
+    model.addAttribute(LOGIN, userDTO.getFormattedPhone());
+    model.addAttribute("fullName", userDTO.getFullName());
+    return "profile";
+  }
+
+  @GetMapping(path = PROFILE_ACCREDITED)
+  public String profileAccredited(Model model) {
+    UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
+    model.addAttribute("userDTO", userDTO);
+    model.addAttribute(LOGIN, userDTO.getFormattedPhone());
     return "profile";
   }
 

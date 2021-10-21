@@ -4,6 +4,7 @@ import com.ddkolesnik.userservice.configuration.exception.BitrixException;
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
 import com.ddkolesnik.userservice.model.bitrix.address.*;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
+import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -101,23 +102,30 @@ public class AddressService extends BitrixService {
     }
     fields.put(TYPE_ID, 1);
     fields.put(ENTITY_TYPE_ID, 8);
-    fields.put(CITY, userDTO.getAddress().getCity());
-    fields.put(ADDRESS_1, getAddress1(userDTO));
-    fields.put(ADDRESS_2, getAddress2(userDTO));
+    prepareAddress(fields, userDTO);
     return fields;
   }
 
-  private String getAddress1(UserDTO dto) {
+  private void prepareAddress(Map<String, Object> fields, UserDTO userDTO) {
+    var address = userDTO.getAddress();
+    if (Objects.nonNull(address)) {
+      fields.put(CITY, address.getCity());
+      fields.put(ADDRESS_1, getAddress1(address));
+      fields.put(ADDRESS_2, getAddress2(address));
+    }
+  }
+
+  private String getAddress1(AddressDTO dto) {
     var address = "";
-    if (Objects.nonNull(dto.getAddress().getStreetAndHouse())) {
-      address += dto.getAddress().getStreetAndHouse();
+    if (Objects.nonNull(dto.getStreetAndHouse())) {
+      address += dto.getStreetAndHouse();
     }
     return address;
   }
 
-  private String getAddress2(UserDTO dto) {
-    if (Objects.nonNull(dto.getAddress().getOffice())) {
-      return dto.getAddress().getOffice();
+  private String getAddress2(AddressDTO dto) {
+    if (Objects.nonNull(dto.getOffice())) {
+      return dto.getOffice();
     }
     return "";
   }
