@@ -15,7 +15,7 @@ import java.time.Instant;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-  @ExceptionHandler({BitrixException.class})
+  @ExceptionHandler({BitrixException.class, UserNotFoundException.class})
   protected ResponseEntity<ApiResponse> handleApiException(BitrixException ex) {
     ApiResponse apiResponse = ApiResponse.builder()
         .message(ex.getMessage())

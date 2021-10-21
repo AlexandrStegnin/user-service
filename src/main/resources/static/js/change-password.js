@@ -76,7 +76,7 @@ function changePassword(oldPassword, newPassword) {
     })
         .done(function (data) {
             if (data.status === 'OK') {
-                showMessage(data.message.toUpperCase())
+                showSuccessForm(data.message.toUpperCase())
             }
         })
         .fail(function (jqXHR) {

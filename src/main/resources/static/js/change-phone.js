@@ -4,7 +4,6 @@ let newPhoneField;
 let newPhoneFieldByEmail;
 let oldPhoneField;
 let changePhoneButton;
-let confirmForm;
 let confirmButton;
 
 const ConfirmMethod = {
@@ -21,7 +20,6 @@ jQuery(document).ready(function ($) {
     newPhoneFieldByEmail = $('#new-phone-by-email')
     oldPhoneField = $('#old-phone')
     changePhoneButton = $('button#change-phone')
-    confirmForm = $('#confirm-form-modal')
     confirmButton = $('#confirm')
     onChangePhoneClick()
     onChangePhoneFormSubmit()

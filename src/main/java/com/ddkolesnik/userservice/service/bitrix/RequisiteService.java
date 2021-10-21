@@ -42,8 +42,8 @@ public class RequisiteService extends BitrixService {
     var requisiteFilter = new RequisiteFilter(filter);
     var requisite = restTemplate.exchange(bitrixProperty.getRequisiteList(),
         HttpMethod.POST, new HttpEntity<>(requisiteFilter), RequisiteResult.class);
-    log.info("Результат поиска реквизита {}", requisite);
     var response = requisite.getBody();
+    log.info("Результат поиска реквизита {}", response);
     if (Objects.isNull(response) || response.getTotal() == 0) {
       return null;
     }

@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.configuration.exception.UserNotFoundException;
 import com.ddkolesnik.userservice.enums.OwnerType;
 import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.domain.AppUser;
@@ -16,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Objects;
 
 /**
@@ -39,7 +39,7 @@ public class AppUserService {
   public AppUser findByPhone(String phone) {
     var cleanPhone = PhoneUtils.cleanPhone(phone);
     return appUserRepository.findByPhone(cleanPhone)
-        .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+        .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
   }
 
   public void create(AppUser appUser) {
