@@ -135,7 +135,7 @@ public class UserService {
   }
 
   public void changePassword(ChangePasswordDTO changePasswordDTO) {
-    var user = appUserService.findByPhone(changePasswordDTO.getPhone());
+    var user = appUserService.findByPhone(SecurityUtils.getCurrentUserPhone());
     if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
       throw BitrixException.builder()
           .status(HttpStatus.BAD_REQUEST)

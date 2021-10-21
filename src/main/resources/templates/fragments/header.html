@@ -32,7 +32,7 @@
                 <div class="header__user-name">
                     <div class="header__user-info">
                         <span>Аккаунт</span>
-                        <span th:text="${login}"></span>
+                        <span id="login" th:text="${login}"></span>
                     </div>
                     <div class="header__user-logo">
 
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="header__user-links">
-                    <span data-bs-toggle="modal" data-bs-target="#password">Сменить пароль</span>
+                    <span data-bs-toggle="modal" data-bs-target="#change-password-form-modal">Сменить пароль</span>
                     <span data-bs-toggle="modal" data-bs-target="#number">Сменить номер телефона</span>
                     <a href="/">Выйти</a>
                 </div>
