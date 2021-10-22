@@ -1,14 +1,22 @@
-<div class="col-12" th:fragment="account-info-card" id="account-info-card">
-    <div class="info-card info-card--l info-card--flex">
-        <div class="info-card__name">Счет инвестора №791231</div>
-        <div class="info-card__item">
-            <span>Свободно</span><span>150 000 руб.</span>
+<div th:fragment="account-info-card" id="account-info-card">
+    <div th:if="*{!user.accredited}">
+        <div class="info-card info-card--m">
+            <div class="info-card__name">Счет инвестора</div>
+            <div class="info-card__desc">Доступен после аккредитации</div>
         </div>
-        <div class="info-card__item">
-            <span>В инвестициях</span><span>150 000 руб.</span>
-        </div>
-        <div class="info-card__item">
-            <span>Заработано</span><span>0 руб.</span>
+    </div>
+    <div th:if="*{user.accredited}">
+        <div class="info-card info-card--l info-card--flex">
+            <div class="info-card__name">Счет инвестора №791231</div>
+            <div class="info-card__item">
+                <span>Свободно</span><span>150 000 руб.</span>
+            </div>
+            <div class="info-card__item">
+                <span>В инвестициях</span><span>150 000 руб.</span>
+            </div>
+            <div class="info-card__item">
+                <span>Заработано</span><span>0 руб.</span>
+            </div>
         </div>
     </div>
 </div>

@@ -47,8 +47,12 @@
                             <div class="row gy-xl-2 g-lg-1 g-1">
                                 <div class="col-xl-12 col-lg-6">
                                     <div class="row gy-xl-2 g-lg-1 g-1">
-                                        <div th:replace="~{fragments/person-info-card.html :: #person-info-card}"></div>
-                                        <div th:replace="~{fragments/account-info-card.html :: #account-info-card}"></div>
+                                        <div class="col-12">
+                                            <div th:replace="~{fragments/person-info-card.html :: #person-info-card}"></div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div th:replace="~{fragments/account-info-card.html :: #account-info-card}"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

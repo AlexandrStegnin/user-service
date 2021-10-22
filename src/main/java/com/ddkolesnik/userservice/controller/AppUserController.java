@@ -32,7 +32,7 @@ public class AppUserController {
     if (userDTO.isAccredited()) {
       return REDIRECT + PROFILE_ACCREDITED;
     }
-    model.addAttribute("userDTO", userDTO);
+    model.addAttribute("user", userDTO);
     model.addAttribute(LOGIN, userDTO.getFormattedPhone());
     model.addAttribute("fullName", userDTO.getFullName());
     return "profile";

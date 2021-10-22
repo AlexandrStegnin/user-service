@@ -47,32 +47,19 @@
                         <div class="col-xl-3">
                             <div class="row gy-xl-2 g-lg-1 g-1">
                                 <div class="col-xl-12 col-lg-6">
-                                    <div class="info-card">
-                                        <div class="info-card__header">
-                                            <div class="info-card__name" th:text="*{fullName}"></div>
-                                            <div class="info-card__desc">Не аккредитован</div>
-                                        </div>
-                                        <div class="info-card__link">
-                                            <a href="" class="link link--light ">Анкетные данные</a>
-                                            <a href="" class="link link--light link--clear">Мои инвестиции</a>
-                                            <a href="" class="link link--light link--clear">Банковские реквизиты</a>
-                                        </div>
-                                    </div>
+                                    <div th:replace="~{fragments/person-info-card.html :: #person-info-card}"></div>
                                 </div>
                                 <div class="col-xl-12 col-lg-6">
                                     <div class="row gy-xl-2 g-lg-1 g-1">
                                         <div class="col-12">
-                                            <div class="info-card info-card--m">
-                                                <div class="info-card__name">Счет инвестора</div>
-                                                <div class="info-card__desc">Доступен после аккредитации</div>
-                                            </div>
+                                            <div th:replace="~{fragments/account-info-card.html :: #account-info-card}"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-5 offset-xl-1">
-                            <form action="#" th:action="@{/update}" th:method="POST" th:object="${userDTO}" id="details"
+                            <form action="#" th:action="@{/update}" th:method="POST" th:object="${user}" id="details"
                                   enctype="multipart/form-data" class="form">
                                 <div class="form__group">
                                     <div class="form__name">Анкетные данные</div>

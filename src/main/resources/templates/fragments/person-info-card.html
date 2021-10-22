@@ -1,13 +1,16 @@
-<div class="col-12" th:fragment="person-info-card" id="person-info-card">
-    <div class="info-card">
-        <div class="info-card__header">
-            <div class="info-card__name" th:text="*{user.fullName}"></div>
-            <div class="info-card__desc">Аккредитован</div>
-        </div>
-        <div class="info-card__link">
-            <a th:href="@{/profile}" class="link link--light" th:classappend="${#request.getServletPath().contains('/profile') ? 'link--clear' : ''}">Анкетные данные</a>
-            <a th:href="@{/#}" class="link link--light" th:classappend="${#request.getServletPath().contains('/investments') ? 'link--clear' : ''}">Мои инвестиции</a>
-            <a th:href="@{/bank-requisites}" class="link link--light" th:classappend="${#request.getServletPath().contains('/bank-requisites') ? 'link--clear' : ''}">Банковские реквизиты</a>
-        </div>
+<div class="info-card" th:fragment="person-info-card" id="person-info-card">
+    <div class="info-card__header">
+        <div class="info-card__name" th:text="*{user.fullName}"></div>
+        <div class="info-card__desc" th:text="${user.accredited} ? 'Аккредитован' : 'Не аккредитован'"></div>
+    </div>
+    <div class="info-card__link">
+        <a th:href="@{/profile}" class="link link--light"
+           th:classappend="${#request.getServletPath().contains('/profile') ? 'link--clear' : ''}">Анкетные данные</a>
+        <a th:href="@{/#}" class="link link--light"
+           th:classappend="${#request.getServletPath().contains('/investments') ? 'link--clear' : ''}">Мои
+            инвестиции</a>
+        <a th:href="@{/bank-requisites}" class="link link--light"
+           th:classappend="${#request.getServletPath().contains('/bank-requisites') ? 'link--clear' : ''}">Банковские
+            реквизиты</a>
     </div>
 </div>
