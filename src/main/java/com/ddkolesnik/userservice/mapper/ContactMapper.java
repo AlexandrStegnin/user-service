@@ -63,6 +63,9 @@ public abstract class ContactMapper {
     if (Objects.nonNull(dto.getTaxStatus())) {
       fields.put(CONTACT_TAX_STATUS, dto.getTaxStatus().getCode());
     }
+    if (Objects.nonNull(dto.getAddress())) {
+      fields.put(CONTACT_ADDRESS, dto.getAddress());
+    }
     return fields;
   }
 

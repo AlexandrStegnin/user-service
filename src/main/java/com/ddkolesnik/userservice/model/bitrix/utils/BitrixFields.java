@@ -38,8 +38,6 @@ public class BitrixFields {
   public static final String REQUISITE_NAME = "NAME";
   public static final String CONTACT_PREFIX = "CONTACT_";
   public static final String TYPE_ID = "TYPE_ID";
-  public static final String CITY = "CITY";
-  public static final String ADDRESS_1 = "ADDRESS_1";
-  public static final String ADDRESS_2 = "ADDRESS_2";
+  public static final String CONTACT_ADDRESS = "UF_CRM_1625549771";
 
 }

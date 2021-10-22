@@ -38,14 +38,12 @@ public class ContactListFilter {
     select.add(CONTACT_PLACE_OF_BIRTH);
     select.add(IDENT_DOC_NAME);
     select.add(PASSPORT_ISSUED_AT);
-    select.add(CITY);
-    select.add(ADDRESS_1);
-    select.add(ADDRESS_2);
     select.add(CONTACT_CONFIRM_CODE);
     select.add(CONTACT_RAW_PASSWORD);
     select.add(CONTACT_PHONE);
     select.add(CONTACT_TAX_STATUS);
     select.add(CONTACT_NEW_PHONE);
+    select.add(CONTACT_ADDRESS);
   }
 
   public ContactListFilter(Map<String, String[]> filter) {

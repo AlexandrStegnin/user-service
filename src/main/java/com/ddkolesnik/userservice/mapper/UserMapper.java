@@ -3,7 +3,6 @@ package com.ddkolesnik.userservice.mapper;
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
 import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.enums.Gender;
-import com.ddkolesnik.userservice.model.bitrix.address.BitrixAddress;
 import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
@@ -11,7 +10,6 @@ import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.UserProfile;
-import com.ddkolesnik.userservice.model.dto.AddressDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.utils.DateUtils;
@@ -48,9 +46,6 @@ public abstract class UserMapper {
 
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
-
-  @Mapping(target = "address", expression = "java(extractAddress(address))")
-  public abstract void updateAddress(BitrixAddress address, @MappingTarget UserDTO dto);
 
   protected String extractBirthdate(BitrixContact bitrixContact) {
     return DateUtils.convertToDDMMYYYY(bitrixContact.getBirthdate().split("T")[0]);
@@ -89,14 +84,6 @@ public abstract class UserMapper {
         .departmentCode(requisite.getDepartmentCode())
         .number(requisite.getNumber())
         .issuedAt(requisite.getIssuedAt())
-        .build();
-  }
-
-  protected AddressDTO extractAddress(BitrixAddress address) {
-    return AddressDTO.builder()
-        .city(address.getCity())
-        .streetAndHouse(address.getAddress1())
-        .office(address.getAddress2())
         .build();
   }
 

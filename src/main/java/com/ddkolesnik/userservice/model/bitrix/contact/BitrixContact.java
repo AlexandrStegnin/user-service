@@ -68,6 +68,9 @@ public class BitrixContact {
   @JsonProperty(CONTACT_NEW_PHONE)
   String newPhone;
 
+  @JsonProperty(CONTACT_ADDRESS)
+  String address;
+
   @JsonCreator
   public BitrixContact(@JsonProperty(CONTACT_ID) Integer id,
                        @JsonProperty(CONTACT_NAME) String name,
@@ -81,7 +84,8 @@ public class BitrixContact {
                        @JsonProperty(CONTACT_CONFIRM_CODE) String confirmCode,
                        @JsonProperty(CONTACT_RAW_PASSWORD) String rawPassword,
                        @JsonProperty(CONTACT_TAX_STATUS) Integer taxStatus,
-                       @JsonProperty(CONTACT_NEW_PHONE) String newPhone) {
+                       @JsonProperty(CONTACT_NEW_PHONE) String newPhone,
+                       @JsonProperty(CONTACT_ADDRESS) String address) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
@@ -95,6 +99,7 @@ public class BitrixContact {
     this.rawPassword = rawPassword;
     this.taxStatus = taxStatus;
     this.newPhone = newPhone;
+    this.address = address;
   }
 
 }

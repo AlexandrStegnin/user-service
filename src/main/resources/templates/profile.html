@@ -73,7 +73,7 @@
                                         <div class="form__field-item">
                                             <div class="f-input__wrapper ">
                                                 <input name="fio" type="text" placeholder="Иванов Иван Иванович"
-                                                       class="f-input  " th:field="*{user.fullName}"
+                                                       class="f-input  " th:field="*{fullName}"
                                                        readonly>
                                             </div>
                                         </div>
@@ -236,7 +236,7 @@
                                         <div class="form__field-item">
                                             <div class="f-input__wrapper ">
                                                 <input name="default" type="text" placeholder="Адрес регистрации"
-                                                       class="f-input  ">
+                                                       class="f-input  " id="" th:field="*{address}">
                                             </div>
                                         </div>
                                     </div>
@@ -252,17 +252,13 @@
                                             <div class="f-drop__shell">
                                                 <label class="f-drop">
                                                     <input type="file" class="f-file__input"/>
-
                                                     <svg class="icon__cloud" width="40px" height="30px">
                                                         <use xlink:href="/img/svg-symbols.svg#cloud"></use>
                                                     </svg>
-
                                                     <div class="f-drop__text">Перетащите файлы сюда или</div>
                                                     <a href="/">Выберите файл на компьютере</a>
-
                                                 </label>
                                                 <div class="f-drop__list">
-
                                                 </div>
                                             </div>
                                         </div>

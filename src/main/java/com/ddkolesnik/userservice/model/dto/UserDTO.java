@@ -33,7 +33,7 @@ public class UserDTO {
   String inn;
   String snils;
   PassportDTO passport;
-  AddressDTO address;
+  String address;
   Gender gender;
   String birthdate;
   String password;
@@ -45,7 +45,7 @@ public class UserDTO {
   Integer bitrixId;
   TaxStatus taxStatus;
   @Builder.Default
-  boolean accredited = true;
+  boolean accredited = false;
 
   public String getPhone() {
     return PhoneUtils.cleanPhone(this.phone);

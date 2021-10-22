@@ -6,7 +6,6 @@ import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
-import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
 import com.ddkolesnik.userservice.utils.PhoneUtils;
@@ -32,7 +31,6 @@ public class AppUserService {
   AppUserRepository appUserRepository;
   RequisiteService requisiteService;
   AccountService accountService;
-  AddressService addressService;
   PasswordEncoder encoder;
   UserMapper userMapper;
 
@@ -67,10 +65,6 @@ public class AppUserService {
     var dto = userMapper.toDTO(contact);
     var requisite = requisiteService.findRequisite(contact.getId().toString());
     userMapper.updatePassport(requisite, dto);
-    if (Objects.nonNull(requisite)) {
-      var address = addressService.findAddress(requisite);
-      userMapper.updateAddress(address, dto);
-    }
     return dto;
   }
 
