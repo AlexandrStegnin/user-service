@@ -31,7 +31,7 @@ public class UserDTO {
   String phone;
   String confirmCode;
   String inn;
-  String snils;
+  SnilsDTO snils;
   PassportDTO passport;
   String address;
   Gender gender;

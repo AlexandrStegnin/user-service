@@ -139,7 +139,7 @@
                                         <div class="form__field-item">
                                             <div class="f-input__wrapper ">
                                                 <input name="snils" type="text" placeholder="12345678999"
-                                                       class="f-input  " id="snils" th:field="*{snils}">
+                                                       class="f-input  " id="snils" th:field="*{snils.number}">
                                             </div>
                                         </div>
                                     </div>
@@ -252,7 +252,7 @@
                                         <div class="form__field-item">
                                             <div class="f-drop__shell">
                                                 <label class="f-drop">
-                                                    <input type="file" class="f-file__input"/>
+                                                    <input type="file" class="f-file__input"  th:field="*{passport.scans}"/>
                                                     <svg class="icon__cloud" width="40px" height="30px">
                                                         <use xlink:href="/img/svg-symbols.svg#cloud"></use>
                                                     </svg>
@@ -274,7 +274,7 @@
                                         <div class="form__field-item">
                                             <div class="f-drop__shell">
                                                 <label class="f-drop">
-                                                    <input type="file" class="f-file__input"/>
+                                                    <input type="file" class="f-file__input" th:field="*{snils.scans}"/>
 
                                                     <svg class="icon__cloud" width="40px" height="30px">
                                                         <use xlink:href="/img/svg-symbols.svg#cloud"></use>

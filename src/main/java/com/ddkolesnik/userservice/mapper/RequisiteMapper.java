@@ -1,6 +1,10 @@
 package com.ddkolesnik.userservice.mapper;
 
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -12,17 +16,23 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 /**
  * @author Alexandr Stegnin
  */
+@Slf4j
 @Component
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class RequisiteMapper {
 
-  public Map<String, Object> convertFields(UserDTO userDTO) {
+  public Map<String, Object> convertFields(UserDTO dto) {
     var fields = new LinkedHashMap<String, Object>();
-    fields.put(CONTACT_INN, userDTO.getInn());
-    fields.put(CONTACT_SNILS, userDTO.getSnils());
-    convertPassport(fields, userDTO);
+    fields.put(CONTACT_INN, dto.getInn());
+    var snils = dto.getSnils();
+    if (Objects.nonNull(snils)) {
+      fields.put(CONTACT_SNILS, snils.getNumber());
+    }
+    convertPassport(fields, dto);
     fields.put(ENTITY_TYPE_ID, "3");
     fields.put(PRESET_ID, "5");
-    fields.put(ENTITY_ID, userDTO.getId().toString());
+    fields.put(ENTITY_ID, dto.getId().toString());
     fields.put(REQUISITE_NAME, "Реквизит");
     return fields;
   }

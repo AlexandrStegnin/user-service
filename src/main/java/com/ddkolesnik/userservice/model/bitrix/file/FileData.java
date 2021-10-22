@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.model.bitrix.file;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FileData {
 
-  String[] fileData;
+  @JsonProperty("fileData")
+  String[] files;
 
 }

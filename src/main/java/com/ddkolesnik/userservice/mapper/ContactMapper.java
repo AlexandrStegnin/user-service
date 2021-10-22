@@ -3,20 +3,19 @@ package com.ddkolesnik.userservice.mapper;
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.enums.ValueType;
-import com.ddkolesnik.userservice.model.bitrix.file.FileData;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
-import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.utils.ScanConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 
@@ -48,8 +47,11 @@ public abstract class ContactMapper {
     if (Objects.nonNull(dto.getGender())) {
       fields.put(CONTACT_GENDER, dto.getGender().getId());
     }
-    if (isScansAvailable(dto.getPassport())) {
-      fields.put(CONTACT_SCANS, convertScans(dto));
+    if (ScanConverter.isScansAvailable(dto.getPassport())) {
+      fields.put(CONTACT_SCANS, ScanConverter.convertScans(dto.getPassport()));
+    }
+    if (ScanConverter.isScansAvailable(dto.getSnils())) {
+      fields.put(SNILS_SCANS, ScanConverter.convertScans(dto.getSnils()));
     }
     if (Objects.nonNull(dto.getPlaceOfBirth())) {
       fields.put(CONTACT_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
@@ -81,29 +83,6 @@ public abstract class ContactMapper {
         .value(phone)
         .valueType(ValueType.WORK.name())
         .build();
-  }
-
-  private boolean isScansAvailable(PassportDTO dto) {
-    return Objects.nonNull(dto)
-        && Objects.nonNull(dto.getScans())
-        && (dto.getScans().length > 0);
-  }
-
-  private List<FileData> convertScans(UserDTO dto) {
-    var files = dto.getPassport().getScans();
-    var fileDataList = new ArrayList<FileData>();
-    for (MultipartFile file : files) {
-      try {
-        byte[] content = file.getBytes();
-        var imageString = Base64Utils.encodeToString(content);
-        var fileData = new FileData();
-        fileData.setFileData(new String[]{file.getOriginalFilename(), imageString});
-        fileDataList.add(fileData);
-      } catch (IOException e) {
-        log.error("Произошла ошибка {}", e.getMessage());
-      }
-    }
-    return fileDataList;
   }
   
 }

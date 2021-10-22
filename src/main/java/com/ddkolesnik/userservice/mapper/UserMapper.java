@@ -45,6 +45,7 @@ public abstract class UserMapper {
   @Mapping(target = "accredited", expression = "java(convertAccredited(bitrixContact))")
   public abstract UserDTO toDTO(BitrixContact bitrixContact);
 
+  @Mapping(target = "snils.number", source = "requisite.snils")
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
