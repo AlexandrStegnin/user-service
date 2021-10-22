@@ -33,6 +33,7 @@ public class UserDTO {
   String inn;
   SnilsDTO snils;
   PassportDTO passport;
+  BankRequisitesDTO bankRequisites;
   String address;
   Gender gender;
   String birthdate;

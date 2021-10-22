@@ -53,6 +53,9 @@ public abstract class ContactMapper {
     if (ScanConverter.isScansAvailable(dto.getSnils())) {
       fields.put(SNILS_SCANS, ScanConverter.convertScans(dto.getSnils()));
     }
+    if (ScanConverter.isScansAvailable(dto.getBankRequisites())) {
+      fields.put(BANK_REQUISITES_SCANS, ScanConverter.convertScans(dto.getBankRequisites()));
+    }
     if (Objects.nonNull(dto.getPlaceOfBirth())) {
       fields.put(CONTACT_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
     }
