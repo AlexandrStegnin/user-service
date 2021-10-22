@@ -1,442 +1,468 @@
 <!doctype html>
 <html class="no-js" lang="ru">
 
-    <head>
-        <meta name="_csrf" th:content="${_csrf.token}"/>
-        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Колесник</title>
-        <meta content="" name="description">
-        <meta content="" name="keywords">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta content="telephone=no" name="format-detection">
-        <!-- This make sence for mobile browsers. It means, that content has been optimized for mobile browsers -->
-        <meta name="HandheldFriendly" content="true">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Колесник</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="telephone=no" name="format-detection">
+    <!-- This make sence for mobile browsers. It means, that content has been optimized for mobile browsers -->
+    <meta name="HandheldFriendly" content="true">
 
-        <!--[if (gt IE 9)|!(IE)]><!-->
-        <link th:href="@{/css/main.min.css}" rel="stylesheet" type="text/css">
-        <!--<![endif]-->
-        <meta property="og:title" content="" />
-        <meta property="og:url" content="" />
-        <meta property="og:description" content="" />
-        <meta property="og:image" content="" />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="500" />
-        <meta property="og:image:height" content="300" />
-        <meta property="twitter:description" content="" />
-        <link rel="image_src" href="" />
-        <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-        <script>
-            (function (H) { H.className = H.className.replace(/\bno-js\b/, 'js') })(document.documentElement)
-        </script>
-    </head>
-    <body class="page ">
-        <div class="page__top ">
-            <div th:replace="~{fragments/header.html :: #header}"></div>
-            <main class="page__inner page__inner--light">
-                <section class="section">
-                    <div class="container">
-                        <div class="section__header">Личный кабинет
-                            <br>инвестора</div>
-                        <div class="section__body">
-                            <div class="row gy-lg-6 gy-7">
-                                <div class="col-xl-3">
+    <!--[if (gt IE 9)|!(IE)]><!-->
+    <link th:href="@{/css/main.min.css}" rel="stylesheet" type="text/css">
+    <!--<![endif]-->
+    <meta property="og:title" content=""/>
+    <meta property="og:url" content=""/>
+    <meta property="og:description" content=""/>
+    <meta property="og:image" content=""/>
+    <meta property="og:image:type" content="image/jpeg"/>
+    <meta property="og:image:width" content="500"/>
+    <meta property="og:image:height" content="300"/>
+    <meta property="twitter:description" content=""/>
+    <link rel="image_src" href=""/>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <script>
+        (function (H) {
+            H.className = H.className.replace(/\bno-js\b/, 'js')
+        })(document.documentElement)
+    </script>
+</head>
+<body class="page ">
+<div class="page__top ">
+    <div th:replace="~{fragments/header.html :: #header}"></div>
+    <main class="page__inner page__inner--light">
+        <section class="section">
+            <div class="container">
+                <div class="section__header">Личный кабинет
+                    <br>инвестора
+                </div>
+                <div class="section__body">
+                    <div class="row gy-lg-6 gy-7">
+                        <div class="col-xl-3">
+                            <div class="row gy-xl-2 g-lg-1 g-1">
+                                <div class="col-xl-12 col-lg-6">
+                                    <div class="info-card">
+                                        <div class="info-card__header">
+                                            <div class="info-card__name" th:text="*{fullName}"></div>
+                                            <div class="info-card__desc">Не аккредитован</div>
+                                        </div>
+                                        <div class="info-card__link">
+                                            <a href="" class="link link--light ">Анкетные данные</a>
+                                            <a href="" class="link link--light link--clear">Мои инвестиции</a>
+                                            <a href="" class="link link--light link--clear">Банковские реквизиты</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-lg-6">
                                     <div class="row gy-xl-2 g-lg-1 g-1">
-                                        <div class="col-xl-12 col-lg-6">
-                                            <div class="info-card">
-                                                <div class="info-card__header">
-                                                    <div class="info-card__name" th:text="*{fullName}"></div>
-                                                    <div class="info-card__desc">Не аккредитован</div>
-                                                </div>
-                                                <div class="info-card__link">
-                                                    <a href="" class="link link--light ">Анкетные данные</a>
-                                                    <a href="" class="link link--light link--clear">Мои инвестиции</a>
-                                                    <a href="" class="link link--light link--clear">Банковские реквизиты</a>
+                                        <div class="col-12">
+                                            <div class="info-card info-card--m">
+                                                <div class="info-card__name">Счет инвестора</div>
+                                                <div class="info-card__desc">Доступен после аккредитации</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-5 offset-xl-1">
+                            <form action="#" th:action="@{/update}" th:method="POST" th:object="${userDTO}" id="details"
+                                  enctype="multipart/form-data" class="form">
+                                <div class="form__group">
+                                    <div class="form__name">Анкетные данные</div>
+                                    <div class="form__desc">
+                                        Заполните анкетные данные для получения аккредитации
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            ФИО
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input name="fio" type="text" placeholder="Иванов Иван Иванович"
+                                                       class="f-input  " th:field="*{fullName}"
+                                                       readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            Налоговый статус
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-select__wrapper js-select-shell">
+                                                <select name="tax-status" id="tax-status" class="f-select"
+                                                        th:field="*{taxStatus}" placeholder="Самозанятый">
+                                                    <option th:each="tStatus : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
+                                                            th:value="${tStatus}" th:text="${tStatus.title}"></option>
+                                                </select>
+                                                <div class="f-select__icon">
+                                                    <svg class="icon__arrow" width="7px" height="7px">
+                                                        <use xlink:href="/img/svg-symbols.svg#arrow"></use>
+                                                    </svg>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-12 col-lg-6">
-                                            <div class="row gy-xl-2 g-lg-1 g-1">
-                                                <div class="col-12">
-                                                    <div class="info-card info-card--m">
-                                                        <div class="info-card__name">Счет инвестора</div>
-                                                        <div class="info-card__desc">Доступен после аккредитации</div>
-                                                    </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            Телефон
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input data-phone-mask="+7 (999) 999-99-99" name="phone" type="text"
+                                                       placeholder="+7 (999) 999-99-99" class="f-input  "
+                                                       id="phone" th:field="*{phone}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            Электронная почта
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input name="email" type="text" placeholder="example@mai.ru"
+                                                       class="f-input  " id="email" th:field="*{email}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            ИНН
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input name="inn" type="text" placeholder="720000000001"
+                                                       class="f-input  " id="inn" th:field="*{inn}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            СНИЛС
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input name="snils" type="text" placeholder="12345678999"
+                                                       class="f-input  " id="snils" th:field="*{snils}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            Дата рождения
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input data-phone-mask="99.99.9999" name="birthdate" type="text"
+                                                       placeholder="01.01.1980" class="f-input  " id="birthdate"
+                                                       th:field="*{birthdate}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            Место рождения
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input name="place-of-birth" type="text" placeholder="Место рождения"
+                                                       class="f-input  " id="place-of-birth" th:field="*{placeOfBirth}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form__group">
+                                    <div class="form__name">Паспортные данные</div>
+                                    <div class="form__field-group">
+                                        <div class="form__field">
+                                            <div class="form__field-name">
+                                                Серия
+                                            </div>
+                                            <div class="form__field-item">
+                                                <div class="f-input__wrapper ">
+                                                    <input data-phone-mask="9999" name="serial" type="text"
+                                                           placeholder="6701" class="f-input  " id="serial"
+                                                           th:field="*{passport.serial}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form__field">
+                                            <div class="form__field-name">
+                                                Номер
+                                            </div>
+                                            <div class="form__field-item">
+                                                <div class="f-input__wrapper ">
+                                                    <input data-phone-mask="999999" name="passport-number" type="text"
+                                                           placeholder="340220" class="f-input  " id="passport-number"
+                                                           th:field="*{passport.number}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form__field">
+                                            <div class="form__field-name">
+                                                Код подразделения
+                                            </div>
+                                            <div class="form__field-item">
+                                                <div class="f-input__wrapper ">
+                                                    <input data-phone-mask="999-999" name="department-code" type="text"
+                                                           placeholder="222-222" class="f-input  " id="department-code"
+                                                           th:field="*{passport.departmentCode}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form__field">
+                                            <div class="form__field-name">
+                                                Дата выдачи
+                                            </div>
+                                            <div class="form__field-item">
+                                                <div class="f-input__wrapper ">
+                                                    <input data-phone-mask="99.99.9999" name="issued-at" type="text"
+                                                           placeholder="__.__.____" class="f-input  " id="issued-at"
+                                                           th:field="*{passport.issuedAt}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            Кем выдан
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input name="issued-by" type="text" placeholder="Кем выдан"
+                                                       class="f-input  " id="issued-by" th:field="*{passport.issuedBy}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-name">
+                                            Адрес регистрации
+                                        </div>
+                                        <div class="form__field-item">
+                                            <div class="f-input__wrapper ">
+                                                <input name="default" type="text" placeholder="Адрес регистрации"
+                                                       class="f-input  ">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form__group">
+                                    <div class="form__name">Сканы паспорта</div>
+                                    <div class="form__help">
+                                        <p>Загрузите сканы или фото следующих страниц:</p>
+                                        <p style="font-weight: bold;">разворот с фото и страницу с пропиской</p>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-item">
+                                            <div class="f-drop__shell">
+                                                <label class="f-drop">
+                                                    <input type="file" class="f-file__input"/>
+
+                                                    <svg class="icon__cloud" width="40px" height="30px">
+                                                        <use xlink:href="/img/svg-symbols.svg#cloud"></use>
+                                                    </svg>
+
+                                                    <div class="f-drop__text">Перетащите файлы сюда или</div>
+                                                    <a href="/">Выберите файл на компьютере</a>
+
+                                                </label>
+                                                <div class="f-drop__list">
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-5 offset-xl-1">
-                                    <form action="#" th:action="@{/update}" th:method="POST" th:object="${userDTO}" id="details" enctype="multipart/form-data" class="form">
-                                        <div class="form__group">
-                                            <div class="form__name">Анкетные данные</div>
-                                            <div class="form__desc">
-                                                Заполните анкетные данные для получения аккредитации
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    ФИО
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input name="fio" type="text" placeholder="Иванов Иван Иванович" class="f-input  " th:field="*{fullName}"
-                                                               readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    Налоговый статус
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-select__wrapper js-select-shell">
-                                                        <select name="tax-status" id="tax-status" class="f-select" th:field="*{taxStatus}" placeholder="Самозанятый">
-                                                            <option th:each="tStatus : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
-                                                                    th:value="${tStatus}" th:text="${tStatus.title}"></option>
-                                                        </select>
-                                                        <div class="f-select__icon">
-                                                            <svg class="icon__arrow" width="7px" height="7px">
-                                                                <use xlink:href="/img/svg-symbols.svg#arrow"></use>
-                                                            </svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    Телефон
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input data-phone-mask="+7 (999) 999-99-99" name="phone" type="text" placeholder="+7 (999) 999-99-99" class="f-input  "
-                                                               id="phone" th:field="*{phone}" readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    Электронная почта
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input name="email" type="text" placeholder="example@mai.ru" class="f-input  " id="email" th:field="*{email}" readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    ИНН
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input name="inn" type="text" placeholder="720000000001" class="f-input  " id="inn" th:field="*{inn}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    СНИЛС
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input name="snils" type="text" placeholder="12345678999" class="f-input  " id="snils" th:field="*{snils}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    Дата рождения
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input data-phone-mask="99.99.9999" name="birthdate" type="text" placeholder="01.01.1980" class="f-input  " id="birthdate" th:field="*{birthdate}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    Место рождения
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input name="place-of-birth" type="text" placeholder="Место рождения" class="f-input  " id="place-of-birth" th:field="*{placeOfBirth}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form__group">
-                                            <div class="form__name">Паспортные данные</div>
-                                            <div class="form__field-group">
-                                                <div class="form__field">
-                                                    <div class="form__field-name">
-                                                        Серия
-                                                    </div>
-                                                    <div class="form__field-item">
-                                                        <div class="f-input__wrapper ">
-                                                            <input data-phone-mask="9999" name="serial" type="text" placeholder="6701" class="f-input  " id="serial" th:field="*{passport.serial}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form__field">
-                                                    <div class="form__field-name">
-                                                        Номер
-                                                    </div>
-                                                    <div class="form__field-item">
-                                                        <div class="f-input__wrapper ">
-                                                            <input data-phone-mask="999999" name="passport-number" type="text" placeholder="340220" class="f-input  " id="passport-number" th:field="*{passport.number}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form__field">
-                                                    <div class="form__field-name">
-                                                        Код подразделения
-                                                    </div>
-                                                    <div class="form__field-item">
-                                                        <div class="f-input__wrapper ">
-                                                            <input data-phone-mask="999-999" name="department-code" type="text" placeholder="222-222" class="f-input  " id="department-code" th:field="*{passport.departmentCode}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form__field">
-                                                    <div class="form__field-name">
-                                                        Дата выдачи
-                                                    </div>
-                                                    <div class="form__field-item">
-                                                        <div class="f-input__wrapper ">
-                                                            <input data-phone-mask="99.99.9999" name="issued-at" type="text" placeholder="__.__.____" class="f-input  " id="issued-at" th:field="*{passport.issuedAt}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    Кем выдан
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input name="issued-by" type="text" placeholder="Кем выдан" class="f-input  " id="issued-by" th:field="*{passport.issuedBy}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-name">
-                                                    Адрес регистрации
-                                                </div>
-                                                <div class="form__field-item">
-                                                    <div class="f-input__wrapper ">
-                                                        <input name="default" type="text" placeholder="Адрес регистрации" class="f-input  ">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form__group">
-                                            <div class="form__name">Сканы паспорта</div>
-                                            <div class="form__help">
-                                                <p>Загрузите сканы или фото следующих страниц:</p>
-                                                <p style="font-weight: bold;">разворот с фото и страницу с пропиской</p>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-item">
-                                                    <div class="f-drop__shell">
-                                                        <label class="f-drop">
-                                                            <input type="file" class="f-file__input" />
-
-                                                            <svg class="icon__cloud" width="40px" height="30px">
-                                                                <use xlink:href="/img/svg-symbols.svg#cloud"></use>
-                                                            </svg>
-
-                                                            <div class="f-drop__text">Перетащите файлы сюда или</div>
-                                                            <a href="/">Выберите файл на компьютере</a>
-
-                                                        </label>
-                                                        <div class="f-drop__list">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form__group">
-                                            <div class="form__name">Скан снилс</div>
-                                            <div class="form__help">
-                                                <p>Загрузите скан СНИЛС</p>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-item">
-                                                    <div class="f-drop__shell">
-                                                        <label class="f-drop">
-                                                            <input type="file" class="f-file__input" />
-
-                                                            <svg class="icon__cloud" width="40px" height="30px">
-                                                                <use xlink:href="/img/svg-symbols.svg#cloud"></use>
-                                                            </svg>
-
-                                                            <div class="f-drop__text">Перетащите файлы сюда или</div>
-                                                            <a href="/">Выберите файл на компьютере</a>
-
-                                                        </label>
-                                                        <div class="f-drop__list">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form__group">
-                                            <div class="form__name">Банковские реквизиты</div>
-                                            <div class="form__help">
-                                                <p>Загрузите скан или фото банковских реквизитов
-                                                    <br>Если вы инвестируете как физ. лицо, то указывайте реквизиты физ. лица, если вы инвестируете как ИП, то нужны реквизиты ИП.</p>
-                                            </div>
-                                            <div class="form__field">
-                                                <div class="form__field-item">
-                                                    <div class="f-drop__shell">
-                                                        <label class="f-drop">
-                                                            <input type="file" class="f-file__input" />
-
-                                                            <svg class="icon__cloud" width="40px" height="30px">
-                                                                <use xlink:href="/img/svg-symbols.svg#cloud"></use>
-                                                            </svg>
-
-                                                            <div class="f-drop__text">Перетащите файлы сюда или</div>
-                                                            <a href="/">Выберите файл на компьютере</a>
-
-                                                        </label>
-                                                        <div class="f-drop__list">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form__submit">
-                                            <button class="button  " type="submit" id="submit">
-                                                <span>Отправить</span>
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </main>
-        </div>
-        <aside class="page__bottom">
-            <div th:replace="~{fragments/footer.html :: #footer}"></div>
-            <script th:src="@{/js/separate-js/svg4everybody.min.js}"></script>
-            <script>
-                svg4everybody();
-            </script>
-            <script th:src="@{/js/main.min.js}"></script>
-        </aside>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <h2 class="modal__title">Восстановление пароля</h2>
-                    <form class="modal__body">
-                        <div class="modal__fild">
-                            <div class="modal__fild-name">Введите номер телефона, который использовали при регистрации</div>
-                            <div class="modal__fild-item">
-                                <div class="f-input__wrapper ">
-                                    <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text" placeholder="Номер телефона" class="f-input  ">
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal__action">
-                            <div data-bs-dismiss="modal">
-                                <button class="button  " onclick="event.preventDefault()" data-bs-toggle="modal" data-bs-target="#send">
-                                    <span>Восстановить</span>
-                                </button>
-                            </div>
-                            <div class="modal__action-link">
-                                <a href="" class="link link--colored link--clear">Войти</a>
-                                <a href="" class="link link--colored link--clear">Создать личный кабинет</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="modal modal--send fade" id="send" tabindex="-1" aria-labelledby="sendLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="modal__desc">
-                        Вам отправлено смс с временным паролем. Используйте его для авторизации
-                    </div>
-                    <div data-bs-dismiss="modal" aria-label="Close">
-                        <button class="button  ">
-                            <span>Войти</span>
-                        </button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal modal--send-number fade" id="send-number" tabindex="-1" aria-labelledby="send-number" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <!-- состояния отображаются по классу success / error у modal-content -->
-                <div class="modal-content">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="registration registration--verification">
-                        <form class="registration__body">
-                            <div class="registration__field d-block">
-                                <div class="registration__subtitle">Введите код подтверждения</div>
-                                <div class="registration__field-item">
-                                    <div class="f-input__wrapper ">
-                                        <input name="default" type="text" placeholder="......" class="f-input  ">
-
+                                <div class="form__group">
+                                    <div class="form__name">Скан снилс</div>
+                                    <div class="form__help">
+                                        <p>Загрузите скан СНИЛС</p>
                                     </div>
-                                    <button class="button  ">
-                                        <span>Подтвердить</span>
+                                    <div class="form__field">
+                                        <div class="form__field-item">
+                                            <div class="f-drop__shell">
+                                                <label class="f-drop">
+                                                    <input type="file" class="f-file__input"/>
+
+                                                    <svg class="icon__cloud" width="40px" height="30px">
+                                                        <use xlink:href="/img/svg-symbols.svg#cloud"></use>
+                                                    </svg>
+
+                                                    <div class="f-drop__text">Перетащите файлы сюда или</div>
+                                                    <a href="/">Выберите файл на компьютере</a>
+
+                                                </label>
+                                                <div class="f-drop__list">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form__group">
+                                    <div class="form__name">Банковские реквизиты</div>
+                                    <div class="form__help">
+                                        <p>Загрузите скан или фото банковских реквизитов
+                                            <br>Если вы инвестируете как физ. лицо, то указывайте реквизиты физ. лица,
+                                            если вы инвестируете как ИП, то нужны реквизиты ИП.</p>
+                                    </div>
+                                    <div class="form__field">
+                                        <div class="form__field-item">
+                                            <div class="f-drop__shell">
+                                                <label class="f-drop">
+                                                    <input type="file" class="f-file__input"/>
+
+                                                    <svg class="icon__cloud" width="40px" height="30px">
+                                                        <use xlink:href="/img/svg-symbols.svg#cloud"></use>
+                                                    </svg>
+
+                                                    <div class="f-drop__text">Перетащите файлы сюда или</div>
+                                                    <a href="/">Выберите файл на компьютере</a>
+
+                                                </label>
+                                                <div class="f-drop__list">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form__submit">
+                                    <button class="button  " type="submit" id="submit">
+                                        <span>Отправить</span>
                                     </button>
-                                    <a href="/" class="registration__action-link">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+<aside class="page__bottom">
+    <div th:replace="~{fragments/footer.html :: #footer}"></div>
+    <script th:src="@{/js/separate-js/svg4everybody.min.js}"></script>
+    <script>
+        svg4everybody();
+    </script>
+    <script th:src="@{/js/main.min.js}"></script>
+</aside>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h2 class="modal__title">Восстановление пароля</h2>
+            <form class="modal__body">
+                <div class="modal__fild">
+                    <div class="modal__fild-name">Введите номер телефона, который использовали при регистрации</div>
+                    <div class="modal__fild-item">
+                        <div class="f-input__wrapper ">
+                            <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text"
+                                   placeholder="Номер телефона" class="f-input  ">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal__action">
+                    <div data-bs-dismiss="modal">
+                        <button class="button  " onclick="event.preventDefault()" data-bs-toggle="modal"
+                                data-bs-target="#send">
+                            <span>Восстановить</span>
+                        </button>
+                    </div>
+                    <div class="modal__action-link">
+                        <a href="" class="link link--colored link--clear">Войти</a>
+                        <a href="" class="link link--colored link--clear">Создать личный кабинет</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal modal--send fade" id="send" tabindex="-1" aria-labelledby="sendLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal__desc">
+                Вам отправлено смс с временным паролем. Используйте его для авторизации
+            </div>
+            <div data-bs-dismiss="modal" aria-label="Close">
+                <button class="button  ">
+                    <span>Войти</span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal--send-number fade" id="send-number" tabindex="-1" aria-labelledby="send-number"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <!-- состояния отображаются по классу success / error у modal-content -->
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="registration registration--verification">
+                <form class="registration__body">
+                    <div class="registration__field d-block">
+                        <div class="registration__subtitle">Введите код подтверждения</div>
+                        <div class="registration__field-item">
+                            <div class="f-input__wrapper ">
+                                <input name="default" type="text" placeholder="......" class="f-input  ">
+
+                            </div>
+                            <button class="button  ">
+                                <span>Подтвердить</span>
+                            </button>
+                            <a href="/" class="registration__action-link">
                                 Отправить код повторно
                             </a>
-                                </div>
-                            </div>
-                            <div class="modal__success">
-                                <div class="modal__success-text">
-                                    Ваш номер телефона успешно изменен Номер телефона - ваш логин при входе личный кабинет.
-                                </div>
+                        </div>
+                    </div>
+                    <div class="modal__success">
+                        <div class="modal__success-text">
+                            Ваш номер телефона успешно изменен Номер телефона - ваш логин при входе личный кабинет.
+                        </div>
 
-                                <svg class="icon__succ" width="70px" height="70px">
-                                    <use xlink:href="/img/svg-symbols.svg#succ"></use>
-                                </svg>
+                        <svg class="icon__succ" width="70px" height="70px">
+                            <use xlink:href="/img/svg-symbols.svg#succ"></use>
+                        </svg>
 
-                            </div>
-                            <div class="modal__error">
-                                <div class="modal__error-text">Код введен неверно</div>
+                    </div>
+                    <div class="modal__error">
+                        <div class="modal__error-text">Код введен неверно</div>
 
-                                <svg class="icon__err" width="70px" height="70px">
-                                    <use xlink:href="/img/svg-symbols.svg#err"></use>
-                                </svg>
+                        <svg class="icon__err" width="70px" height="70px">
+                            <use xlink:href="/img/svg-symbols.svg#err"></use>
+                        </svg>
 
-                                <a href="/" class="registration__action-link">
+                        <a href="/" class="registration__action-link">
                             Отправить код повторно
                         </a>
-                            </div>
-                        </form>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
-        <script th:src="@{https://code.jquery.com/jquery-3.5.1.min.js}"
-                integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-        <script type="text/javascript" th:src="@{/js/common.js}"></script>
-        <script type="text/javascript" th:src="@{/js/change-phone.js}"></script>
-        <script type="text/javascript" th:src="@{/js/change-password.js}"></script>
-        <div th:replace="~{forms/change-password-form.html :: #change-password-form-modal}"></div>
-        <div th:replace="~{forms/change-phone-form.html :: #change-phone-form-modal}"></div>
-        <div th:replace="~{fragments/message-form.html :: #message-form-modal}"></div>
-        <div th:replace="~{forms/confirm-form.html :: #confirm-form-modal}"></div>
-    </body>
-
+<script th:src="@{https://code.jquery.com/jquery-3.5.1.min.js}"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/change-phone.js}"></script>
+<script type="text/javascript" th:src="@{/js/change-password.js}"></script>
+<div th:replace="~{forms/change-password-form.html :: #change-password-form-modal}"></div>
+<div th:replace="~{forms/change-phone-form.html :: #change-phone-form-modal}"></div>
+<div th:replace="~{fragments/message-form.html :: #message-form-modal}"></div>
+<div th:replace="~{forms/confirm-form.html :: #confirm-form-modal}"></div>
+</body>
 </html>
