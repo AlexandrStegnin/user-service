@@ -44,6 +44,7 @@ public class ContactListFilter {
     select.add(CONTACT_TAX_STATUS);
     select.add(CONTACT_NEW_PHONE);
     select.add(CONTACT_ADDRESS);
+    select.add(IS_CONTACT_ACCREDITED);
   }
 
   public ContactListFilter(Map<String, String[]> filter) {

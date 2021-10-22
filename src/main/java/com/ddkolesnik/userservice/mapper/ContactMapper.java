@@ -4,7 +4,6 @@ import com.ddkolesnik.userservice.configuration.MapStructConfig;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.enums.ValueType;
 import com.ddkolesnik.userservice.model.bitrix.file.FileData;
-import com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
@@ -41,7 +40,7 @@ public abstract class ContactMapper {
     fields.put(CONTACT_SECOND_NAME, dto.getSecondName());
     fields.put(CONTACT_LAST_NAME, dto.getLastName());
     fields.put(CONTACT_EMAIL, Collections.singletonList(convertEmail(dto.getEmail())));
-    fields.put(BitrixFields.CONTACT_PHONE, Collections.singletonList(convertPhone(dto.getPhone())));
+    fields.put(CONTACT_PHONE, Collections.singletonList(convertPhone(dto.getPhone())));
     fields.put("UF_CRM_1625221385", "1");
     if (Objects.nonNull(dto.getBirthdate())) {
       fields.put(CONTACT_BIRTHDATE, dto.getBirthdate());

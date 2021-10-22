@@ -42,6 +42,7 @@ public abstract class UserMapper {
   @Mapping(target = "birthdate", expression = "java(extractBirthdate(bitrixContact))")
   @Mapping(target = "phone", expression = "java(extractPhone(bitrixContact))")
   @Mapping(target = "taxStatus", expression = "java(convertTaxStatus(bitrixContact))")
+  @Mapping(target = "accredited", expression = "java(convertAccredited(bitrixContact))")
   public abstract UserDTO toDTO(BitrixContact bitrixContact);
 
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
@@ -96,6 +97,10 @@ public abstract class UserMapper {
 
   protected TaxStatus convertTaxStatus(BitrixContact bitrixContact) {
     return TaxStatus.fromCode(bitrixContact.getTaxStatus());
+  }
+
+  protected boolean convertAccredited(BitrixContact bitrixContact) {
+    return !Objects.isNull(bitrixContact.getContactAccredited()) && bitrixContact.getContactAccredited() != 0;
   }
 
 }

@@ -71,6 +71,9 @@ public class BitrixContact {
   @JsonProperty(CONTACT_ADDRESS)
   String address;
 
+  @JsonProperty(IS_CONTACT_ACCREDITED)
+  Integer contactAccredited;
+
   @JsonCreator
   public BitrixContact(@JsonProperty(CONTACT_ID) Integer id,
                        @JsonProperty(CONTACT_NAME) String name,
@@ -85,7 +88,8 @@ public class BitrixContact {
                        @JsonProperty(CONTACT_RAW_PASSWORD) String rawPassword,
                        @JsonProperty(CONTACT_TAX_STATUS) Integer taxStatus,
                        @JsonProperty(CONTACT_NEW_PHONE) String newPhone,
-                       @JsonProperty(CONTACT_ADDRESS) String address) {
+                       @JsonProperty(CONTACT_ADDRESS) String address,
+                       @JsonProperty(IS_CONTACT_ACCREDITED) Integer contactAccredited) {
     this.id = id;
     this.name = name;
     this.secondName = secondName;
@@ -100,6 +104,7 @@ public class BitrixContact {
     this.taxStatus = taxStatus;
     this.newPhone = newPhone;
     this.address = address;
+    this.contactAccredited = contactAccredited;
   }
 
 }

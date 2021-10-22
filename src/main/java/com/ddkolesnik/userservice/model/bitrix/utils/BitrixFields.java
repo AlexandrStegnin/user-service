@@ -37,7 +37,7 @@ public class BitrixFields {
   public static final String PRESET_ID = "PRESET_ID";
   public static final String REQUISITE_NAME = "NAME";
   public static final String CONTACT_PREFIX = "CONTACT_";
-  public static final String TYPE_ID = "TYPE_ID";
   public static final String CONTACT_ADDRESS = "UF_CRM_1625549771";
+  public static final String IS_CONTACT_ACCREDITED = "UF_CRM_1623240983";
 
 }
