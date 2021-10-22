@@ -1,0 +1,96 @@
+<!doctype html>
+<html class="no-js" lang="ru">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Колесник</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="telephone=no" name="format-detection">
+    <!-- This make sence for mobile browsers. It means, that content has been optimized for mobile browsers -->
+    <meta name="HandheldFriendly" content="true">
+
+    <!--[if (gt IE 9)|!(IE)]><!-->
+    <link th:href="@{/css/main.min.css}" rel="stylesheet" type="text/css">
+    <!--<![endif]-->
+    <meta property="og:title" content=""/>
+    <meta property="og:url" content=""/>
+    <meta property="og:description" content=""/>
+    <meta property="og:image" content=""/>
+    <meta property="og:image:type" content="image/jpeg"/>
+    <meta property="og:image:width" content="500"/>
+    <meta property="og:image:height" content="300"/>
+    <meta property="twitter:description" content=""/>
+    <link rel="image_src" href=""/>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <script>
+        (function (H) {
+            H.className = H.className.replace(/\bno-js\b/, 'js')
+        })(document.documentElement)
+    </script>
+</head>
+<body class="page ">
+<div class="page__top ">
+    <div th:replace="~{fragments/header.html :: #header}"></div>
+    <main class="page__inner page__inner--light">
+        <section class="section section--pb-small">
+            <div class="container">
+                <div class="section__header">Личный кабинет
+                    <br>инвестора
+                </div>
+                <div class="section__body">
+                    <div class="row gy-lg-6 gy-7">
+                        <div class="col-xl-3">
+                            <div class="row gy-xl-2 g-lg-1 g-1">
+                                <div class="col-xl-12 col-lg-6">
+                                    <div class="row gy-xl-2 g-lg-1 g-1">
+                                        <div th:replace="~{fragments/person-info-card.html :: #person-info-card}"></div>
+                                        <div th:replace="~{fragments/account-info-card.html :: #account-info-card}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 offset-xl-1">
+                            <div class="info">
+                                <div class="info__name">
+                                    Банковские реквизиты
+                                </div>
+                                <div class="info__group">
+                                    <div class="info__row">
+                                        <div class="info__item">Наименование банка</div>
+                                        <div class="info__item">Сбербанк</div>
+                                    </div>
+                                    <div class="info__row">
+                                        <div class="info__item">БИК</div>
+                                        <div class="info__item">044525225</div>
+                                    </div>
+                                    <div class="info__row">
+                                        <div class="info__item">Корреспондентский счет</div>
+                                        <div class="info__item">30101810600000000681</div>
+                                    </div>
+                                    <div class="info__row">
+                                        <div class="info__item">Расчетный счет</div>
+                                        <div class="info__item">30301810000006000001</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+<aside class="page__bottom">
+    <div th:replace="~{fragments/footer.html :: #footer}"></div>
+    <script th:src="@{/js/separate-js/svg4everybody.min.js}"></script>
+    <script>
+        svg4everybody();
+    </script>
+    <script th:src="@{/js/main.min.js}"></script>
+</aside>
+</body>
+</html>

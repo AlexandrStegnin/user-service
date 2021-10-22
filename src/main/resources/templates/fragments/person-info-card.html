@@ -1,0 +1,13 @@
+<div class="col-12" th:fragment="person-info-card" id="person-info-card">
+    <div class="info-card">
+        <div class="info-card__header">
+            <div class="info-card__name" th:text="*{user.fullName}"></div>
+            <div class="info-card__desc">Аккредитован</div>
+        </div>
+        <div class="info-card__link">
+            <a th:href="@{/profile}" th:attr="class=${#request.getServletPath().contains('/profile') ? 'link link--light' : 'link link--light link--clear'}">Анкетные данные</a>
+            <a th:href="@{/#}" th:attr="class=${#request.getServletPath().contains('/investments') ? 'link link--light' : 'link link--light link--clear'}">Мои инвестиции</a>
+            <a th:href="@{/bank-requisites}" th:attr="class=${#request.getServletPath().contains('/bank-requisites') ? 'link link--light' : 'link link--light link--clear'}">Банковские реквизиты</a>
+        </div>
+    </div>
+</div>

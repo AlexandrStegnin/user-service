@@ -44,33 +44,8 @@
                                     <div class="row gy-xl-2 g-lg-1 g-1">
                                         <div class="col-xl-12 col-lg-6">
                                             <div class="row gy-xl-2 g-lg-1 g-1">
-                                                <div class="col-12">
-                                                    <div class="info-card">
-                                                        <div class="info-card__header">
-                                                            <div class="info-card__name" th:text="*{user.fullName}"></div>
-                                                            <div class="info-card__desc">Аккредитован</div>
-                                                        </div>
-                                                        <div class="info-card__link">
-                                                            <a href="" class="link link--light ">Анкетные данные</a>
-                                                            <a href="" class="link link--light link--clear">Мои инвестиции</a>
-                                                            <a href="" class="link link--light link--clear">Банковские реквизиты</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="info-card info-card--flex info-card--l">
-                                                        <div class="info-card__name">Счет инвестора №791231</div>
-                                                        <div class="info-card__item">
-                                                            <span>Свободно</span><span>150 000 руб.</span>
-                                                        </div>
-                                                        <div class="info-card__item">
-                                                            <span>В инвестициях</span><span>150 000 руб.</span>
-                                                        </div>
-                                                        <div class="info-card__item">
-                                                            <span>Заработано</span><span>0 руб.</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <div th:replace="~{fragments/person-info-card.html :: #person-info-card}"></div>
+                                                <div th:replace="~{fragments/account-info-card.html :: #account-info-card}"></div>
                                             </div>
                                         </div>
                                     </div>

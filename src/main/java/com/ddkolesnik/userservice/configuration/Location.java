@@ -25,5 +25,6 @@ public class Location {
   public final String RETRY_SEND_CONFIRM_MESSAGE = "/retry-send";
   public final String PROFILE = "/profile";
   public final String PROFILE_ACCREDITED = "/profile/accredited";
+  public final String BANK_REQUISITES = "/bank-requisites";
 
 }

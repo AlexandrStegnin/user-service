@@ -46,6 +46,14 @@ public class AppUserController {
     return "accredited";
   }
 
+  @GetMapping(path = BANK_REQUISITES)
+  public String bankRequisites(Model model) {
+    UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
+    model.addAttribute("user", userDTO);
+    model.addAttribute(LOGIN, userDTO.getFormattedPhone());
+    return "bank-requisites";
+  }
+
   @GetMapping(path = LOGIN_URL)
   public String login() {
     return LOGIN;
