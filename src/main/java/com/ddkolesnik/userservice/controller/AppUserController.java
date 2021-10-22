@@ -23,34 +23,34 @@ public class AppUserController {
 
   private static final String LOGIN = "login";
   private static final String REDIRECT = "redirect:";
+  private static final String USER = "user";
 
   AppUserService appUserService;
 
   @GetMapping(path = PROFILE)
   public String profile(Model model) {
-    UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
-    if (userDTO.isAccredited()) {
+    UserDTO dto = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
+    if (dto.isAccredited()) {
       return REDIRECT + PROFILE_ACCREDITED;
     }
-    model.addAttribute("user", userDTO);
-    model.addAttribute(LOGIN, userDTO.getFormattedPhone());
-    model.addAttribute("fullName", userDTO.getFullName());
+    addAttributes(model, dto);
     return "profile";
   }
 
   @GetMapping(path = PROFILE_ACCREDITED)
   public String profileAccredited(Model model) {
-    UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
-    model.addAttribute("user", userDTO);
-    model.addAttribute(LOGIN, userDTO.getFormattedPhone());
+    UserDTO dto = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
+    if (!dto.isAccredited()) {
+      return REDIRECT + PROFILE;
+    }
+    addAttributes(model, dto);
     return "accredited";
   }
 
   @GetMapping(path = BANK_REQUISITES)
   public String bankRequisites(Model model) {
-    UserDTO userDTO = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
-    model.addAttribute("user", userDTO);
-    model.addAttribute(LOGIN, userDTO.getFormattedPhone());
+    UserDTO dto = appUserService.findUser(SecurityUtils.getCurrentUserPhone());
+    addAttributes(model, dto);
     return "bank-requisites";
   }
 
@@ -63,5 +63,10 @@ public class AppUserController {
   public String logout() {
     SecurityContextHolder.clearContext();
     return LOGIN;
+  }
+
+  private void addAttributes(Model model, UserDTO dto) {
+    model.addAttribute(USER, dto);
+    model.addAttribute(LOGIN, dto.getFormattedPhone());
   }
 }
