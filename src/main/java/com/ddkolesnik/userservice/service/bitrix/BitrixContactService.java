@@ -45,11 +45,10 @@ public class BitrixContactService extends BitrixService {
      if (bitrixWebClient.isContactExists(dto.getPhone())) {
       updateContact(dto);
       return ApiResponse.build200Response("Контакт Б24 успешно обновлён");
-    } else {
-      Integer contactId = createContact(dto);
-      dto.setBitrixId(contactId);
-      return ApiResponse.build201Response("Пользователь успешно создан в Б24");
     }
+    Integer contactId = createContact(dto);
+    dto.setBitrixId(contactId);
+    return ApiResponse.build201Response("Пользователь успешно создан в Б24");
   }
 
   public BitrixContact getContact(UserDTO userDTO) {

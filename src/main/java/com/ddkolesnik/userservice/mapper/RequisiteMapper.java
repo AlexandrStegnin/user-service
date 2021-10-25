@@ -2,7 +2,6 @@ package com.ddkolesnik.userservice.mapper;
 
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,6 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class RequisiteMapper {
 
