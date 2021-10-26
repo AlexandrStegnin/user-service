@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.model.bitrix.contact;
 
 import com.ddkolesnik.userservice.model.bitrix.file.Scan;
+import com.ddkolesnik.userservice.model.bitrix.requisite.bank.BankRequisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -73,6 +74,8 @@ public class BitrixContact {
 
   @JsonProperty(IS_CONTACT_ACCREDITED)
   Integer contactAccredited;
+
+  BankRequisite bankRequisites;
 
   @JsonCreator
   public BitrixContact(@JsonProperty(CONTACT_ID) Integer id,

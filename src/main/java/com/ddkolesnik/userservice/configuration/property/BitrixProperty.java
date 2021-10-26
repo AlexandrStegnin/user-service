@@ -56,16 +56,10 @@ public class BitrixProperty {
   String requisiteAdd;
 
   @NotBlank
-  String addressList;
-
-  @NotBlank
-  String addressUpdate;
-
-  @NotBlank
-  String addressAdd;
-
-  @NotBlank
   String businessProcessStart;
+
+  @NotBlank
+  String requisiteBankDetailList;
 
   public String getApiUrl() {
     return defaultUrl + webhookUserId + accessKey;

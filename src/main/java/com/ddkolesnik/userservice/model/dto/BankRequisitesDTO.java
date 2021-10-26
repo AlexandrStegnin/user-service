@@ -17,8 +17,8 @@ public class BankRequisitesDTO implements Scanned {
 
   String bankName;
   String bik;
-  String correspondentAccount;
-  String currentAccount;
+  String correspondentAccountNumber;
+  String accountNumber;
   MultipartFile[] scans;
 
 }

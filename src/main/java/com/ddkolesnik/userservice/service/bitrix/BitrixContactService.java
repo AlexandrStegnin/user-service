@@ -33,12 +33,14 @@ public class BitrixContactService extends BitrixService {
 
   ContactMapper contactMapper;
   BitrixWebClient bitrixWebClient;
+  BankRequisiteService bankRequisiteService;
 
   public BitrixContactService(BitrixProperty bitrixProperty, RestTemplate restTemplate, ContactMapper contactMapper,
-                              BitrixWebClient bitrixWebClient) {
+                              BitrixWebClient bitrixWebClient, BankRequisiteService bankRequisiteService) {
     super(bitrixProperty, restTemplate);
     this.contactMapper = contactMapper;
     this.bitrixWebClient = bitrixWebClient;
+    this.bankRequisiteService = bankRequisiteService;
   }
 
   public ApiResponse createOrUpdateContact(UserDTO dto) {
@@ -59,7 +61,10 @@ public class BitrixContactService extends BitrixService {
   }
 
   public BitrixContact getContact(String phone) {
-    return bitrixWebClient.getContact(phone);
+    var contact = bitrixWebClient.getContact(phone);
+    var bankRequisites = bankRequisiteService.findRequisites(contact.getId().toString());
+    contact.setBankRequisites(bankRequisites);
+    return contact;
   }
 
   public void updateContact(UserDTO userDTO) {

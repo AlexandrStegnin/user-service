@@ -66,19 +66,19 @@
                                 <div class="info__group">
                                     <div class="info__row">
                                         <div class="info__item">Наименование банка</div>
-                                        <div class="info__item">Сбербанк</div>
+                                        <div class="info__item" th:text="*{user.bankRequisites.bankName}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">БИК</div>
-                                        <div class="info__item">044525225</div>
+                                        <div class="info__item" th:text="*{user.bankRequisites.bik}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Корреспондентский счет</div>
-                                        <div class="info__item">30101810600000000681</div>
+                                        <div class="info__item" th:text="*{user.bankRequisites.correspondentAccountNumber}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Расчетный счет</div>
-                                        <div class="info__item">30301810000006000001</div>
+                                        <div class="info__item" th:text="*{user.bankRequisites.accountNumber}"></div>
                                     </div>
                                 </div>
                             </div>

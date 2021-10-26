@@ -41,5 +41,9 @@ public class BitrixFields {
   public static final String IS_CONTACT_ACCREDITED = "UF_CRM_1623240983";
   public static final String SNILS_SCANS = "UF_CRM_1623311532";
   public static final String BANK_REQUISITES_SCANS = "UF_CRM_1623322170";
+  public static final String BANK_NAME = "RQ_BANK_NAME";
+  public static final String BANK_BIK = "RQ_BIK";
+  public static final String BANK_ACCOUNT_NUMBER = "RQ_ACC_NUM";
+  public static final String BANK_CORR_ACCOUNT_NUMBER = "RQ_COR_ACC_NUM";
 
 }
