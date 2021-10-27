@@ -32,8 +32,8 @@ function onEnterKeyPressed() {
 function onRetrySendClick() {
     $(document).on('click', 'a.retry-send', function (event) {
         event.preventDefault()
-        confirmModal.find('#response-state').removeClass('error')
-        confirmModal.find('#confirm-code').val('')
+        confirmForm.find('#response-state').removeClass('error')
+        confirmForm.find('#confirm-code').val('')
         retrySendConfirmMessage()
     })
 }
@@ -72,4 +72,17 @@ function showFailForm(title) {
     confirmForm.find('#fail-text').text(title)
     confirmForm.find('#response-state').addClass('error')
     confirmForm.modal('show')
+}
+
+function getUserDTO(confirmCode, clientBitrixId) {
+    return {
+        name: $('#name').val(),
+        secondName: $('#secondName').val(),
+        lastName: $('#lastName').val(),
+        email: $('#email').val(),
+        phone: $('#phone').val(),
+        confirmCode: confirmCode,
+        agreementPersonalData: $('#agreement-personal-data').prop('checked'),
+        bitrixId: clientBitrixId
+    }
 }

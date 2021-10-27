@@ -19,7 +19,7 @@ jQuery(document).ready(function ($) {
     newPhoneField = $('#new-phone')
     newPhoneFieldByEmail = $('#new-phone-by-email')
     oldPhoneField = $('#old-phone')
-    changePhoneButton = $('button#change-phone')
+    changePhoneButton = $('button.change-phone')
     confirmButton = $('#confirm')
     onChangePhoneClick()
     onChangePhoneFormSubmit()
@@ -37,7 +37,7 @@ function onChangePhoneClick() {
 function onChangePhoneFormSubmit() {
     changePhoneButton.on('click', function (e) {
         e.preventDefault()
-        let method = $('#by-phone').data('method')
+        let method = $(this).data('method')
         if (method === 'by-phone') {
             confirmByPhone()
         } else {
