@@ -1,5 +1,4 @@
-<div class="modal modal--number fade" id="change-phone-form-modal" tabindex="-1" aria-labelledby="number"
-     aria-hidden="true">
+<div class="modal modal--number fade" id="change-phone-form-modal" tabindex="-1" aria-labelledby="number" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -7,13 +6,9 @@
             <h2 class="registration__sub">Как вам удобнее получить код подтверждения?</h2>
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                            type="button" role="tab" aria-controls="nav-home" aria-selected="true">По старому номеру
-                        телефона
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">По старому номеру телефона
                     </button>
-                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                            type="button" role="tab" aria-controls="nav-profile" aria-selected="false">По email
-                    </button>
+                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">По email</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -24,9 +19,8 @@
                             </div>
                             <div class="registration__field-item">
                                 <div class="f-input__wrapper ">
-                                    <input data-phone-mask="+7 (999)
-                                999-99-99" name="default" type="text" placeholder="+7 (999) 999-99-99" class="f-input  "
-                                           id="old-phone">
+                                    <input data-phone-mask="+7 (999)999-99-99" name="default" type="text" placeholder="+7 (999) 999-99-99" class="f-input  "id="old-phone">
+
                                 </div>
                             </div>
                         </div>
@@ -35,15 +29,13 @@
                             </div>
                             <div class="registration__field-item">
                                 <div class="f-input__wrapper ">
-                                    <input data-phone-mask="+7 (999)
-                                999-99-99" name="default" type="text" placeholder="+7 (999) 999-99-99" class="f-input  "
-                                           id="new-phone">
+                                    <input data-phone-mask="+7 (999)999-99-99" name="default" type="text" placeholder="+7 (999) 999-99-99" class="f-input  " id="new-phone">
+
                                 </div>
                             </div>
                         </div>
                         <div class="registration__action">
-                            <button class="button  change-phone" onclick="event.preventDefault()"
-                                data-method="by-phone">
+                            <button class="button  change-phone" onclick="event.preventDefault()" data-method="by-phone">
                                 <span>Изменить</span>
                             </button>
                         </div>
@@ -52,24 +44,20 @@
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <form class="registration__body">
                         <div class="registration__field">
-                            <div class="registration__field-name registration__field-name--desc">На указанный в профиле
-                                email будет отправлен код подтверждения
-                            </div>
+                            <div class="registration__field-name registration__field-name--desc">На указанный в профиле email будет отправлен код подтверждения</div>
                         </div>
                         <div class="registration__field">
                             <div class="registration__field-name">Новый номер телефона
                             </div>
                             <div class="registration__field-item">
                                 <div class="f-input__wrapper ">
-                                    <input data-phone-mask="+7 (999)
-                                999-99-99" name="default" type="text" placeholder="+7 (999) 999-99-99"
-                                           class="f-input  " id="new-phone-by-email">
+                                    <input data-phone-mask="+7 (999)999-99-99" name="default" type="text" placeholder="+7 (999) 999-99-99" class="f-input  " id="new-phone-by-email">
+
                                 </div>
                             </div>
                         </div>
                         <div class="registration__action">
-                            <button class="button  change-phone" onclick="event.preventDefault()"
-                                    data-method="by-email">
+                            <button class="button  change-phone" onclick="event.preventDefault()" data-method="by-email">
                                 <span>Изменить</span>
                             </button>
                         </div>
