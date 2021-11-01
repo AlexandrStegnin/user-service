@@ -59,12 +59,6 @@ public class AppUserController {
     return LOGIN;
   }
 
-  @GetMapping(path = LOGOUT_URL)
-  public String logout() {
-    SecurityContextHolder.clearContext();
-    return LOGIN;
-  }
-
   private void addAttributes(Model model, UserDTO dto) {
     model.addAttribute(USER, dto);
     model.addAttribute(LOGIN, dto.getFormattedPhone());
