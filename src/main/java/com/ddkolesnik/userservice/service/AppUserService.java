@@ -2,9 +2,13 @@ package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.configuration.exception.UserNotFoundException;
 import com.ddkolesnik.userservice.enums.OwnerType;
+import com.ddkolesnik.userservice.mapper.BalanceMapper;
 import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.domain.AppUser;
+import com.ddkolesnik.userservice.model.dto.AccountDTO;
+import com.ddkolesnik.userservice.model.dto.BalanceDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.repository.AccountTransactionRepository;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
@@ -27,10 +31,12 @@ import java.util.Objects;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AppUserService {
 
+  AccountTransactionRepository accountTransactionRepository;
   BitrixContactService bitrixContactService;
   AppUserRepository appUserRepository;
   RequisiteService requisiteService;
   AccountService accountService;
+  BalanceMapper balanceMapper;
   PasswordEncoder encoder;
   UserMapper userMapper;
 
@@ -65,6 +71,7 @@ public class AppUserService {
     var dto = userMapper.toDTO(contact);
     var requisite = requisiteService.findRequisite(contact.getId().toString());
     userMapper.updatePassport(requisite, dto);
+    fetchBalance(dto);
     return dto;
   }
 
@@ -79,6 +86,15 @@ public class AppUserService {
       account.setAccountNumber(user.getPhone());
       accountService.update(account);
     }
+  }
+
+  private void fetchBalance(UserDTO dto) {
+    AccountDTO accountDTO = accountTransactionRepository.fetchBalance(OwnerType.INVESTOR, Long.valueOf(dto.getId()));
+    BalanceDTO balance = balanceMapper.toBalance(accountDTO);
+    if (Objects.isNull(balance)) {
+      balance = BalanceDTO.builder().build();
+    }
+    dto.setBalance(balance);
   }
 
 }

@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">СНИЛС</div>
-                                        <div class="info__item" th:text="*{user.snils}"></div>
+                                        <div class="info__item" th:text="*{user.snils.number}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Дата рождения</div>
@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Адрес регистрации</div>
-                                        <div class="info__item">г. Тюмень, ул. Ивана Захарова д. 37, кв. 12</div>
+                                        <div class="info__item" th:text="*{user.address}"></div>
                                     </div>
                                 </div>
                                 <div class="info__name">

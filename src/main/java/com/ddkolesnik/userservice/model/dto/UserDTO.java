@@ -47,6 +47,7 @@ public class UserDTO {
   TaxStatus taxStatus;
   @Builder.Default
   boolean accredited = false;
+  BalanceDTO balance;
 
   public String getPhone() {
     return PhoneUtils.cleanPhone(this.phone);
