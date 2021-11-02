@@ -20,11 +20,6 @@ function init() {
 function onSubmitRegistration() {
     registration.on('submit', function (event) {
         event.preventDefault()
-        let agreementPersonalData = $('#agreement-personal-data').prop('checked')
-        if (!agreementPersonalData) {
-            showMessage("Нужно согласие с обработкой и хранением персональных данных")
-            return false
-        }
         create()
     })
 }
