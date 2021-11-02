@@ -14,9 +14,9 @@ public class BitrixFields {
   public static final String CONTACT_LAST_NAME = "LAST_NAME";
   public static final String CONTACT_EMAIL = "EMAIL";
   public static final String CONTACT_GENDER = "UF_CRM_1554359872664";
-  public static final String CONTACT_BIRTHDATE = "BIRTHDATE";
+  public static final String CONTACT_BIRTHDATE = "UF_CRM_1631100798";
   public static final String CONTACT_SCANS = "UF_CRM_1623322119";
-  public static final String CONTACT_PLACE_OF_BIRTH = "UF_CRM_1623241366";
+  public static final String CONTACT_PLACE_OF_BIRTH = "UF_CRM_1631100841";
   public static final String CONTACT_CONFIRM_CODE = "UF_CRM_1627978615";
   public static final String CONTACT_RAW_PASSWORD = "UF_CRM_1632722824";
   public static final String CONTACT_PHONE = "PHONE";
@@ -45,5 +45,6 @@ public class BitrixFields {
   public static final String BANK_BIK = "RQ_BIK";
   public static final String BANK_ACCOUNT_NUMBER = "RQ_ACC_NUM";
   public static final String BANK_CORR_ACCOUNT_NUMBER = "RQ_COR_ACC_NUM";
+  public static final String REQUISITE_ID = "ID";
 
 }

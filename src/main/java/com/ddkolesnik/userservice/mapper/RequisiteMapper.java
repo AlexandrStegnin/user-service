@@ -27,6 +27,8 @@ public class RequisiteMapper {
     if (Objects.nonNull(snils)) {
       fields.put(CONTACT_SNILS, snils.getNumber());
     }
+    fields.put(CONTACT_BIRTHDATE, dto.getBirthdate());
+    fields.put(CONTACT_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
     convertPassport(fields, dto);
     fields.put(ENTITY_TYPE_ID, "3");
     fields.put(PRESET_ID, "5");

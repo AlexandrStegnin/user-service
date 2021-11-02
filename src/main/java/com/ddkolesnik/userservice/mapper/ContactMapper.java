@@ -41,9 +41,6 @@ public abstract class ContactMapper {
     fields.put(CONTACT_EMAIL, Collections.singletonList(convertEmail(dto.getEmail())));
     fields.put(CONTACT_PHONE, Collections.singletonList(convertPhone(dto.getPhone())));
     fields.put("UF_CRM_1625221385", "1");
-    if (Objects.nonNull(dto.getBirthdate())) {
-      fields.put(CONTACT_BIRTHDATE, dto.getBirthdate());
-    }
     if (Objects.nonNull(dto.getGender())) {
       fields.put(CONTACT_GENDER, dto.getGender().getId());
     }
@@ -55,9 +52,6 @@ public abstract class ContactMapper {
     }
     if (ScanConverter.isScansAvailable(dto.getBankRequisites())) {
       fields.put(BANK_REQUISITES_SCANS, ScanConverter.convertScans(dto.getBankRequisites()));
-    }
-    if (Objects.nonNull(dto.getPlaceOfBirth())) {
-      fields.put(CONTACT_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
     }
     if (isCreate) {
       fields.put(CONTACT_IS_INDIVIDUAL, dto.isIndividual() ? "Y" : "N");

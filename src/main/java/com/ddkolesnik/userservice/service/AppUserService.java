@@ -71,6 +71,7 @@ public class AppUserService {
     var dto = userMapper.toDTO(contact);
     var requisite = requisiteService.findRequisite(contact.getId().toString());
     userMapper.updatePassport(requisite, dto);
+    userMapper.updateBirthdate(requisite, dto);
     fetchBalance(dto);
     return dto;
   }

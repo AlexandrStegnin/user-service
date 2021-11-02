@@ -11,6 +11,7 @@ import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.UserProfile;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
+import com.ddkolesnik.userservice.model.dto.SnilsDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.utils.DateUtils;
 import org.mapstruct.Mapper;
@@ -39,18 +40,24 @@ public abstract class UserMapper {
   @Mapping(target = "bitrixId", source = "id")
   @Mapping(target = "email", expression = "java(extractEmail(bitrixContact))")
   @Mapping(target = "gender", expression = "java(extractGender(bitrixContact))")
-  @Mapping(target = "birthdate", expression = "java(extractBirthdate(bitrixContact))")
   @Mapping(target = "phone", expression = "java(extractPhone(bitrixContact))")
   @Mapping(target = "taxStatus", expression = "java(convertTaxStatus(bitrixContact))")
   @Mapping(target = "accredited", expression = "java(convertAccredited(bitrixContact))")
   public abstract UserDTO toDTO(BitrixContact bitrixContact);
 
-  @Mapping(target = "snils.number", source = "requisite.snils")
+  @Mapping(target = "snils", expression = "java(extractSnils(requisite))")
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
-  protected String extractBirthdate(BitrixContact bitrixContact) {
-    return DateUtils.convertToDDMMYYYY(bitrixContact.getBirthdate().split("T")[0]);
+  @Mapping(target = "snils", ignore = true)
+  @Mapping(target = "birthdate", expression = "java(extractBirthdate(requisite))")
+  public abstract void updateBirthdate(Requisite requisite, @MappingTarget UserDTO dto);
+
+  protected String extractBirthdate(Requisite requisite) {
+    if (Objects.nonNull(requisite.getBirthdate())) {
+      return DateUtils.convertToDDMMYYYY(requisite.getBirthdate().split("T")[0]);
+    }
+    return null;
   }
 
   protected Long getInvestorRole() {
@@ -86,6 +93,12 @@ public abstract class UserMapper {
         .departmentCode(requisite.getDepartmentCode())
         .number(requisite.getNumber())
         .issuedAt(requisite.getIssuedAt())
+        .build();
+  }
+
+  protected SnilsDTO extractSnils(Requisite requisite) {
+    return SnilsDTO.builder()
+        .number(requisite.getSnils())
         .build();
   }
 
