@@ -3,6 +3,7 @@ package com.ddkolesnik.userservice.mapper;
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
 import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.enums.Gender;
+import com.ddkolesnik.userservice.model.bitrix.address.BitrixAddress;
 import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
@@ -52,6 +53,9 @@ public abstract class UserMapper {
   @Mapping(target = "snils", ignore = true)
   @Mapping(target = "birthdate", expression = "java(extractBirthdate(requisite))")
   public abstract void updateBirthdate(Requisite requisite, @MappingTarget UserDTO dto);
+
+  @Mapping(target = "address", source = "address.address")
+  public abstract void updateAddress(BitrixAddress address, @MappingTarget UserDTO dto);
 
   protected String extractBirthdate(Requisite requisite) {
     if (Objects.nonNull(requisite.getBirthdate())) {

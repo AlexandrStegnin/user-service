@@ -8,6 +8,7 @@ import com.ddkolesnik.userservice.model.dto.AppUserDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.BusinessProcessService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
@@ -44,6 +45,7 @@ public class UserService {
   SendMessageService sendMessageService;
   RequisiteService requisiteService;
   PasswordEncoder passwordEncoder;
+  AddressService addressService;
   AppUserService appUserService;
   UserMapper userMapper;
 
@@ -85,8 +87,17 @@ public class UserService {
     var requisite = requisiteService.findRequisite(dto);
     if (Objects.isNull(requisite)) {
       requisiteService.createRequisite(dto);
+      requisite = requisiteService.findRequisite(dto);
     } else {
       requisiteService.updateRequisite(requisite, dto);
+    }
+    if (Objects.nonNull(dto.getAddress())) {
+      var address = addressService.findAddress(requisite);
+      if (Objects.isNull(address)) {
+        addressService.createAddress(dto);
+      } else {
+        addressService.updateAddress(dto);
+      }
     }
     bitrixContactService.updateContact(dto);
   }

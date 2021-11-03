@@ -46,5 +46,8 @@ public class BitrixFields {
   public static final String BANK_ACCOUNT_NUMBER = "RQ_ACC_NUM";
   public static final String BANK_CORR_ACCOUNT_NUMBER = "RQ_COR_ACC_NUM";
   public static final String REQUISITE_ID = "ID";
+  public static final String TYPE_ID = "TYPE_ID";
+  public static final String ADDRESS_2 = "ADDRESS_2";
+  public static final String REGISTRATION_ADDRESS = "4";
 
 }

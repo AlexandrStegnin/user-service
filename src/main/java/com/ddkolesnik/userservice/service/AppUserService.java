@@ -10,6 +10,7 @@ import com.ddkolesnik.userservice.model.dto.BalanceDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AccountTransactionRepository;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
+import com.ddkolesnik.userservice.service.bitrix.AddressService;
 import com.ddkolesnik.userservice.service.bitrix.BitrixContactService;
 import com.ddkolesnik.userservice.service.bitrix.RequisiteService;
 import com.ddkolesnik.userservice.utils.PhoneUtils;
@@ -35,6 +36,7 @@ public class AppUserService {
   BitrixContactService bitrixContactService;
   AppUserRepository appUserRepository;
   RequisiteService requisiteService;
+  AddressService addressService;
   AccountService accountService;
   BalanceMapper balanceMapper;
   PasswordEncoder encoder;
@@ -72,6 +74,10 @@ public class AppUserService {
     var requisite = requisiteService.findRequisite(contact.getId().toString());
     userMapper.updatePassport(requisite, dto);
     userMapper.updateBirthdate(requisite, dto);
+    if (Objects.nonNull(requisite)) {
+      var address = addressService.findAddress(requisite);
+      userMapper.updateAddress(address, dto);
+    }
     fetchBalance(dto);
     return dto;
   }
