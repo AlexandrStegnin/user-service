@@ -41,65 +41,66 @@
                 <div class="registration">
                     <h2 class="registration__title">Регистрация <br> нового инвестора</h2>
                     <form action="#" th:method="POST" th:object="${userDTO}" id="registration"
-                          class="registration__body">
+                          class="registration__body v-form">
                         <input type="hidden" id="client-id">
                         <input type="hidden" id="client-secret">
                         <div class="registration__field">
                             <div class="registration__field-name">Фамилия</div>
-                            <div class="registration__field-item">
+                            <div class="registration__field-item v-field">
                                 <div class="f-input__wrapper ">
-                                    <input id="lastName" th:field="*{lastName}" required type="text"
-                                           placeholder="Иванов" class="f-input  ">
+                                    <input id="lastName" th:field="*{lastName}" type="text"
+                                           placeholder="Иванов" class="f-input  " data-pristine-required-message='* Обязательно для заполнения' required>
                                 </div>
                             </div>
                         </div>
                         <div class="registration__field">
                             <div class="registration__field-name">Имя</div>
-                            <div class="registration__field-item">
+                            <div class="registration__field-item v-field">
                                 <div class="f-input__wrapper ">
-                                    <input id="name" th:field="*{name}" required type="text" placeholder="Иван"
-                                           class="f-input  ">
+                                    <input id="name" th:field="*{name}" type="text" placeholder="Иван"
+                                           class="f-input  " data-pristine-required-message='* Обязательно для заполнения' required>
                                 </div>
                             </div>
                         </div>
-                        <div class="registration__field">
+                        <div class="registration__field ">
                             <div class="registration__field-name">Отчество</div>
-                            <div class="registration__field-item">
+                            <div class="registration__field-item ">
                                 <div class="f-input__wrapper ">
                                     <input id="secondName" th:field="*{secondName}" type="text" placeholder="Иванович"
                                            class="f-input  ">
                                 </div>
                             </div>
                         </div>
-                        <div class="registration__field">
+                        <div class="registration__field ">
                             <div class="registration__field-name">Телефон</div>
-                            <div class="registration__field-item">
+                            <div class="registration__field-item v-field">
                                 <div class="f-input__wrapper ">
                                     <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text" id="phone"
                                            placeholder="+7 (999) 999-99-99" class="f-input  " th:field="*{phone}"
-                                           required>
+                                           data-pristine-required-message='* Обязательно для заполнения' required>
                                 </div>
                             </div>
                         </div>
-                        <div class="registration__field">
+                        <div class="registration__field v-field">
                             <div class="registration__field-name">E-mail</div>
-                            <div class="registration__field-item">
+                            <div class="registration__field-item v-field">
                                 <div class="f-input__wrapper ">
-                                    <input id="email" th:field="*{email}" required type="text"
-                                           placeholder="example@mail.ru" class="f-input  ">
+                                    <input id="email" th:field="*{email}" type="text"
+                                           placeholder="example@mail.ru" class="f-input  " data-pristine-email-message='* Укажите корректный e-mail' data-pristine-required-message='* Обязательно для заполнения' required>
                                 </div>
                             </div>
                         </div>
                         <div class="registration__accept">
-                            <div class="registration__accept-item">
+                            <div class="registration__accept-item v-field">
                                 <label class="f-checkbox ">
-                                    <input type="checkbox" id="agreement-personal-data">Согласен на <a href="/">обработку
+                                    <input type="checkbox" id="agreement-personal-data" data-pristine-required-message='* Вам необходимо дать согласие на обработку Персональных данных ' required>Согласен на <a href="/">обработку
                                     и хранение персональных данных</a>
+                                    <span>✓</span>
                                 </label>
                             </div>
                         </div>
                         <div class="registration__action">
-                            <button class="button  " type="submit" id="submit">
+                            <button class="button  " type="submit" id="submit ">
                                 <span>Зарегистрироваться</span>
                             </button>
                             <button class="button button--secondary " onclick="location.href='/'">

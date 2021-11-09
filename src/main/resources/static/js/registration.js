@@ -20,7 +20,9 @@ function init() {
 function onSubmitRegistration() {
     registration.on('submit', function (event) {
         event.preventDefault()
-        create()
+        if (noErrors()) {
+            create()
+        }
     })
 }
 
@@ -41,7 +43,7 @@ function create() {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
-    let userDTO = getUserDTO(null, null, null)
+    let userDTO = getUserDTO(null, null)
 
     $.post({
         url: "create",
@@ -50,7 +52,8 @@ function create() {
         contentType: "application/json;charset=utf-8",
         beforeSend: function (xhr) {
             xhr.setRequestHeader(header, token);
-        }})
+        }
+    })
         .done(function (data) {
             $('#client-id').val(data.message)
             confirmModal.modal('show')
@@ -76,11 +79,12 @@ function confirm(confirmCode, clientBitrixId) {
         contentType: "application/json;charset=utf-8",
         beforeSend: function (xhr) {
             xhr.setRequestHeader(header, token);
-        }})
+        }
+    })
         .done(function (data) {
             confirmModal.find('#response-state').removeClass('error')
             confirmModal.modal('hide')
-            window.location.href="/profile"
+            window.location.href = "/profile"
         })
         .fail(function (jqXHR) {
             confirmModal.find('#response-state').addClass('error')
@@ -103,4 +107,8 @@ function getUserDTO(confirmCode, clientBitrixId) {
         agreementPersonalData: $('#agreement-personal-data').prop('checked'),
         bitrixId: clientBitrixId
     }
+}
+
+function noErrors() {
+    return $('div.pristine-error').length === 0
 }
