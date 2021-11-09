@@ -86,3 +86,7 @@ function getUserDTO(confirmCode, clientBitrixId) {
         bitrixId: clientBitrixId
     }
 }
+
+function noErrors() {
+    return $('div.pristine-error:not([style*="display: none"])').length === 0
+}

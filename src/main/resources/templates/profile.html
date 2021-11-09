@@ -61,22 +61,24 @@
                         </div>
                         <div class="col-xl-5 offset-xl-1">
                             <form action="#" th:action="@{/update}" th:method="POST" th:object="${user}" id="details"
-                                  enctype="multipart/form-data" class="form">
+                                  enctype="multipart/form-data" class="form v-form">
                                 <div class="form__group">
                                     <div class="form__name">Анкетные данные</div>
                                     <div class="form__desc">
                                         Заполните анкетные данные для получения аккредитации
                                     </div>
-                                    <div class="form__field">
+                                    <div class="form__field form__field--info">
                                         <div class="form__field-name">
                                             ФИО
+                                            <span name="fio" th:text="*{fullName}"></span>
                                         </div>
-                                        <div class="form__field-item">
-                                            <div class="f-input__wrapper ">
-                                                <input name="fio" type="text" placeholder="Иванов Иван Иванович"
-                                                       class="f-input  " th:field="*{fullName}"
-                                                       readonly>
-                                            </div>
+                                        <div class="form__field-name">
+                                            Телефон (логин)
+                                            <span name="phone" id="phone" th:text="*{phone}"></span>
+                                        </div>
+                                        <div class="form__field-name">
+                                            Электронная почта
+                                            <span name="email" id="email" th:text="*{email}"></span>
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -86,10 +88,12 @@
                                         <div class="form__field-item">
                                             <div class="f-select__wrapper js-select-shell">
                                                 <select name="tax-status" id="tax-status" class="f-select"
-                                                        th:field="*{taxStatus}" placeholder="Самозанятый">
+                                                        th:field="*{taxStatus}" placeholder="Выберете в каком статусе будете инвестировать">
                                                     <option th:each="tStatus : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
                                                             th:value="${tStatus}" th:text="${tStatus.title}"></option>
                                                 </select>
+                                                <div class="f-select__error">* Выберете в каком статусе будете инвестировать
+                                                        </div>
                                                 <div class="f-select__icon">
                                                     <svg class="icon__arrow" width="7px" height="7px">
                                                         <use xlink:href="/img/svg-symbols.svg#arrow"></use>
@@ -100,35 +104,13 @@
                                     </div>
                                     <div class="form__field">
                                         <div class="form__field-name">
-                                            Телефон
-                                        </div>
-                                        <div class="form__field-item">
-                                            <div class="f-input__wrapper ">
-                                                <input data-phone-mask="+7 (999) 999-99-99" name="phone" type="text"
-                                                       placeholder="+7 (999) 999-99-99" class="f-input  "
-                                                       id="phone" th:field="*{phone}" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form__field">
-                                        <div class="form__field-name">
-                                            Электронная почта
-                                        </div>
-                                        <div class="form__field-item">
-                                            <div class="f-input__wrapper ">
-                                                <input name="email" type="text" placeholder="example@mai.ru"
-                                                       class="f-input  " id="email" th:field="*{email}" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form__field">
-                                        <div class="form__field-name">
                                             ИНН
                                         </div>
-                                        <div class="form__field-item">
+                                        <div class="form__field-item v-field">
                                             <div class="f-input__wrapper ">
-                                                <input name="inn" type="text" placeholder="720000000001"
-                                                       class="f-input  " id="inn" th:field="*{inn}">
+                                                <input data-phone-mask="99999999999[9]" name="inn" type="text" placeholder="720000000001"
+                                                       class="f-input  " id="inn" th:field="*{inn}" minlength='12' data-pristine-required-message='* Обязательно для заполнения' required data-pristine-minlength-message='* ИНН должен
+                                    содержать 12 цифр'>
                                             </div>
                                         </div>
                                     </div>
@@ -136,10 +118,11 @@
                                         <div class="form__field-name">
                                             СНИЛС
                                         </div>
-                                        <div class="form__field-item">
+                                        <div class="form__field-item v-field">
                                             <div class="f-input__wrapper ">
-                                                <input name="snils" type="text" placeholder="12345678999"
-                                                       class="f-input  " id="snils" th:field="*{snils.number}">
+                                                <input data-phone-mask="9999999999[9]" name="snils" type="text" placeholder="12345678999"
+                                                       class="f-input  " id="snils" th:field="*{snils.number}" minlength='11' data-pristine-required-message='* Обязательно для заполнения' required data-pristine-minlength-message='* СНИЛС должен
+                                    содержать 11 цифр'>
                                             </div>
                                         </div>
                                     </div>
