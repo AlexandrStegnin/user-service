@@ -70,15 +70,18 @@
                                     <div class="form__field form__field--info">
                                         <div class="form__field-name">
                                             ФИО
-                                            <span name="fio" th:text="*{fullName}"></span>
+                                            <input name="fio" type="hidden" th:field="*{fullName}">
+                                            <span th:text="*{fullName}"></span>
                                         </div>
                                         <div class="form__field-name">
                                             Телефон (логин)
-                                            <span name="phone" id="phone" th:text="*{formattedPhone}"></span>
+                                            <input name="phone" type="hidden" th:field="*{phone}">
+                                            <span id="phone" th:field="*{phone}" th:text="*{formattedPhone}"></span>
                                         </div>
                                         <div class="form__field-name">
                                             Электронная почта
-                                            <span name="email" id="email" th:text="*{email}"></span>
+                                            <input name="email" type="hidden" th:field="*{email}">
+                                            <span id="email" th:text="*{email}"></span>
                                         </div>
                                     </div>
                                     <div class="form__field">
@@ -89,9 +92,9 @@
                                             <div class="f-select__wrapper js-select-shell">
                                                 <select name="tax-status" id="tax-status" class="f-select"
                                                         th:field="*{taxStatus}" placeholder="ВЫБЕРИТЕ В КАКОМ СТАТУСЕ БУДЕТЕ ИНВЕСТИРОВАТЬ">
-                                                    <option data-placeholder="true" value=""></option>
+                                                    <option th:if="*{taxStatus == null}" data-placeholder="true" value=""></option>
                                                     <option th:each="tStatus, iter : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
-                                                            th:value="${tStatus}" th:text="${tStatus.title}" ></option>
+                                                            th:value="${tStatus}" th:text="${tStatus.title}" th:selected="*{taxStatus}" ></option>
                                                 </select>
                                                 <div class="f-select__error">* Выберите в каком статусе будете инвестировать
                                                 </div>

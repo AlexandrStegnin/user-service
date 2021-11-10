@@ -89,6 +89,6 @@ function getUserDTO(confirmCode, clientBitrixId) {
 
 function noErrors() {
     let divErrors = $('div.pristine-error:not([style*="display: none"])').length
-    let selectErrors = $('div.f-select__error:not([style*="display: none"])').length
+    let selectErrors = $('div.f-select__error:visible').length
     return (divErrors + selectErrors) === 0
 }
