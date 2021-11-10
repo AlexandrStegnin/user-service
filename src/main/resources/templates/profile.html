@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="form__field-name">
                                             Телефон (логин)
-                                            <span name="phone" id="phone" th:text="*{phone}"></span>
+                                            <span name="phone" id="phone" th:text="*{formattedPhone}"></span>
                                         </div>
                                         <div class="form__field-name">
                                             Электронная почта
@@ -88,12 +88,13 @@
                                         <div class="form__field-item">
                                             <div class="f-select__wrapper js-select-shell">
                                                 <select name="tax-status" id="tax-status" class="f-select"
-                                                        th:field="*{taxStatus}" placeholder="Выберете в каком статусе будете инвестировать">
-                                                    <option th:each="tStatus : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
-                                                            th:value="${tStatus}" th:text="${tStatus.title}"></option>
+                                                        th:field="*{taxStatus}" placeholder="ВЫБЕРИТЕ В КАКОМ СТАТУСЕ БУДЕТЕ ИНВЕСТИРОВАТЬ">
+                                                    <option data-placeholder="true" value=""></option>
+                                                    <option th:each="tStatus, iter : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
+                                                            th:value="${tStatus}" th:text="${tStatus.title}" ></option>
                                                 </select>
-                                                <div class="f-select__error">* Выберете в каком статусе будете инвестировать
-                                                        </div>
+                                                <div class="f-select__error">* Выберите в каком статусе будете инвестировать
+                                                </div>
                                                 <div class="f-select__icon">
                                                     <svg class="icon__arrow" width="7px" height="7px">
                                                         <use xlink:href="/img/svg-symbols.svg#arrow"></use>

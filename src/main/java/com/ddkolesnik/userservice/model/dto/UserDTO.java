@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,7 +54,7 @@ public class UserDTO {
 
   public String getFullName() {
     var fullName = this.lastName + " " + this.name + " ";
-    return (fullName + Optional.ofNullable(this.secondName).orElse("")).trim().toUpperCase(Locale.ROOT);
+    return (fullName + Optional.ofNullable(this.secondName).orElse("")).trim();
   }
 
   public String getFormattedPhone() {
