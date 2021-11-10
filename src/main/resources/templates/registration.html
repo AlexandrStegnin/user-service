@@ -85,7 +85,7 @@
                             <div class="registration__field-name">E-mail</div>
                             <div class="registration__field-item v-field">
                                 <div class="f-input__wrapper ">
-                                    <input id="email" th:field="*{email}" type="text"
+                                    <input id="email" th:field="*{email}" type="email"
                                            placeholder="example@mail.ru" class="f-input  " data-pristine-email-message='* Укажите корректный e-mail' data-pristine-required-message='* Обязательно для заполнения' required>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                         <div class="registration__accept">
                             <div class="registration__accept-item v-field">
                                 <label class="f-checkbox ">
-                                    <input type="checkbox" id="agreement-personal-data" data-pristine-required-message='* Вам необходимо дать согласие на обработку Персональных данных ' required>Согласен на <a href="/">обработку
+                                    <input type="checkbox" name="abc" id="agreement-personal-data" data-pristine-required-message='* Вам необходимо дать согласие на обработку Персональных данных ' required>Согласен на <a href="/">обработку
                                     и хранение персональных данных</a>
                                     <span>✓</span>
                                 </label>
