@@ -1,26 +1,16 @@
 let restoreForm;
 let phoneNumberField;
 let submitRestoreButton;
-let restorePasswordButton;
 
 jQuery(document).ready(function ($) {
     init()
-    onRestorePasswordClick()
     onRestoreFormSubmit()
 })
 
 function init() {
-    restorePasswordButton = $('#restore-password')
     restoreForm = $('#restore-password-form-modal')
     phoneNumberField = $('#phone-number')
     submitRestoreButton = $('#restore')
-}
-
-function onRestorePasswordClick() {
-    restorePasswordButton.on('click', function (event) {
-        event.preventDefault()
-        restoreForm.modal('show')
-    })
 }
 
 function onRestoreFormSubmit() {
@@ -61,11 +51,8 @@ function restorePassword(phoneNumber) {
                 showMessage('ВАМ ОТПРАВЛЕНО СМС С ВРЕМЕННЫМ ПАРОЛЕМ. ИСПОЛЬЗУЙТЕ ЕГО ДЛЯ АВТОРИЗАЦИИ.')
             }
         })
-        .fail(function (jqXHR, status, error) {
-            console.log(status)
-            console.log(error)
+        .fail(function (jqXHR) {
             let errorMessage = (jqXHR.responseJSON.message).toUpperCase()
-            console.log(errorMessage);
             showMessage(errorMessage)
         })
         .always(function () {
