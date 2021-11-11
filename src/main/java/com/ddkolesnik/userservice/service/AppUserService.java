@@ -96,7 +96,8 @@ public class AppUserService {
   }
 
   private void fetchBalance(UserDTO dto) {
-    AccountDTO accountDTO = accountTransactionRepository.fetchBalance(OwnerType.INVESTOR, Long.valueOf(dto.getId()));
+    AppUser investor = findByPhone(dto.getPhone());
+    AccountDTO accountDTO = accountTransactionRepository.fetchBalance(OwnerType.INVESTOR, investor.getId());
     BalanceDTO balance = balanceMapper.toBalance(accountDTO);
     if (Objects.isNull(balance)) {
       balance = BalanceDTO.builder().build();

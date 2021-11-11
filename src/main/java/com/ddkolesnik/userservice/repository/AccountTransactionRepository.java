@@ -17,9 +17,9 @@ public interface AccountTransactionRepository extends JpaRepository<AccountTrans
 
   @Query("SELECT DISTINCT new com.ddkolesnik.userservice.model.dto.AccountDTO(atx.owner, SUM(atx.cash), atx.owner.ownerName) " +
       "FROM AccountTransaction atx " +
-      "WHERE atx.owner.ownerType = :ownerType AND atx.owner.id = :ownerId " +
+      "WHERE atx.owner.ownerType = :ownerType AND atx.owner.ownerId = :investorId " +
       "GROUP BY atx.owner, atx.owner.ownerName " +
       "ORDER BY atx.owner.ownerName")
-  AccountDTO fetchBalance(@Param("ownerType") OwnerType ownerType, @Param("ownerId") Long ownerId);
+  AccountDTO fetchBalance(@Param("ownerType") OwnerType ownerType, @Param("investorId") Long investorId);
 
 }

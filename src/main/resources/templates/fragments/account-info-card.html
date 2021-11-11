@@ -7,15 +7,15 @@
     </div>
     <div th:if="*{user.accredited}">
         <div class="info-card info-card--l info-card--flex">
-            <div class="info-card__name" th:text="*{user.balance.accountNumber}? 'Счёт не найден'"></div>
+            <div class="info-card__name" th:text="*{user.balance.accountNumber} ? *{'Счёт № ' + user.balance.accountNumber} : 'Счёт не найден'"></div>
             <div class="info-card__item">
-                <span>Свободно</span><span th:text="*{user.balance.sum + ' руб.'}"></span>
+                <span>Свободно </span><span th:text="${#numbers.formatCurrency(user.balance.sum)}"></span>
             </div>
             <div class="info-card__item">
-                <span>В инвестициях</span><span>0 руб.</span>
+                <span>В инвестициях </span ><span th:text="${#numbers.formatCurrency(0)}"></span>
             </div>
             <div class="info-card__item">
-                <span>Заработано</span><span>0 руб.</span>
+                <span>Заработано </span><span th:text="${#numbers.formatCurrency(0)}"></span>
             </div>
         </div>
     </div>

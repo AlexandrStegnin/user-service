@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @author Alexandr Stegnin
@@ -19,5 +20,9 @@ public class BalanceDTO {
   String accountNumber = "";
   @Builder.Default
   BigDecimal sum = BigDecimal.ZERO;
+
+  public BigDecimal getSum() {
+    return sum.setScale(2, RoundingMode.CEILING);
+  }
 
 }
