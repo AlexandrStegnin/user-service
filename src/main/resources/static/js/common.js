@@ -45,7 +45,7 @@ function retrySendConfirmMessage() {
     let userDTO = getUserDTO(null, null)
 
     $.post({
-        url: "retry-send",
+        url: "/retry-send",
         data: JSON.stringify(userDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",

@@ -66,7 +66,7 @@ function changePassword(oldPassword, newPassword) {
     }
 
     $.post({
-        url: "change-password",
+        url: "/change-password",
         data: JSON.stringify(changePasswordDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",

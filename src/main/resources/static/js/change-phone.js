@@ -101,7 +101,7 @@ function changePhone(changePhoneDTO) {
     let header = $("meta[name='_csrf_header']").attr("content");
 
     $.post({
-        url: "change-phone",
+        url: "/change-phone",
         data: JSON.stringify(changePhoneDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
@@ -158,9 +158,9 @@ function sendConfirmPhoneMessage(oldPhone, newPhone, isOld) {
     let url
 
     if (isOld) {
-        url = 'confirm-old-phone'
+        url = '/confirm-old-phone'
     } else {
-        url = "confirm-new-phone"
+        url = "/confirm-new-phone"
     }
     let changePhoneDTO = {
         oldPhone: oldPhone,
@@ -196,7 +196,7 @@ function checkConfirmCode(changePhoneDTO) {
     let header = $("meta[name='_csrf_header']").attr("content");
 
     $.post({
-        url: 'check-confirm-code',
+        url: '/check-confirm-code',
         data: JSON.stringify(changePhoneDTO),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
@@ -226,7 +226,7 @@ function sendConfirmEmailMessage() {
     let header = $("meta[name='_csrf_header']").attr("content");
 
     $.post({
-        url: "confirm-by-email",
+        url: "/confirm-by-email",
         data: null,
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
