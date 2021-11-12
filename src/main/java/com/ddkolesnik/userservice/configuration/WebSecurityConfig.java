@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             HOME_URL, LOGIN_URL, LOGOUT_URL, REGISTRATION_URL, CONFIRM_URL, CREATE_USER,
             RESTORE_PASSWORD, CHANGE_PASSWORD, CONFIRM_OLD_PHONE, CHECK_CONFIRM_CODE,
             CONFIRM_NEW_PHONE, CHANGE_PHONE, CONFIRM_BY_EMAIL, RETRY_SEND_CONFIRM_MESSAGE).permitAll()
-        .antMatchers(UNION_PROFIT, KIND_ON_PROJECT, INVESTMENTS).hasRole("INVESTOR")
+        .antMatchers(UNION_PROFIT, KIND_ON_PROJECT, INVESTMENTS).hasAnyRole("ADMIN", "INVESTOR")
         .anyRequest().authenticated()
         .and()
         .formLogin()

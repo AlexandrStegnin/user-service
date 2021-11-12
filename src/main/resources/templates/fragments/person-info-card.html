@@ -6,7 +6,7 @@
     <div class="info-card__link">
         <a th:href="@{/profile}" class="link link--light"
            th:classappend="${#request.getServletPath().contains('/profile') ? 'link--clear' : ''}">Анкетные данные</a>
-        <a th:href="@{/#}" class="link link--light"
+        <a th:href="@{/investments}" class="link link--light"
            th:classappend="${#request.getServletPath().contains('/investments') ? 'link--clear' : ''}">Мои
             инвестиции</a>
         <a th:href="@{/bank-requisites}" class="link link--light"

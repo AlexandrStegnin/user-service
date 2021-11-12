@@ -12,10 +12,10 @@ import java.util.List;
 /**
  * @author Aleksandr Stegnin on 12.07.2021
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Builder
+@Table(name = "app_user")
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -32,13 +32,15 @@ public class AppUser implements UserDetails {
 
   String password;
 
-  Long roleId;
+  @OneToOne
+  @JoinColumn(name = "role_id")
+  AppRole role;
 
   Integer bitrixId;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(() -> "USER");
+    return List.of(role::getName);
   }
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

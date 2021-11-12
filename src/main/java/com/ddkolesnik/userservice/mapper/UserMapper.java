@@ -1,7 +1,6 @@
 package com.ddkolesnik.userservice.mapper;
 
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
-import com.ddkolesnik.userservice.enums.AppRole;
 import com.ddkolesnik.userservice.enums.Gender;
 import com.ddkolesnik.userservice.model.bitrix.address.BitrixAddress;
 import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
@@ -9,15 +8,18 @@ import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
+import com.ddkolesnik.userservice.model.domain.AppRole;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.UserProfile;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.SnilsDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.repository.AppRoleRepository;
 import com.ddkolesnik.userservice.utils.DateUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -29,8 +31,15 @@ import java.util.Objects;
 @Mapper(config = MapStructConfig.class)
 public abstract class UserMapper {
 
+  protected AppRoleRepository appRoleRepository;
+
+  @Autowired
+  public final void setAppRoleRepository(AppRoleRepository appRoleRepository) {
+    this.appRoleRepository = appRoleRepository;
+  }
+
   @Mapping(target = "login", source = "phone")
-  @Mapping(target = "roleId", expression = "java(getInvestorRole())")
+  @Mapping(target = "role", expression = "java(getInvestorRole())")
   public abstract AppUser toEntity(UserDTO dto);
 
   @Mapping(target = "profile", expression = "java(getProfile(dto, user))")
@@ -64,8 +73,8 @@ public abstract class UserMapper {
     return null;
   }
 
-  protected Long getInvestorRole() {
-    return AppRole.INVESTOR.getId();
+  protected AppRole getInvestorRole() {
+    return appRoleRepository.findByName("ROLE_INVESTOR");
   }
 
   protected UserProfile getProfile(UserDTO dto, AppUser user) {
