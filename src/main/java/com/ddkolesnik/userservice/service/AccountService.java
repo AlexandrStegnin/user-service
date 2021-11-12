@@ -43,4 +43,8 @@ public class AccountService {
     accountRepository.save(account);
   }
 
+  public Account findByInvestorId(Long ownerId) {
+    return findByOwnerId(ownerId, OwnerType.INVESTOR);
+  }
+
 }

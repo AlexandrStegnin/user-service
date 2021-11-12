@@ -25,4 +25,9 @@ public class BalanceDTO {
     return sum.setScale(2, RoundingMode.CEILING);
   }
 
+  public BalanceDTO(AccountDTO accountDTO) {
+    this.accountNumber = accountDTO.getOwner().getAccountNumber();
+    this.sum= accountDTO.getSummary();
+  }
+
 }
