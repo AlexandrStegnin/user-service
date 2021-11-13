@@ -36,6 +36,28 @@
 <body class="page ">
 <div class="page__top ">
     <div th:replace="~{fragments/header.html :: #header}"></div>
+    <input type="hidden" id="investorLogin" th:value="*{investorLogin}">
+    <div class="container-fluid" id="barChartContainer">
+        <div class="row">
+            <canvas id="barChart" aria-label="Your browser does not support the canvas element.">
+                <p>Данные загружаются</p>
+            </canvas>
+        </div>
+    </div>
+    <div class="container-fluid" id="investedBarChartContainer">
+        <div class="row">
+            <canvas id="investedBarChart" aria-label="Your browser does not support the canvas element.">
+                <p>Данные загружаются</p>
+            </canvas>
+        </div>
+    </div>
+    <div class="container-fluid" id="profitBarChartContainer">
+        <div class="row">
+            <canvas id="profitBarChart" aria-label="Your browser does not support the canvas element.">
+                <p>Данные загружаются</p>
+            </canvas>
+        </div>
+    </div>
 </div>
 <aside class="page__bottom">
     <div th:replace="~{fragments/footer.html :: #footer}"></div>
@@ -47,6 +69,9 @@
 </aside>
 <script th:src="@{https://code.jquery.com/jquery-3.5.1.min.js}"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script th:src="@{https://cdn.jsdelivr.net/npm/apexcharts}"></script>
+<script type="text/javascript"
+        th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js}"></script>
+<script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
+<script th:src="@{/js/charts-for-flows.js}"></script>
 </body>
 </html>

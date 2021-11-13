@@ -12,7 +12,5 @@ import java.util.List;
 
 @Repository
 public interface InvestorProfitRepository extends JpaRepository<InvestorProfit, Long> {
-
-    List<InvestorProfit> findByLoginOrderByYearSale(String login);
-
+    List<InvestorProfit> findByInvestorIdOrderByYearSale(Long investorId);
 }

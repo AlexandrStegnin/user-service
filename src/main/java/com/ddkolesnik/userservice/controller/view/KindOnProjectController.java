@@ -24,8 +24,8 @@ public class KindOnProjectController {
   KindOnProjectService kindOnProjectService;
 
   @PostMapping(path = KIND_ON_PROJECT)
-  public List<KindOnProject> findByInvestorLogin(@RequestBody(required = false) String login) {
-    return kindOnProjectService.findByInvestorLogin(login);
+  public List<KindOnProject> findByInvestorPhone(@RequestBody(required = false) String phone) {
+    return kindOnProjectService.findByInvestorPhone(phone);
   }
 
 }

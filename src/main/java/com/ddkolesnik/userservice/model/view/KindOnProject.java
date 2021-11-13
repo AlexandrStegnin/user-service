@@ -44,4 +44,7 @@ public class KindOnProject {
   @Column(name = "buy_date")
   Date buyDate;
 
+  @Column(name = "investorid")
+  Long investorId;
+
 }

@@ -37,4 +37,7 @@ public class InvestorProfit {
   @Column(name = "login")
   String login;
 
+  @Column(name = "investor_id")
+  Long investorId;
+
 }

@@ -29,9 +29,9 @@ public class ProfitController {
   CompanyProfitService companyProfitService;
 
   @PostMapping(path = UNION_PROFIT)
-  public List<CompanyInvestorProfit> findByLogin(@RequestBody(required = false) String login) {
+  public List<CompanyInvestorProfit> findByPhone(@RequestBody(required = false) String phone) {
     List<CompanyProfit> companyProfits = companyProfitService.findAll();
-    List<InvestorProfit> investorProfits = investorProfitService.findByLogin(login);
+    List<InvestorProfit> investorProfits = investorProfitService.findByPhone(phone);
 
     List<CompanyInvestorProfit> profitUnions = companyProfits.stream()
         .map(CompanyInvestorProfit::new)

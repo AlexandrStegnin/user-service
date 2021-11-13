@@ -1,7 +1,9 @@
 package com.ddkolesnik.userservice.service.view;
 
+import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.view.InvestorProfit;
 import com.ddkolesnik.userservice.repository.view.InvestorProfitRepository;
+import com.ddkolesnik.userservice.service.AppUserService;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,14 @@ import java.util.Objects;
 public class InvestorProfitService {
 
   InvestorProfitRepository investorProfitRepository;
+  AppUserService appUserService;
 
-  public List<InvestorProfit> findByLogin(String login) {
-    if (Objects.isNull(login)) {
-      login = SecurityUtils.getCurrentUserPhone();
+  public List<InvestorProfit> findByPhone(String phone) {
+    if (Objects.isNull(phone)) {
+      phone = SecurityUtils.getCurrentUserPhone();
     }
-    return investorProfitRepository.findByLoginOrderByYearSale(login);
+    AppUser investor = appUserService.findByPhone(phone);
+    return investorProfitRepository.findByInvestorIdOrderByYearSale(investor.getId());
   }
 
 }
