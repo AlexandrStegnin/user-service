@@ -27,11 +27,9 @@ public class RequisiteMapper {
     if (Objects.nonNull(snils)) {
       fields.put(CONTACT_SNILS, snils.getNumber());
     }
-    fields.put(CONTACT_BIRTHDATE, dto.getBirthdate());
-    fields.put(CONTACT_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
+    convertBirthdateAndPlaceOfBirth(fields, dto);
     convertPassport(fields, dto);
     fields.put(ENTITY_TYPE_ID, "3");
-    fields.put(PRESET_ID, "5");
     fields.put(ENTITY_ID, dto.getId().toString());
     fields.put(REQUISITE_NAME, "Реквизит");
     return fields;
@@ -46,6 +44,26 @@ public class RequisiteMapper {
       fields.put(PASSPORT_ISSUED_BY, passport.getIssuedBy());
       fields.put(PASSPORT_ISSUED_AT, passport.getIssuedAt());
       fields.put(IDENT_DOC_NAME, "Паспорт");
+    }
+  }
+
+  private void convertBirthdateAndPlaceOfBirth(Map<String, Object> fields, UserDTO dto) {
+    switch (dto.getTaxStatus()) {
+      case INDIVIDUAL:
+      case SELF_EMPLOYED:
+        fields.put(PRESET_ID, PRESET_ID_FOR_INDIVIDUAL);
+        fields.put(CONTACT_BIRTHDATE, dto.getBirthdate());
+        fields.put(CONTACT_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
+        break;
+      case BUSINESSMAN:
+        fields.put(PRESET_ID, PRESET_ID_FOR_BUSINESSMAN);
+        fields.put(BUSINESSMAN_BIRTHDATE, dto.getBirthdate());
+        fields.put(BUSINESSMAN_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
+        break;
+      case LEGAL_ENTITY:
+        fields.put(PRESET_ID, PRESET_ID_FOR_LEGAL_ENTITY);
+        fields.put(LEGAL_ENTITY_BIRTHDATE, dto.getBirthdate());
+        fields.put(LEGAL_ENTITY_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
     }
   }
 
