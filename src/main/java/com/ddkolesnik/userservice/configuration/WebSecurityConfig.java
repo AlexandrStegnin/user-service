@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static com.ddkolesnik.userservice.configuration.Location.*;
@@ -35,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .usernameParameter("username").passwordParameter("password")
         .defaultSuccessUrl(PROFILE)
         .permitAll()
+        .failureHandler(getAuthenticationFailureHandler())
         .and()
         .logout().clearAuthentication(true)
         .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
@@ -52,6 +54,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public AuthenticationManager authenticationProvider() throws Exception {
     return super.authenticationManagerBean();
+  }
+
+  @Bean
+  public AuthenticationFailureHandler getAuthenticationFailureHandler() {
+    return new AuthFailureHandler();
   }
 
 }

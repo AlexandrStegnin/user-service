@@ -43,6 +43,7 @@
                 <div class="registration registration--auth">
                     <h2 class="registration__title">Вход <br>
                         в личный кабинет</h2>
+                    <p class="text-danger" th:if="${param.error}" th:text="'Не верные имя пользователя или пароль'"></p>
                     <form class="registration__body" th:action="@{/login}" th:method="POST">
                         <div class="registration__field">
                             <div class="registration__field-name">Логин</div>
