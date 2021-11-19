@@ -55,7 +55,19 @@ public class Requisite {
   @JsonProperty(CONTACT_BIRTHDATE)
   String birthdate;
 
+  @JsonProperty(BUSINESSMAN_BIRTHDATE)
+  String businessmanBirthdate;
+
+  @JsonProperty(LEGAL_ENTITY_BIRTHDATE)
+  String legalEntityBirthdate;
+
   @JsonProperty(CONTACT_PLACE_OF_BIRTH)
   String placeOfBirth;
+
+  @JsonProperty(BUSINESSMAN_PLACE_OF_BIRTH)
+  String businessmanPlaceOfBirth;
+
+  @JsonProperty(LEGAL_ENTITY_PLACE_OF_BIRTH)
+  String legalEntityPlaceOfBirth;
 
 }

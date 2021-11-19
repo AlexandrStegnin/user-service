@@ -60,15 +60,51 @@ public abstract class UserMapper {
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
   @Mapping(target = "snils", ignore = true)
-  @Mapping(target = "birthdate", expression = "java(extractBirthdate(requisite))")
+  @Mapping(target = "birthdate", expression = "java(extractBirthdate(requisite, dto))")
+  @Mapping(target = "placeOfBirth", expression = "java(extractPlaceOfBirth(requisite, dto))")
   public abstract void updateBirthdate(Requisite requisite, @MappingTarget UserDTO dto);
 
   @Mapping(target = "address", source = "address.address")
   public abstract void updateAddress(BitrixAddress address, @MappingTarget UserDTO dto);
 
-  protected String extractBirthdate(Requisite requisite) {
-    if (Objects.nonNull(requisite.getBirthdate())) {
-      return DateUtils.convertToDDMMYYYY(requisite.getBirthdate().split("T")[0]);
+  protected String extractBirthdate(Requisite requisite, UserDTO dto) {
+    switch (dto.getTaxStatus()) {
+      case INDIVIDUAL:
+      case SELF_EMPLOYED:
+        if (Objects.nonNull(requisite.getBirthdate())) {
+          return DateUtils.convertToDDMMYYYY(requisite.getBirthdate().split("T")[0]);
+        }
+        break;
+      case BUSINESSMAN:
+        if (Objects.nonNull(requisite.getBusinessmanBirthdate())) {
+          return DateUtils.convertToDDMMYYYY(requisite.getBusinessmanBirthdate().split("T")[0]);
+        }
+        break;
+      case LEGAL_ENTITY:
+        if (Objects.nonNull(requisite.getLegalEntityBirthdate())) {
+          return DateUtils.convertToDDMMYYYY(requisite.getLegalEntityBirthdate().split("T")[0]);
+        }
+    }
+    return null;
+  }
+
+  protected String extractPlaceOfBirth(Requisite requisite, UserDTO dto) {
+    switch (dto.getTaxStatus()) {
+      case INDIVIDUAL:
+      case SELF_EMPLOYED:
+        if (Objects.nonNull(requisite.getPlaceOfBirth())) {
+          return requisite.getPlaceOfBirth();
+        }
+        break;
+      case BUSINESSMAN:
+        if (Objects.nonNull(requisite.getBusinessmanPlaceOfBirth())) {
+          return requisite.getBusinessmanPlaceOfBirth();
+        }
+        break;
+      case LEGAL_ENTITY:
+        if (Objects.nonNull(requisite.getLegalEntityPlaceOfBirth())) {
+          return requisite.getLegalEntityPlaceOfBirth();
+        }
     }
     return null;
   }

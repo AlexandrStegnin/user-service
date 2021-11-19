@@ -4,7 +4,6 @@ import com.ddkolesnik.userservice.model.bitrix.file.Scan;
 import com.ddkolesnik.userservice.model.bitrix.requisite.bank.BankRequisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Email;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -48,11 +47,23 @@ public class BitrixContact {
   @JsonProperty(CONTACT_BIRTHDATE)
   String birthdate;
 
+  @JsonProperty(BUSINESSMAN_BIRTHDATE)
+  String businessmanBirthdate;
+
+  @JsonProperty(LEGAL_ENTITY_BIRTHDATE)
+  String legalEntityBirthdate;
+
   @JsonProperty(CONTACT_SCANS)
   List<Scan> scans;
 
   @JsonProperty(CONTACT_PLACE_OF_BIRTH)
   String placeOfBirth;
+
+  @JsonProperty(BUSINESSMAN_PLACE_OF_BIRTH)
+  String businessmanPlaceOfBirth;
+
+  @JsonProperty(LEGAL_ENTITY_PLACE_OF_BIRTH)
+  String legalEntityPlaceOfBirth;
 
   @JsonProperty(CONTACT_CONFIRM_CODE)
   String confirmCode;
@@ -76,38 +87,5 @@ public class BitrixContact {
   Integer contactAccredited;
 
   BankRequisite bankRequisites;
-
-  @JsonCreator
-  public BitrixContact(@JsonProperty(CONTACT_ID) Integer id,
-                       @JsonProperty(CONTACT_NAME) String name,
-                       @JsonProperty(CONTACT_SECOND_NAME) String secondName,
-                       @JsonProperty(CONTACT_LAST_NAME) String lastName,
-                       @JsonProperty(CONTACT_EMAIL) List<Email> email,
-                       @JsonProperty(CONTACT_GENDER) String gender,
-                       @JsonProperty(CONTACT_BIRTHDATE) String birthdate,
-                       @JsonProperty(CONTACT_SCANS) List<Scan> scans,
-                       @JsonProperty(CONTACT_PLACE_OF_BIRTH) String placeOfBirth,
-                       @JsonProperty(CONTACT_CONFIRM_CODE) String confirmCode,
-                       @JsonProperty(CONTACT_RAW_PASSWORD) String rawPassword,
-                       @JsonProperty(CONTACT_TAX_STATUS) Integer taxStatus,
-                       @JsonProperty(CONTACT_NEW_PHONE) String newPhone,
-                       @JsonProperty(CONTACT_ADDRESS) String address,
-                       @JsonProperty(IS_CONTACT_ACCREDITED) Integer contactAccredited) {
-    this.id = id;
-    this.name = name;
-    this.secondName = secondName;
-    this.lastName = lastName;
-    this.emails = email;
-    this.gender = gender;
-    this.birthdate = birthdate;
-    this.scans = scans;
-    this.placeOfBirth = placeOfBirth;
-    this.confirmCode = confirmCode;
-    this.rawPassword = rawPassword;
-    this.taxStatus = taxStatus;
-    this.newPhone = newPhone;
-    this.address = address;
-    this.contactAccredited = contactAccredited;
-  }
 
 }
