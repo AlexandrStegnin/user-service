@@ -82,7 +82,7 @@ public abstract class UserMapper {
         break;
       case LEGAL_ENTITY:
         if (Objects.nonNull(requisite.getLegalEntityBirthdate())) {
-          return DateUtils.convertToDDMMYYYY(requisite.getLegalEntityBirthdate().split("T")[0]);
+          return DateUtils.convert(requisite.getLegalEntityBirthdate().split("T")[0]);
         }
     }
     return null;

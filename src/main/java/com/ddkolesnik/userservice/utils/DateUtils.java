@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 /**
@@ -12,12 +13,38 @@ import java.util.Objects;
 @UtilityClass
 public class DateUtils {
 
+  private static final String DDMMYYYY = "dd.MM.yyyy";
+  private static final String YYYYMMDD = "yyyy-MM-dd";
+
+  public static String convert(String issuedAt) {
+    try {
+      return convertToDDMMYYYY(issuedAt);
+    } catch (DateTimeParseException e) {
+      e.printStackTrace();
+    }
+    try {
+      return convertDDMMYYYToDDMMYYY(issuedAt);
+    } catch (DateTimeParseException e) {
+      e.printStackTrace();
+    }
+    try {
+      return convertToYYYYMMDD(issuedAt);
+    } catch (DateTimeParseException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  private static String convertDDMMYYYToDDMMYYY(String issuedAt) {
+    return convertTo(issuedAt, DDMMYYYY, DDMMYYYY);
+  }
+
   public static String convertToDDMMYYYY(String issuedAt) {
-    return convertTo(issuedAt, "yyyy-MM-dd", "dd.MM.yyyy");
+    return convertTo(issuedAt, YYYYMMDD, DDMMYYYY);
   }
 
   public static String convertToYYYYMMDD(String issuedAt) {
-    return convertTo(issuedAt, "dd.MM.yyyy", "yyyy-MM-dd");
+    return convertTo(issuedAt, DDMMYYYY, YYYYMMDD);
   }
 
   private static String convertTo(String date, String patternFrom, String patternTo) {
