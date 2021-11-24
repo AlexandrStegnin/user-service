@@ -54,7 +54,7 @@ public class BitrixFields {
   public static final String PRESET_ID_FOR_BUSINESSMAN = "5";
   public static final String BUSINESSMAN_BIRTHDATE = "UF_CRM_1631100959";
   public static final String BUSINESSMAN_PLACE_OF_BIRTH = "UF_CRM_1631100973";
-  public static final String LEGAL_ENTITY_BIRTHDATE = "UF_CRM_1636710671";
+  public static final String LEGAL_ENTITY_BIRTHDATE = "UF_CRM_1637751380";
   public static final String LEGAL_ENTITY_PLACE_OF_BIRTH = "UF_CRM_1636710681";
 
 }

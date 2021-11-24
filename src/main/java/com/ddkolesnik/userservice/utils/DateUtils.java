@@ -23,20 +23,11 @@ public class DateUtils {
       e.printStackTrace();
     }
     try {
-      return convertDDMMYYYToDDMMYYY(issuedAt);
-    } catch (DateTimeParseException e) {
-      e.printStackTrace();
-    }
-    try {
       return convertToYYYYMMDD(issuedAt);
     } catch (DateTimeParseException e) {
       e.printStackTrace();
     }
     return null;
-  }
-
-  private static String convertDDMMYYYToDDMMYYY(String issuedAt) {
-    return convertTo(issuedAt, DDMMYYYY, DDMMYYYY);
   }
 
   public static String convertToDDMMYYYY(String issuedAt) {
