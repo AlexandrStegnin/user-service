@@ -47,6 +47,8 @@ public class UserDTO {
   @Builder.Default
   boolean accredited = false;
   BalanceDTO balance;
+  @Builder.Default
+  boolean newNumberConfirmation = false;
 
   public String getPhone() {
     return PhoneUtils.cleanPhone(this.phone);
