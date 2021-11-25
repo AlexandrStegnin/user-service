@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -21,9 +22,17 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = {"id", "accountNumber"})
 public class Account {
 
+  @GenericGenerator(
+      name = "account_generator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+          @org.hibernate.annotations.Parameter(name = "sequence_name", value = "account_id_seq"),
+          @org.hibernate.annotations.Parameter(name = "increment_size", value = "1"),
+          @org.hibernate.annotations.Parameter(name = "optimizer", value = "hilo")
+      }
+  )
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_generator")
-  @SequenceGenerator(name="account_generator", sequenceName = "account_id_seq")
   @Column(name = "id")
   Long id;
 

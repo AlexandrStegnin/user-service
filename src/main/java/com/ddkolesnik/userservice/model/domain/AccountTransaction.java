@@ -4,6 +4,7 @@ import com.ddkolesnik.userservice.enums.CashType;
 import com.ddkolesnik.userservice.enums.OperationType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,9 +24,17 @@ import java.util.Set;
 @Table(name = "account_transaction")
 public class AccountTransaction {
 
+  @GenericGenerator(
+      name = "account_tx_generator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+          @org.hibernate.annotations.Parameter(name = "sequence_name", value = "account_transaction_id_seq"),
+          @org.hibernate.annotations.Parameter(name = "increment_size", value = "1"),
+          @org.hibernate.annotations.Parameter(name = "optimizer", value = "hilo")
+      }
+  )
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_tx_generator")
-  @SequenceGenerator(name = "account_tx_generator", sequenceName = "account_transaction_id_seq")
   @Column(name = "id")
   Long id;
 

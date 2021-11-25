@@ -2,6 +2,7 @@ package com.ddkolesnik.userservice.model.domain;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,9 +22,17 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppUser implements UserDetails {
 
+  @GenericGenerator(
+      name = "app_user_generator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+          @org.hibernate.annotations.Parameter(name = "sequence_name", value = "app_user_id_seq"),
+          @org.hibernate.annotations.Parameter(name = "increment_size", value = "1"),
+          @org.hibernate.annotations.Parameter(name = "optimizer", value = "hilo")
+      }
+  )
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_generator")
-  @SequenceGenerator(name="app_user_generator", sequenceName = "app_user_id_seq")
   Long id;
 
   String phone;
