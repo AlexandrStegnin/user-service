@@ -20,7 +20,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-@PropertySource(value = "classpath:private.properties")
+@PropertySource(value = "classpath:mail.properties")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SendMessageService {
 
