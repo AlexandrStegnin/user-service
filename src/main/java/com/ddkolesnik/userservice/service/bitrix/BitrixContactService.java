@@ -70,6 +70,7 @@ public class BitrixContactService extends BitrixService {
   public void updateContact(UserDTO userDTO) {
     var contactUpdate = contactMapper.toContactUpdate(userDTO);
     var updated = bitrixWebClient.updateContact(contactUpdate);
+    userDTO.setBitrixId(contactUpdate.getId());
     log.info("Результат обновления контакта {}", updated);
   }
 
