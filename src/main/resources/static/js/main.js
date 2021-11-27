@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
       errorTextClass: 'text-help',
     };
     let valid;
-    const pristine = new Pristine(form, defaultConfig, true);
+    const pristine = new Pristine(form, defaultConfig, false);
     form.addEventListener('submit', function (e) {
       valid = pristine.validate();
       form.querySelectorAll('select.f-select').forEach((select)=> {
@@ -52,6 +52,23 @@ document.addEventListener('DOMContentLoaded', function () {
         if (el.value) el.value = numberFormat(el.value);
         el.addEventListener('keyup', function () {
             this.value = numberFormat(this.value);
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    this.querySelectorAll('[data-phone-mask]').forEach((element) => {
+        const im = new Inputmask(element.dataset.phoneMask);
+        im.mask(element);
+    });
+    this.querySelectorAll('.f-input__eye').forEach((el) => {
+        el.addEventListener('click', function () {
+            this.classList.toggle('show');
+            if (this.matches('.show')) {
+                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'text');
+            } else {
+                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'password');
+            }
         });
     });
 });
@@ -125,23 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     input.forEach((el, index) => {
         el.addEventListener('drop', handler);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    this.querySelectorAll('[data-phone-mask]').forEach((element) => {
-        const im = new Inputmask(element.dataset.phoneMask);
-        im.mask(element);
-    });
-    this.querySelectorAll('.f-input__eye').forEach((el) => {
-        el.addEventListener('click', function () {
-            this.classList.toggle('show');
-            if (this.matches('.show')) {
-                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'text');
-            } else {
-                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'password');
-            }
-        });
     });
 });
 
