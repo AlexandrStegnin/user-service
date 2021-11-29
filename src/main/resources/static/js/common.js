@@ -34,17 +34,15 @@ function onRetrySendClick() {
         event.preventDefault()
         confirmForm.find('#response-state').removeClass('error')
         confirmForm.find('#confirm-code').val('')
-        let title = confirmForm.find('#title').text()
-        let isNewNumberConfirmation = title === 'ПОДТВЕРДИТЕ НОВЫЙ НОМЕР'
-        retrySendConfirmMessage(isNewNumberConfirmation)
+        retrySendConfirmMessage()
     })
 }
 
-function retrySendConfirmMessage(isNewNumberConfirmation) {
+function retrySendConfirmMessage() {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
-    let userDTO = getUserDTO(null, null, isNewNumberConfirmation)
+    let userDTO = getUserDTO(null, null)
 
     $.post({
         url: "/retry-send",
@@ -76,7 +74,7 @@ function showFailForm(title) {
     confirmForm.modal('show')
 }
 
-function getUserDTO(confirmCode, clientBitrixId, isNewNumberConfirmation) {
+function getUserDTO(confirmCode, clientBitrixId) {
     return {
         name: $('#name').val(),
         secondName: $('#secondName').val(),
@@ -85,8 +83,7 @@ function getUserDTO(confirmCode, clientBitrixId, isNewNumberConfirmation) {
         phone: $('#phone').val(),
         confirmCode: confirmCode,
         agreementPersonalData: $('#agreement-personal-data').prop('checked'),
-        bitrixId: clientBitrixId,
-        newNumberConfirmation: isNewNumberConfirmation
+        bitrixId: clientBitrixId
     }
 }
 
@@ -95,3 +92,7 @@ function noErrors() {
     let selectErrors = $('div.f-select__error:visible').length
     return (divErrors + selectErrors) === 0
 }
+
+$(document).on('click', '[data-bs-dismiss="modal"]', function () {
+    confirmForm.find('#response-state').removeClass('success')
+})

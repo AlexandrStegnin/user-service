@@ -60,9 +60,7 @@ public class BusinessProcessService extends BitrixService {
   }
 
   public void retrySendConfirmMessage(UserDTO dto) {
-    var template = dto.isNewNumberConfirmation() ?
-        BusinessProcessTemplate.CONFIRM_NEW_PHONE : BusinessProcessTemplate.CONFIRM_OLD_PHONE;
-    var businessProcess = buildBusinessProcess(template);
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.RETRY_SEND_MESSAGE);
     businessProcess.addDocumentId(CONTACT_PREFIX.concat(dto.getBitrixId().toString()));
     var confirm = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
