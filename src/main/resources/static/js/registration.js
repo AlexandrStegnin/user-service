@@ -19,6 +19,7 @@ function init() {
 
 function onSubmitRegistration() {
     registration.on('submit', function (event) {
+        event.stopImmediatePropagation();
         event.preventDefault()
         if (noErrors()) {
             create()
