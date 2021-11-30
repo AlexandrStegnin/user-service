@@ -77,7 +77,7 @@
                                 <div class="f-input__wrapper ">
                                     <input data-phone-mask="+7 (999) 999-99-99" name="default" type="text" id="phone"
                                            placeholder="+7 (999) 999-99-99" class="f-input  " th:field="*{phone}"
-                                           data-pristine-required-message='* Обязательно для заполнения' required>
+                                           data-pristine-required-message='* Обязательно для заполнения' required minlength='12'>
                                 </div>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <div class="registration__action">
-                            <button class="button  " type="submit" id="submit ">
+                            <button class="button button--submit" type="submit" id="submit ">
                                 <span>Зарегистрироваться</span>
                             </button>
                             <button class="button button--secondary " onclick="location.href='/'">
