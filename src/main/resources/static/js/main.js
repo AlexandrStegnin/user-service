@@ -22,12 +22,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const pristine = new Pristine(form, defaultConfig, false);
     form.addEventListener('submit', function (e) {
       valid = pristine.validate();
+      form.querySelectorAll('.f-input[data-phone-mask]').forEach((select)=> {
+        let curValue = select.value.replace(/[^+\d]+/g, "").length
+        if ( curValue < 12 && curValue > 1) {
+          valid = false;
+          select.closest('.f-input__wrapper').classList.add('error')
+          let msg = select.closest('.v-field').querySelector('.pristine-error.custom')
+          if (!msg) {
+            msg = document.createElement('div');
+            msg.className = "pristine-error text-help custom";
+            msg.innerHTML = '* Обязательно для заполнения';
+            select.closest('.v-field').append(msg);
+          }
+        } else {
+          select.closest('.f-input__wrapper').classList.remove('error')
+          select.closest('.v-field').querySelector('.pristine-error.custom')?.remove()
+        }
+      })
       form.querySelectorAll('select.f-select').forEach((select)=> {
         if (!select.value.length) {
           valid = false;
           select.classList.add('error')
         }
       })
+      console.log(valid)
       if (valid) return;
       e.preventDefault();
       window.scrollTo({
@@ -52,23 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (el.value) el.value = numberFormat(el.value);
         el.addEventListener('keyup', function () {
             this.value = numberFormat(this.value);
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    this.querySelectorAll('[data-phone-mask]').forEach((element) => {
-        const im = new Inputmask(element.dataset.phoneMask);
-        im.mask(element);
-    });
-    this.querySelectorAll('.f-input__eye').forEach((el) => {
-        el.addEventListener('click', function () {
-            this.classList.toggle('show');
-            if (this.matches('.show')) {
-                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'text');
-            } else {
-                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'password');
-            }
         });
     });
 });
@@ -142,6 +143,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     input.forEach((el, index) => {
         el.addEventListener('drop', handler);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    this.querySelectorAll('[data-phone-mask]').forEach((element) => {
+        const im = new Inputmask(element.dataset.phoneMask);
+        im.mask(element);
+    });
+    this.querySelectorAll('.f-input__eye').forEach((el) => {
+        el.addEventListener('click', function () {
+            this.classList.toggle('show');
+            if (this.matches('.show')) {
+                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'text');
+            } else {
+                this.closest('.f-input__wrapper').querySelector('input').setAttribute('type', 'password');
+            }
+        });
     });
 });
 
