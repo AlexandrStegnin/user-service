@@ -22,30 +22,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const pristine = new Pristine(form, defaultConfig, false);
     form.addEventListener('submit', function (e) {
       valid = pristine.validate();
-      form.querySelectorAll('.f-input[data-phone-mask]').forEach((select)=> {
-        let curValue = select.value.replace(/[^+\d]+/g, "").length
-        if ( curValue < 12 && curValue > 1) {
+      form.querySelectorAll('.f-input[data-phone-mask][minlength]').forEach((select) => {
+        let curValue = select.value.replace(/[^+\d]+/g, '').length;
+        const { minLength } = select;
+        const message = select.dataset.pristineMinlengthMessage;
+        if (curValue < minLength && curValue > 1) {
           valid = false;
-          select.closest('.f-input__wrapper').classList.add('error')
-          let msg = select.closest('.v-field').querySelector('.pristine-error.custom')
+          select.closest('.f-input__wrapper').classList.add('error');
+          let msg = select.closest('.v-field').querySelector('.pristine-error.custom');
           if (!msg) {
             msg = document.createElement('div');
-            msg.className = "pristine-error text-help custom";
-            msg.innerHTML = '* Обязательно для заполнения';
+            msg.className = 'pristine-error text-help custom';
+            msg.innerHTML = message ? message : '* Обязательно для заполнения';
             select.closest('.v-field').append(msg);
           }
         } else {
-          select.closest('.f-input__wrapper').classList.remove('error')
-          select.closest('.v-field').querySelector('.pristine-error.custom')?.remove()
+          select.closest('.f-input__wrapper').classList.remove('error');
+          select.closest('.v-field').querySelector('.pristine-error.custom')?.remove();
         }
-      })
-      form.querySelectorAll('select.f-select').forEach((select)=> {
+      });
+      form.querySelectorAll('select.f-select').forEach((select) => {
         if (!select.value.length) {
           valid = false;
-          select.classList.add('error')
+          select.classList.add('error');
         }
-      })
-      console.log(valid)
+      });
       if (valid) return;
       e.preventDefault();
       window.scrollTo({

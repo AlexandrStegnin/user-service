@@ -90,7 +90,7 @@
                                         </div>
                                         <div class="form__field-item">
                                             <div class="f-select__wrapper js-select-shell">
-                                                <select name="tax-status" id="tax-status" class="f-select"
+                                                <select name="tax-status" id="tax-status" class="f-select" required
                                                         th:field="*{taxStatus}" placeholder="ВЫБЕРИТЕ В КАКОМ СТАТУСЕ БУДЕТЕ ИНВЕСТИРОВАТЬ">
                                                     <option th:if="*{taxStatus == null}" data-placeholder="true" value=""></option>
                                                     <option th:each="tStatus, iter : ${T(com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus).values()}"
@@ -112,8 +112,8 @@
                                         </div>
                                         <div class="form__field-item v-field">
                                             <div class="f-input__wrapper ">
-                                                <input data-phone-mask="99999999999[9]" name="inn" type="text" placeholder="720000000001"
-                                                       class="f-input  " id="inn" th:field="*{inn}" minlength='12' data-pristine-required-message='* Обязательно для заполнения' required data-pristine-minlength-message='* ИНН должен
+                                                <input data-phone-mask="999999999999" name="inn" type="text" placeholder="720000000001"
+                                                       class="f-input  " id="inn" th:field="*{inn}" data-pristine-required-message='* Обязательно для заполнения' minlength='12' required data-pristine-minlength-message='* ИНН должен
                                     содержать 12 цифр'>
                                             </div>
                                         </div>
@@ -124,7 +124,7 @@
                                         </div>
                                         <div class="form__field-item v-field">
                                             <div class="f-input__wrapper ">
-                                                <input data-phone-mask="9999999999[9]" name="snils" type="text" placeholder="12345678999"
+                                                <input data-phone-mask="99999999999" name="snils" type="text" placeholder="12345678999"
                                                        class="f-input  " id="snils" th:field="*{snils.number}" minlength='11' data-pristine-required-message='* Обязательно для заполнения' required data-pristine-minlength-message='* СНИЛС должен
                                     содержать 11 цифр'>
                                             </div>

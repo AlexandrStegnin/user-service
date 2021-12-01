@@ -17803,16 +17803,6 @@ fieldset:disabled .btn {
   }
 }
 
-.button--header.button {
-  padding: 16px 42px;
-}
-
-@media (max-width: 767px) {
-  .button--header.button {
-    padding: 11px 42px;
-  }
-}
-
 .button--light.button {
   background: #FFFFFF;
   color: #9B7863;
@@ -17829,6 +17819,16 @@ fieldset:disabled .btn {
   transition: none;
   -webkit-filter: brightness(0.9);
           filter: brightness(0.9);
+}
+
+.button--header.button {
+  padding: 16px 42px;
+}
+
+@media (max-width: 767px) {
+  .button--header.button {
+    padding: 11px 42px;
+  }
 }
 
 .button--nav.button {
