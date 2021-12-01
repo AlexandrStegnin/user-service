@@ -61,6 +61,7 @@ public class BusinessProcessService extends BitrixService {
 
   public void retrySendConfirmMessage(UserDTO dto) {
     var businessProcess = buildBusinessProcess(BusinessProcessTemplate.RETRY_SEND_MESSAGE);
+    log.info("Запуск бизнес процесса {} для номера {}", BusinessProcessTemplate.RETRY_SEND_MESSAGE.name(), dto.getPhone());
     businessProcess.addDocumentId(CONTACT_PREFIX.concat(dto.getBitrixId().toString()));
     var confirm = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
