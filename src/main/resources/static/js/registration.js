@@ -29,6 +29,7 @@ function onSubmitRegistration() {
 
 function onConfirmPhone() {
     confirmButton.on('click', function (event) {
+        $(this).attr('disabled', 'disabled')
         event.preventDefault()
         let confirmCode = $('#confirm-code').val()
         let clientBitrixId = $('#client-id').val()
