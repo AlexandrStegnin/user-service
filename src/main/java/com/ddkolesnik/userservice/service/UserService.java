@@ -82,6 +82,9 @@ public class UserService {
   }
 
   public void updateAdditionalFields(UserDTO dto) {
+    var dbUser = appUserService.findUser(dto.getPhone());
+    businessProcessService.notifyAboutUpdatedFields(dto, dbUser);
+
     var contact = bitrixContactService.getContact(dto);
     dto.setId(contact.getId());
     var requisite = requisiteService.findRequisite(dto);

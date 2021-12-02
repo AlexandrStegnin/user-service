@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.service.bitrix;
 
 import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
+import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcess;
 import com.ddkolesnik.userservice.model.bitrix.bp.BusinessProcessTemplate;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
@@ -19,8 +20,11 @@ import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.CONTACT
 @Service
 public class BusinessProcessService extends BitrixService {
 
-  public BusinessProcessService(BitrixProperty bitrixProperty, RestTemplate restTemplate) {
+  private final UserMapper userMapper;
+
+  public BusinessProcessService(BitrixProperty bitrixProperty, RestTemplate restTemplate, UserMapper userMapper) {
     super(bitrixProperty, restTemplate);
+    this.userMapper = userMapper;
   }
 
   public void sendConfirmMessage(UserDTO dto) {
@@ -67,6 +71,18 @@ public class BusinessProcessService extends BitrixService {
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
     var confirmed = confirm.getBody();
     log.info("Результат повторной отправки смс для подтверждения телефона {}", confirmed);
+  }
+
+  public void notifyAboutUpdatedFields(UserDTO dto, UserDTO dbUser) {
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.MANAGER_NOTIFIER);
+    log.info("Запуск бизнес процесса {} для bitrix id {}", BusinessProcessTemplate.MANAGER_NOTIFIER.name(), dbUser.getBitrixId());
+    var updatedFields = userMapper.getUpdatedFields(dto, dbUser);
+    businessProcess.setParameters(updatedFields);
+    businessProcess.addDocumentId(CONTACT_PREFIX.concat(dbUser.getBitrixId().toString()));
+    var notify = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
+        HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
+    var notified = notify.getBody();
+    log.info("Результат запуска БП по обновлённым полям {}, {}", notified, updatedFields);
   }
 
   private BusinessProcess buildBusinessProcess(BusinessProcessTemplate template) {
