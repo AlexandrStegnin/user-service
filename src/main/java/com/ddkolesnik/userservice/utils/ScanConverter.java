@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Alexandr Stegnin
@@ -20,8 +21,11 @@ import java.util.List;
 public class ScanConverter {
 
   public List<FileData> convertScans(Scanned dto) {
-    MultipartFile[] files = dto.getScans();
     var fileDataList = new ArrayList<FileData>();
+    if (ObjectUtils.anyNull(dto, dto.getScans())) {
+      return fileDataList;
+    }
+    MultipartFile[] files = dto.getScans();
     for (MultipartFile file : files) {
       try {
         byte[] content = file.getBytes();
@@ -39,7 +43,7 @@ public class ScanConverter {
   }
 
   public boolean isScansAvailable(Scanned scanned) {
-    if (ObjectUtils.anyNull(scanned, scanned.getScans())) {
+    if (Objects.isNull(scanned) || Objects.isNull(scanned.getScans())) {
       return false;
     }
     return !convertScans(scanned).isEmpty();

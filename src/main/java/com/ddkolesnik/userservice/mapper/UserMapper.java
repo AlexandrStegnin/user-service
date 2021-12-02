@@ -202,8 +202,12 @@ public abstract class UserMapper {
   }
 
   private void getSnilsUpdatedFields(StringBuilder builder, SnilsDTO dto, SnilsDTO dbSnils) {
-    if (ObjectUtils.allNotNull(dto.getNumber(), dbSnils.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbSnils.getNumber())) {
+    if (Objects.isNull(dbSnils)) {
       builder.append("Номер СНИЛС, ");
+    } else {
+      if (!dto.getNumber().equalsIgnoreCase(dbSnils.getNumber())) {
+        builder.append("Номер СНИЛС, ");
+      }
     }
     if (ScanConverter.isScansAvailable(dto)) {
       builder.append("Сканы СНИЛС, ");
@@ -211,23 +215,31 @@ public abstract class UserMapper {
   }
 
   private void getPassportUpdatedFields(StringBuilder builder, PassportDTO dto, PassportDTO dbPassport) {
-    if (ObjectUtils.allNotNull(dto.getSerial(), dbPassport.getSerial()) && !dto.getSerial().equalsIgnoreCase(dbPassport.getSerial())) {
+    if (Objects.isNull(dbPassport)) {
       builder.append("Серия паспорта, ");
-    }
-    if (ObjectUtils.allNotNull(dto.getNumber(), dbPassport.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbPassport.getNumber())) {
       builder.append("Номер паспорта, ");
-    }
-    if (ObjectUtils.allNotNull(dto.getDepartmentCode(), dbPassport.getDepartmentCode()) && !dto.getDepartmentCode().equalsIgnoreCase(dbPassport.getDepartmentCode())) {
       builder.append("Код подразделения, ");
-    }
-    if (ObjectUtils.allNotNull(dto.getIssuedBy(), dbPassport.getIssuedBy()) && !dto.getIssuedBy().equalsIgnoreCase(dbPassport.getIssuedBy())) {
       builder.append("Кем выдан, ");
+      builder.append("Дата выдачи, ");
+    } else {
+      if (!dto.getSerial().equalsIgnoreCase(dbPassport.getSerial())) {
+        builder.append("Серия паспорта, ");
+      }
+      if (!dto.getNumber().equalsIgnoreCase(dbPassport.getNumber())) {
+        builder.append("Номер паспорта, ");
+      }
+      if (!dto.getDepartmentCode().equalsIgnoreCase(dbPassport.getDepartmentCode())) {
+        builder.append("Код подразделения, ");
+      }
+      if (!dto.getIssuedBy().equalsIgnoreCase(dbPassport.getIssuedBy())) {
+        builder.append("Кем выдан, ");
+      }
+      if (!dto.getIssuedAt().equalsIgnoreCase(dbPassport.getIssuedAt())) {
+        builder.append("Дата выдачи, ");
+      }
     }
     if (ScanConverter.isScansAvailable(dto)) {
       builder.append("Сканы паспорта, ");
-    }
-    if (ObjectUtils.allNotNull(dto.getIssuedAt(), dbPassport.getIssuedAt()) && !dto.getIssuedAt().equalsIgnoreCase(dbPassport.getIssuedAt())) {
-      builder.append("Дата выдачи, ");
     }
   }
 
