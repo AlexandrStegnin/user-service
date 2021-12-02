@@ -69,6 +69,7 @@ public class UserService {
       createAppUser(dto);
     }
     businessProcessService.sendConfirmMessage(dto);
+    businessProcessService.notifyAboutCreateContact(dto);
     log.info("Пользователь успешно зарегистрирован {}", dto);
     return dto;
   }

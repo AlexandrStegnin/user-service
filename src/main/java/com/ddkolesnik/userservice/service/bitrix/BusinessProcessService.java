@@ -85,6 +85,16 @@ public class BusinessProcessService extends BitrixService {
     log.info("Результат запуска БП по обновлённым полям {}, {}", notified, parameter);
   }
 
+  public void notifyAboutCreateContact(UserDTO dbUser) {
+    var businessProcess = buildBusinessProcess(BusinessProcessTemplate.CREATE_CONTACT_NOTIFIER);
+    log.info("Запуск бизнес процесса {} для bitrix id {}", BusinessProcessTemplate.CREATE_CONTACT_NOTIFIER.name(), dbUser.getBitrixId());
+    businessProcess.addDocumentId(CONTACT_PREFIX.concat(dbUser.getBitrixId().toString()));
+    var notify = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
+        HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
+    var notified = notify.getBody();
+    log.info("Результат запуска БП о создании пользователя {}", notified);
+  }
+
   private BusinessProcess buildBusinessProcess(BusinessProcessTemplate template) {
     return BusinessProcess.builder()
         .templateId(template.getId())
