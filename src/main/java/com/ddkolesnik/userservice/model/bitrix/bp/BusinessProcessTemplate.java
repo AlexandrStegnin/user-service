@@ -19,7 +19,7 @@ public enum BusinessProcessTemplate {
   CHANGE_PHONE("581"),
   RESTORE_PASSWORD("586"),
   RETRY_SEND_MESSAGE("593"),
-  MANAGER_NOTIFIER("594");
+  UPDATE_FIELDS_NOTIFIER("594");
 
   String id;
 
