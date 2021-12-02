@@ -11,17 +11,22 @@ import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.domain.AppRole;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.UserProfile;
+import com.ddkolesnik.userservice.model.dto.BankRequisitesDTO;
 import com.ddkolesnik.userservice.model.dto.PassportDTO;
 import com.ddkolesnik.userservice.model.dto.SnilsDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.repository.AppRoleRepository;
 import com.ddkolesnik.userservice.utils.DateUtils;
+import com.ddkolesnik.userservice.utils.ScanConverter;
+import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -166,4 +171,80 @@ public abstract class UserMapper {
     return !Objects.isNull(bitrixContact.getContactAccredited()) && bitrixContact.getContactAccredited() != 0;
   }
 
+  public Map<String, String> getUpdatedFields(UserDTO dto, UserDTO dbUser) {
+    var updatedFields = new HashMap<String, String>();
+    updatedFields.put("Parametr1", "");
+    if (ObjectUtils.allNotNull(dto.getInn(), dbUser.getInn()) && !dto.getInn().equalsIgnoreCase(dbUser.getInn())) {
+      updateParameter(updatedFields, "ИНН ");
+    }
+    getSnilsUpdatedFields(updatedFields, dto.getSnils(), dbUser.getSnils());
+    getPassportUpdatedFields(updatedFields, dto.getPassport(), dbUser.getPassport());
+    getBankRequisiteUpdatedFields(updatedFields, dto.getBankRequisites(), dbUser.getBankRequisites());
+    if (ObjectUtils.allNotNull(dto.getAddress(), dbUser.getAddress()) && !dto.getAddress().equalsIgnoreCase(dbUser.getAddress())) {
+      updateParameter(updatedFields, "Адрес ");
+    }
+    if (ObjectUtils.allNotNull(dto.getBirthdate(), dbUser.getBirthdate()) && !dto.getBirthdate().equalsIgnoreCase(dbUser.getBirthdate())) {
+      updateParameter(updatedFields, "Дата рождения ");
+    }
+    if (ObjectUtils.allNotNull(dto.getTaxStatus(), dbUser.getTaxStatus()) && dto.getTaxStatus() != dbUser.getTaxStatus()) {
+      updateParameter(updatedFields, "Налоговый статус ");
+    }
+    if (ObjectUtils.allNotNull(dto.getPlaceOfBirth(), dbUser.getPlaceOfBirth()) && !dto.getPlaceOfBirth().equalsIgnoreCase(dbUser.getPlaceOfBirth())) {
+      updateParameter(updatedFields, "Место рождения ");
+    }
+    return updatedFields;
+  }
+
+  private void getSnilsUpdatedFields(Map<String, String> fields, SnilsDTO dto, SnilsDTO dbSnils) {
+    if (ObjectUtils.allNotNull(dto.getNumber(), dbSnils.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbSnils.getNumber())) {
+      updateParameter(fields, "Номер СНИЛС ");
+    }
+    if (ScanConverter.isScansAvailable(dto)) {
+      updateParameter(fields, "Сканы СНИЛС ");
+    }
+  }
+
+  private void getPassportUpdatedFields(Map<String, String> fields, PassportDTO dto, PassportDTO dbPassport) {
+    if (ObjectUtils.allNotNull(dto.getSerial(), dbPassport.getSerial()) && !dto.getSerial().equalsIgnoreCase(dbPassport.getSerial())) {
+      updateParameter(fields, "Серия паспорта ");
+    }
+    if (ObjectUtils.allNotNull(dto.getNumber(), dbPassport.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbPassport.getNumber())) {
+      updateParameter(fields, "Номер паспорта ");
+    }
+    if (ObjectUtils.allNotNull(dto.getDepartmentCode(), dbPassport.getDepartmentCode()) && !dto.getDepartmentCode().equalsIgnoreCase(dbPassport.getDepartmentCode())) {
+      updateParameter(fields, "Код подразделения ");
+    }
+    if (ObjectUtils.allNotNull(dto.getIssuedBy(), dbPassport.getIssuedBy()) && !dto.getIssuedBy().equalsIgnoreCase(dbPassport.getIssuedBy())) {
+      updateParameter(fields, "Кем выдан ");
+    }
+    if (ScanConverter.isScansAvailable(dto)) {
+      updateParameter(fields, "Сканы паспорта ");
+    }
+    if (ObjectUtils.allNotNull(dto.getIssuedAt(), dbPassport.getIssuedAt()) && !dto.getIssuedAt().equalsIgnoreCase(dbPassport.getIssuedAt())) {
+      updateParameter(fields, "Дата выдачи ");
+    }
+  }
+
+  private void getBankRequisiteUpdatedFields(HashMap<String, String> fields, BankRequisitesDTO dto, BankRequisitesDTO dbBankRequisites) {
+    if (ObjectUtils.anyNull(dto, dbBankRequisites)) {
+      return;
+    }
+    if (ObjectUtils.allNotNull(dto.getBik(), dbBankRequisites.getBik()) && !dto.getBik().equalsIgnoreCase(dbBankRequisites.getBik())) {
+      updateParameter(fields, "БИК банка ");
+    }
+    if (ObjectUtils.allNotNull(dto.getCorrespondentAccountNumber(), dbBankRequisites.getCorrespondentAccountNumber()) &&
+        !dto.getCorrespondentAccountNumber().equalsIgnoreCase(dbBankRequisites.getCorrespondentAccountNumber())) {
+      updateParameter(fields, "Корр. счёт ");
+    }
+    if (ObjectUtils.allNotNull(dto.getAccountNumber(), dbBankRequisites.getAccountNumber()) && !dto.getAccountNumber().equalsIgnoreCase(dbBankRequisites.getAccountNumber())) {
+      updateParameter(fields, "Номер счёта ");
+    }
+    if (ScanConverter.isScansAvailable(dto)) {
+      updateParameter(fields, "Сканы банковских реквизитов ");
+    }
+  }
+
+  private void updateParameter(Map<String, String> fields, String value) {
+    fields.computeIfPresent("Parametr1", (k, v) -> v.concat(value));
+  }
 }
