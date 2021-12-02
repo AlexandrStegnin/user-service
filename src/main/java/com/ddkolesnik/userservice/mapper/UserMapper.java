@@ -3,6 +3,7 @@ package com.ddkolesnik.userservice.mapper;
 import com.ddkolesnik.userservice.configuration.MapStructConfig;
 import com.ddkolesnik.userservice.enums.Gender;
 import com.ddkolesnik.userservice.model.bitrix.address.BitrixAddress;
+import com.ddkolesnik.userservice.model.bitrix.bp.Parameter;
 import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
@@ -25,8 +26,6 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -171,80 +170,79 @@ public abstract class UserMapper {
     return !Objects.isNull(bitrixContact.getContactAccredited()) && bitrixContact.getContactAccredited() != 0;
   }
 
-  public Map<String, String> getUpdatedFields(UserDTO dto, UserDTO dbUser) {
-    var updatedFields = new HashMap<String, String>();
-    updatedFields.put("Parametr1", "");
+  public Parameter getUpdatedFields(UserDTO dto, UserDTO dbUser) {
+    var builder = new StringBuilder();
     if (ObjectUtils.allNotNull(dto.getInn(), dbUser.getInn()) && !dto.getInn().equalsIgnoreCase(dbUser.getInn())) {
-      updateParameter(updatedFields, "ИНН ");
+      builder.append("ИНН ");
     }
-    getSnilsUpdatedFields(updatedFields, dto.getSnils(), dbUser.getSnils());
-    getPassportUpdatedFields(updatedFields, dto.getPassport(), dbUser.getPassport());
-    getBankRequisiteUpdatedFields(updatedFields, dto.getBankRequisites(), dbUser.getBankRequisites());
+    getSnilsUpdatedFields(builder, dto.getSnils(), dbUser.getSnils());
+    getPassportUpdatedFields(builder, dto.getPassport(), dbUser.getPassport());
+    getBankRequisiteUpdatedFields(builder, dto.getBankRequisites(), dbUser.getBankRequisites());
     if (ObjectUtils.allNotNull(dto.getAddress(), dbUser.getAddress()) && !dto.getAddress().equalsIgnoreCase(dbUser.getAddress())) {
-      updateParameter(updatedFields, "Адрес ");
+      builder.append("Адрес ");
     }
     if (ObjectUtils.allNotNull(dto.getBirthdate(), dbUser.getBirthdate()) && !dto.getBirthdate().equalsIgnoreCase(dbUser.getBirthdate())) {
-      updateParameter(updatedFields, "Дата рождения ");
+      builder.append("Дата рождения ");
     }
     if (ObjectUtils.allNotNull(dto.getTaxStatus(), dbUser.getTaxStatus()) && dto.getTaxStatus() != dbUser.getTaxStatus()) {
-      updateParameter(updatedFields, "Налоговый статус ");
+      builder.append("Налоговый статус ");
     }
     if (ObjectUtils.allNotNull(dto.getPlaceOfBirth(), dbUser.getPlaceOfBirth()) && !dto.getPlaceOfBirth().equalsIgnoreCase(dbUser.getPlaceOfBirth())) {
-      updateParameter(updatedFields, "Место рождения ");
+      builder.append("Место рождения ");
     }
-    return updatedFields;
+
+    return Parameter.builder()
+        .param(builder.toString())
+        .build();
   }
 
-  private void getSnilsUpdatedFields(Map<String, String> fields, SnilsDTO dto, SnilsDTO dbSnils) {
+  private void getSnilsUpdatedFields(StringBuilder builder, SnilsDTO dto, SnilsDTO dbSnils) {
     if (ObjectUtils.allNotNull(dto.getNumber(), dbSnils.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbSnils.getNumber())) {
-      updateParameter(fields, "Номер СНИЛС ");
+      builder.append("Номер СНИЛС ");
     }
     if (ScanConverter.isScansAvailable(dto)) {
-      updateParameter(fields, "Сканы СНИЛС ");
+      builder.append("Сканы СНИЛС ");
     }
   }
 
-  private void getPassportUpdatedFields(Map<String, String> fields, PassportDTO dto, PassportDTO dbPassport) {
+  private void getPassportUpdatedFields(StringBuilder builder, PassportDTO dto, PassportDTO dbPassport) {
     if (ObjectUtils.allNotNull(dto.getSerial(), dbPassport.getSerial()) && !dto.getSerial().equalsIgnoreCase(dbPassport.getSerial())) {
-      updateParameter(fields, "Серия паспорта ");
+      builder.append("Серия паспорта ");
     }
     if (ObjectUtils.allNotNull(dto.getNumber(), dbPassport.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbPassport.getNumber())) {
-      updateParameter(fields, "Номер паспорта ");
+      builder.append("Номер паспорта ");
     }
     if (ObjectUtils.allNotNull(dto.getDepartmentCode(), dbPassport.getDepartmentCode()) && !dto.getDepartmentCode().equalsIgnoreCase(dbPassport.getDepartmentCode())) {
-      updateParameter(fields, "Код подразделения ");
+      builder.append("Код подразделения ");
     }
     if (ObjectUtils.allNotNull(dto.getIssuedBy(), dbPassport.getIssuedBy()) && !dto.getIssuedBy().equalsIgnoreCase(dbPassport.getIssuedBy())) {
-      updateParameter(fields, "Кем выдан ");
+      builder.append("Кем выдан ");
     }
     if (ScanConverter.isScansAvailable(dto)) {
-      updateParameter(fields, "Сканы паспорта ");
+      builder.append("Сканы паспорта ");
     }
     if (ObjectUtils.allNotNull(dto.getIssuedAt(), dbPassport.getIssuedAt()) && !dto.getIssuedAt().equalsIgnoreCase(dbPassport.getIssuedAt())) {
-      updateParameter(fields, "Дата выдачи ");
+      builder.append("Дата выдачи ");
     }
   }
 
-  private void getBankRequisiteUpdatedFields(HashMap<String, String> fields, BankRequisitesDTO dto, BankRequisitesDTO dbBankRequisites) {
+  private void getBankRequisiteUpdatedFields(StringBuilder builder, BankRequisitesDTO dto, BankRequisitesDTO dbBankRequisites) {
     if (ObjectUtils.anyNull(dto, dbBankRequisites)) {
       return;
     }
     if (ObjectUtils.allNotNull(dto.getBik(), dbBankRequisites.getBik()) && !dto.getBik().equalsIgnoreCase(dbBankRequisites.getBik())) {
-      updateParameter(fields, "БИК банка ");
+      builder.append("БИК банка ");
     }
     if (ObjectUtils.allNotNull(dto.getCorrespondentAccountNumber(), dbBankRequisites.getCorrespondentAccountNumber()) &&
         !dto.getCorrespondentAccountNumber().equalsIgnoreCase(dbBankRequisites.getCorrespondentAccountNumber())) {
-      updateParameter(fields, "Корр. счёт ");
+      builder.append("Корр. счёт ");
     }
     if (ObjectUtils.allNotNull(dto.getAccountNumber(), dbBankRequisites.getAccountNumber()) && !dto.getAccountNumber().equalsIgnoreCase(dbBankRequisites.getAccountNumber())) {
-      updateParameter(fields, "Номер счёта ");
+      builder.append("Номер счёта ");
     }
     if (ScanConverter.isScansAvailable(dto)) {
-      updateParameter(fields, "Сканы банковских реквизитов ");
+      builder.append("Сканы банковских реквизитов ");
     }
   }
 
-  private void updateParameter(Map<String, String> fields, String value) {
-    fields.computeIfPresent("Parametr1", (k, v) -> v.concat(value));
-  }
 }

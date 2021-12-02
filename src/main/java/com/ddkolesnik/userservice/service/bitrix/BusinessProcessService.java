@@ -76,13 +76,13 @@ public class BusinessProcessService extends BitrixService {
   public void notifyAboutUpdatedFields(UserDTO dto, UserDTO dbUser) {
     var businessProcess = buildBusinessProcess(BusinessProcessTemplate.MANAGER_NOTIFIER);
     log.info("Запуск бизнес процесса {} для bitrix id {}", BusinessProcessTemplate.MANAGER_NOTIFIER.name(), dbUser.getBitrixId());
-    var updatedFields = userMapper.getUpdatedFields(dto, dbUser);
-    businessProcess.setParameters(updatedFields);
+    var parameter = userMapper.getUpdatedFields(dto, dbUser);
+    businessProcess.setParameters(parameter);
     businessProcess.addDocumentId(CONTACT_PREFIX.concat(dbUser.getBitrixId().toString()));
     var notify = restTemplate.exchange(bitrixProperty.getBusinessProcessStart(),
         HttpMethod.POST, new HttpEntity<>(businessProcess), Object.class);
     var notified = notify.getBody();
-    log.info("Результат запуска БП по обновлённым полям {}, {}", notified, updatedFields);
+    log.info("Результат запуска БП по обновлённым полям {}, {}", notified, parameter);
   }
 
   private BusinessProcess buildBusinessProcess(BusinessProcessTemplate template) {

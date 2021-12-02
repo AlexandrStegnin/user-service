@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,9 +27,8 @@ public class BusinessProcess {
   @JsonProperty("DOCUMENT_ID")
   List<String> documentId = new ArrayList<>(Stream.of("crm", "CCrmDocumentContact").collect(Collectors.toList()));
 
-  @Builder.Default
   @JsonProperty("PARAMETERS")
-  Map<String, String> parameters = new HashMap<>();
+  Parameter parameters;
 
   public void addDocumentId(String documentId) {
     this.documentId.add(documentId);
