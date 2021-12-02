@@ -173,56 +173,61 @@ public abstract class UserMapper {
   public Parameter getUpdatedFields(UserDTO dto, UserDTO dbUser) {
     var builder = new StringBuilder();
     if (ObjectUtils.allNotNull(dto.getInn(), dbUser.getInn()) && !dto.getInn().equalsIgnoreCase(dbUser.getInn())) {
-      builder.append("ИНН ");
+      builder.append("ИНН, ");
     }
     getSnilsUpdatedFields(builder, dto.getSnils(), dbUser.getSnils());
     getPassportUpdatedFields(builder, dto.getPassport(), dbUser.getPassport());
     getBankRequisiteUpdatedFields(builder, dto.getBankRequisites(), dbUser.getBankRequisites());
     if (ObjectUtils.allNotNull(dto.getAddress(), dbUser.getAddress()) && !dto.getAddress().equalsIgnoreCase(dbUser.getAddress())) {
-      builder.append("Адрес ");
+      builder.append("Адрес, ");
     }
     if (ObjectUtils.allNotNull(dto.getBirthdate(), dbUser.getBirthdate()) && !dto.getBirthdate().equalsIgnoreCase(dbUser.getBirthdate())) {
-      builder.append("Дата рождения ");
+      builder.append("Дата рождения, ");
     }
     if (ObjectUtils.allNotNull(dto.getTaxStatus(), dbUser.getTaxStatus()) && dto.getTaxStatus() != dbUser.getTaxStatus()) {
-      builder.append("Налоговый статус ");
+      builder.append("Налоговый статус, ");
     }
     if (ObjectUtils.allNotNull(dto.getPlaceOfBirth(), dbUser.getPlaceOfBirth()) && !dto.getPlaceOfBirth().equalsIgnoreCase(dbUser.getPlaceOfBirth())) {
-      builder.append("Место рождения ");
+      builder.append("Место рождения, ");
+    }
+
+    var param = builder.toString().trim();
+    if (param.endsWith(",")) {
+      param = param.substring(0, param.length() - 1);
     }
 
     return Parameter.builder()
-        .param(builder.toString())
+        .param(param)
         .build();
   }
 
   private void getSnilsUpdatedFields(StringBuilder builder, SnilsDTO dto, SnilsDTO dbSnils) {
     if (ObjectUtils.allNotNull(dto.getNumber(), dbSnils.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbSnils.getNumber())) {
-      builder.append("Номер СНИЛС ");
+      builder.append("Номер СНИЛС, ");
     }
     if (ScanConverter.isScansAvailable(dto)) {
-      builder.append("Сканы СНИЛС ");
+      builder.append("Сканы СНИЛС, ");
     }
   }
 
   private void getPassportUpdatedFields(StringBuilder builder, PassportDTO dto, PassportDTO dbPassport) {
     if (ObjectUtils.allNotNull(dto.getSerial(), dbPassport.getSerial()) && !dto.getSerial().equalsIgnoreCase(dbPassport.getSerial())) {
-      builder.append("Серия паспорта ");
+      builder.append("Серия паспорта, ");
     }
     if (ObjectUtils.allNotNull(dto.getNumber(), dbPassport.getNumber()) && !dto.getNumber().equalsIgnoreCase(dbPassport.getNumber())) {
-      builder.append("Номер паспорта ");
+      builder.append("Номер паспорта, ");
     }
     if (ObjectUtils.allNotNull(dto.getDepartmentCode(), dbPassport.getDepartmentCode()) && !dto.getDepartmentCode().equalsIgnoreCase(dbPassport.getDepartmentCode())) {
-      builder.append("Код подразделения ");
+      builder.append("Код подразделения, ");
     }
     if (ObjectUtils.allNotNull(dto.getIssuedBy(), dbPassport.getIssuedBy()) && !dto.getIssuedBy().equalsIgnoreCase(dbPassport.getIssuedBy())) {
-      builder.append("Кем выдан ");
+      builder.append("Кем выдан, ");
     }
     if (ScanConverter.isScansAvailable(dto)) {
-      builder.append("Сканы паспорта ");
+      builder.append("Сканы паспорта, ");
     }
     if (ObjectUtils.allNotNull(dto.getIssuedAt(), dbPassport.getIssuedAt()) && !dto.getIssuedAt().equalsIgnoreCase(dbPassport.getIssuedAt())) {
-      builder.append("Дата выдачи ");
+      builder.append("Дата выдачи, ");
     }
   }
 
@@ -231,17 +236,17 @@ public abstract class UserMapper {
       return;
     }
     if (ObjectUtils.allNotNull(dto.getBik(), dbBankRequisites.getBik()) && !dto.getBik().equalsIgnoreCase(dbBankRequisites.getBik())) {
-      builder.append("БИК банка ");
+      builder.append("БИК банка, ");
     }
     if (ObjectUtils.allNotNull(dto.getCorrespondentAccountNumber(), dbBankRequisites.getCorrespondentAccountNumber()) &&
         !dto.getCorrespondentAccountNumber().equalsIgnoreCase(dbBankRequisites.getCorrespondentAccountNumber())) {
-      builder.append("Корр. счёт ");
+      builder.append("Корр. счёт, ");
     }
     if (ObjectUtils.allNotNull(dto.getAccountNumber(), dbBankRequisites.getAccountNumber()) && !dto.getAccountNumber().equalsIgnoreCase(dbBankRequisites.getAccountNumber())) {
-      builder.append("Номер счёта ");
+      builder.append("Номер счёта, ");
     }
     if (ScanConverter.isScansAvailable(dto)) {
-      builder.append("Сканы банковских реквизитов ");
+      builder.append("Сканы банковских реквизитов, ");
     }
   }
 
