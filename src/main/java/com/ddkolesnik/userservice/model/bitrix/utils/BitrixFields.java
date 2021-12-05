@@ -56,5 +56,6 @@ public class BitrixFields {
   public static final String BUSINESSMAN_PLACE_OF_BIRTH = "UF_CRM_1631100973";
   public static final String LEGAL_ENTITY_BIRTHDATE = "UF_CRM_1637751380";
   public static final String LEGAL_ENTITY_PLACE_OF_BIRTH = "UF_CRM_1636710681";
+  public static final String RETRY_CONFIRM_CODE = "UF_CRM_1625143364";
 
 }

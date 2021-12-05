@@ -171,7 +171,8 @@ public class UserService {
   public void checkConfirmCode(ChangePhoneDTO dto) {
     var phone = SecurityUtils.getCurrentUserPhone();
     var contact = bitrixContactService.getContact(phone);
-    if (Objects.isNull(contact.getConfirmCode()) || !Objects.equals(contact.getConfirmCode(), dto.getConfirmCode())) {
+    var confirmCode = Objects.isNull(contact.getConfirmCode()) ? contact.getRetryConfirmCode() : contact.getConfirmCode();
+    if (Objects.isNull(confirmCode) || !confirmCode.equalsIgnoreCase(dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.PRECONDITION_FAILED)
           .message("Не указан или неверно указан код подтверждения")
@@ -218,13 +219,15 @@ public class UserService {
   }
 
   private void checkConfirmCode(BitrixContact bitrixContact, ChangePhoneDTO dto) {
-    if (Objects.isNull(bitrixContact.getConfirmCode()) || Objects.isNull(dto.getConfirmCode())) {
+    var confirmCode = Objects.isNull(bitrixContact.getConfirmCode()) ?
+        bitrixContact.getRetryConfirmCode() : bitrixContact.getConfirmCode();
+    if (Objects.isNull(confirmCode) || Objects.isNull(dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.BAD_REQUEST)
           .message("Не указан код подтверждения")
           .build();
     }
-    if (!bitrixContact.getConfirmCode().equals(dto.getConfirmCode())) {
+    if (!confirmCode.equals(dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.PRECONDITION_FAILED)
           .message("Код подтверждения не верный")

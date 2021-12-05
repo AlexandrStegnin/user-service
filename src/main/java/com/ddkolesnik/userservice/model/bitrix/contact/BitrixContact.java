@@ -88,4 +88,7 @@ public class BitrixContact {
 
   BankRequisite bankRequisites;
 
+  @JsonProperty(RETRY_CONFIRM_CODE)
+  String retryConfirmCode;
+
 }
