@@ -5,6 +5,7 @@ jQuery(document).ready(function ($) {
     messageForm = $('#message-form-modal')
     confirmForm = $('#confirm-form-modal')
     onRetrySendClick()
+    onSubmitConfirmForm()
 })
 
 /**
@@ -96,3 +97,9 @@ function noErrors() {
 $(document).on('click', '[data-bs-dismiss="modal"]', function () {
     confirmForm.find('#response-state').removeClass('success')
 })
+
+function onSubmitConfirmForm() {
+    confirmForm.on('submit', function (e) {
+        e.preventDefault()
+    })
+}
