@@ -1,7 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
 import com.ddkolesnik.userservice.enums.OwnerType;
-import com.ddkolesnik.userservice.model.domain.Account;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.AccountDTO;
 import com.ddkolesnik.userservice.model.dto.BalanceDTO;
@@ -22,13 +21,11 @@ import java.util.Objects;
 public class AccountTransactionService {
 
   AccountTransactionRepository accountTransactionRepository;
-  AccountService accountService;
   AppUserService appUserService;
 
   public BalanceDTO getBalanceByInvestorPhone(String investorLogin) {
     AppUser user = appUserService.findByPhone(investorLogin);
-    Account account = accountService.findByInvestorId(user.getId());
-    AccountDTO accountDTO = accountTransactionRepository.fetchBalance(OwnerType.INVESTOR, account.getId());
+    AccountDTO accountDTO = accountTransactionRepository.fetchBalance(OwnerType.INVESTOR, user.getId());
     if (Objects.nonNull(accountDTO)) {
       return new BalanceDTO(accountDTO);
     }
