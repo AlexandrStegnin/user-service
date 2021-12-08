@@ -171,13 +171,17 @@ public class UserService {
   public void checkConfirmCode(ChangePhoneDTO dto) {
     var phone = SecurityUtils.getCurrentUserPhone();
     var contact = bitrixContactService.getContact(phone);
-    var confirmCode = Objects.isNull(contact.getConfirmCode()) ? contact.getRetryConfirmCode() : contact.getConfirmCode();
+    var confirmCode = Objects.isNull(contact.getRetryConfirmCode()) ? contact.getConfirmCode() : contact.getRetryConfirmCode();
     if (Objects.isNull(confirmCode) || !confirmCode.equalsIgnoreCase(dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.PRECONDITION_FAILED)
           .message("Не указан или неверно указан код подтверждения")
           .build();
     }
+    var userDTO = UserDTO.builder()
+        .bitrixId(contact.getId())
+        .build();
+    bitrixContactService.clearContactConfirmCodes(userDTO);
   }
 
   public void sendConfirmNewPhoneMessage(ChangePhoneDTO dto) {
@@ -219,8 +223,8 @@ public class UserService {
   }
 
   private void checkConfirmCode(BitrixContact bitrixContact, ChangePhoneDTO dto) {
-    var confirmCode = Objects.isNull(bitrixContact.getConfirmCode()) ?
-        bitrixContact.getRetryConfirmCode() : bitrixContact.getConfirmCode();
+    var confirmCode = Objects.isNull(bitrixContact.getRetryConfirmCode()) ?
+        bitrixContact.getConfirmCode() : bitrixContact.getRetryConfirmCode();
     if (Objects.isNull(confirmCode) || Objects.isNull(dto.getConfirmCode())) {
       throw BitrixException.builder()
           .status(HttpStatus.BAD_REQUEST)
@@ -233,6 +237,10 @@ public class UserService {
           .message("Код подтверждения не верный")
           .build();
     }
+    var userDTO = UserDTO.builder()
+        .bitrixId(bitrixContact.getId())
+        .build();
+    bitrixContactService.clearContactConfirmCodes(userDTO);
   }
 
 }

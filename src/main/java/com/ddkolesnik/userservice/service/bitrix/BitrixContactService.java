@@ -105,6 +105,15 @@ public class BitrixContactService extends BitrixService {
     log.info("Результат обновления кода подтверждения контакта {}", updated);
   }
 
+  public void clearContactConfirmCodes(UserDTO userDTO) {
+    var fields = new HashMap<String, Object>();
+    fields.put(CONTACT_CONFIRM_CODE, "");
+    fields.put(RETRY_CONFIRM_CODE, "");
+    var contact = buildContact(userDTO, fields);
+    var updated = bitrixWebClient.updateContact(contact);
+    log.info("Результат обновления кодов подтверждения контакта {}", updated);
+  }
+
   public void addNewContactPhone(UserDTO userDTO, String newPhone) {
     var fields = new HashMap<String, Object>();
     fields.put(CONTACT_NEW_PHONE, newPhone);
