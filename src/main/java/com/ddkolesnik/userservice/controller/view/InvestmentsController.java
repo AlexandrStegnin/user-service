@@ -4,6 +4,7 @@ package com.ddkolesnik.userservice.controller.view;
 import com.ddkolesnik.userservice.model.dto.BalanceDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.service.AccountTransactionService;
+import com.ddkolesnik.userservice.utils.PhoneUtils;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class InvestmentsController {
   public String showInvestments(@ModelAttribute UserDTO user, ModelMap model) {
     String login = SecurityUtils.getCurrentUserPhone();
     model.addAttribute("investorLogin", login);
+    model.addAttribute("login", PhoneUtils.getFormattedPhone(login));
     BalanceDTO balanceDTO = accountTransactionService.getBalanceByInvestorPhone(login);
     model.addAttribute("account-number", balanceDTO.getAccountNumber());
     model.addAttribute("balance", balanceDTO.getSum());
