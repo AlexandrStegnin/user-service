@@ -178,16 +178,16 @@ public abstract class UserMapper {
     getSnilsUpdatedFields(builder, dto.getSnils(), dbUser.getSnils());
     getPassportUpdatedFields(builder, dto.getPassport(), dbUser.getPassport());
     getBankRequisiteUpdatedFields(builder, dto.getBankRequisites(), dbUser.getBankRequisites());
-    if (ObjectUtils.allNotNull(dto.getAddress(), dbUser.getAddress()) && !dto.getAddress().equalsIgnoreCase(dbUser.getAddress())) {
+    if (Objects.isNull(dbUser.getAddress()) || !dto.getAddress().equalsIgnoreCase(dbUser.getAddress())) {
       builder.append("Адрес, ");
     }
-    if (ObjectUtils.allNotNull(dto.getBirthdate(), dbUser.getBirthdate()) && !dto.getBirthdate().equalsIgnoreCase(dbUser.getBirthdate())) {
+    if (Objects.isNull(dbUser.getBirthdate()) || !dto.getBirthdate().equalsIgnoreCase(dbUser.getBirthdate())) {
       builder.append("Дата рождения, ");
     }
-    if (ObjectUtils.allNotNull(dto.getTaxStatus(), dbUser.getTaxStatus()) && dto.getTaxStatus() != dbUser.getTaxStatus()) {
+    if (Objects.isNull(dbUser.getTaxStatus()) || dto.getTaxStatus() != dbUser.getTaxStatus()) {
       builder.append("Налоговый статус, ");
     }
-    if (ObjectUtils.allNotNull(dto.getPlaceOfBirth(), dbUser.getPlaceOfBirth()) && !dto.getPlaceOfBirth().equalsIgnoreCase(dbUser.getPlaceOfBirth())) {
+    if (Objects.isNull(dbUser.getPlaceOfBirth()) || !dto.getPlaceOfBirth().equalsIgnoreCase(dbUser.getPlaceOfBirth())) {
       builder.append("Место рождения, ");
     }
 
@@ -202,12 +202,8 @@ public abstract class UserMapper {
   }
 
   private void getSnilsUpdatedFields(StringBuilder builder, SnilsDTO dto, SnilsDTO dbSnils) {
-    if (Objects.isNull(dbSnils)) {
+    if (Objects.isNull(dbSnils) || !dto.getNumber().equalsIgnoreCase(dbSnils.getNumber())) {
       builder.append("Номер СНИЛС, ");
-    } else {
-      if (!dto.getNumber().equalsIgnoreCase(dbSnils.getNumber())) {
-        builder.append("Номер СНИЛС, ");
-      }
     }
     if (ScanConverter.isScansAvailable(dto)) {
       builder.append("Сканы СНИЛС, ");
