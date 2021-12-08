@@ -34,7 +34,7 @@ public class InvestmentsController {
     BalanceDTO balanceDTO = accountTransactionService.getBalanceByInvestorPhone(login);
     model.addAttribute("account-number", balanceDTO.getAccountNumber());
     model.addAttribute("balance", balanceDTO.getSum());
-    return "/investments";
+    return "investments";
   }
 
 }
