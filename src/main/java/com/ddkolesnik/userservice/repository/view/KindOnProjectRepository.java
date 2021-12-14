@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface KindOnProjectRepository extends JpaRepository<KindOnProject, Long> {
-    List<KindOnProject> findByInvestorIdOrderByBuyDate(Long investorId);
+  List<KindOnProject> findByInvestorIdOrderByBuyDate(Long investorId);
 }

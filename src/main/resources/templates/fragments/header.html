@@ -4,7 +4,7 @@
 
 </head>
 <body>
-<header class="header " th:fragment="header" id="header">
+<header class="header " th:fragment="header--auth" id="header">
     <div class="header__logo">
         <svg class="icon__logo" width="155px" height="22px">
             <use xlink:href="/img/svg-symbols.svg#logo"></use>
@@ -12,10 +12,14 @@
         <a th:href="@{/profile}"></a>
     </div>
     <div class="header__menu">
+        <div th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:text="${'Баланс: ' + #numbers.formatDecimal(invested, 1, 'WHITESPACE', 2, 'COMMA') + ' руб.'}"></div>
+        <div th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:text="${'Свободный капитал: ' + #numbers.formatDecimal(balance, 1, 'WHITESPACE', 2, 'COMMA') + ' руб.'}"></div>
+        <a th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:href="@{/}">На главную</a>
+        <a th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:href="@{/}">Реализованные проекты</a>
     </div>
     <div th:if="${!#request.getServletPath().contains('/login') and #request.getServletPath().contains('/registration')}">
         <div class="header__btn">
-            <a href="/" class="button button--header ">
+            <a th:href="@{/}" class="button button--header ">
                 <span>Войти</span>
             </a>
         </div>
