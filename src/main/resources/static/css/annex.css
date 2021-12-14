@@ -1,0 +1,68 @@
+.bg {
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -150px 0 0 -200px;
+    text-align: center;
+    z-index: -1000001;
+    font-family: Inter, sans-serif;
+    display: none;
+}
+
+.annex-look {
+    background-color: #9B7863;
+    border-radius: 0;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 10px 20px;
+    line-height: 1;
+    min-width: 160px;
+    border: 2px solid #9B7863;
+    font-family: Inter, sans-serif;
+}
+
+.annex-exit {
+    background-color: #000000;
+    border-radius: 0;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 10px 20px;
+    line-height: 1;
+    min-width: 160px;
+    border: 2px solid #000000;
+    font-family: Inter, sans-serif;
+}
+
+.annex-exit.active, .annex-exit:hover {
+    background-color: white;
+    color: #000000;
+    border-color: #000000;
+}
+
+.annex-look.active, .annex-look:hover {
+    background-color: white;
+    color: #9B7863;
+    border-color: #9B7863;
+}
+
+.stop-scrolling {
+    height: 100%;
+    overflow: hidden;
+}
+
+.text-responsive-annex {
+    font-size: calc(1vw + 1vh);
+}
+
+.modal-header {
+    border-bottom: 1px solid #000000;
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+}

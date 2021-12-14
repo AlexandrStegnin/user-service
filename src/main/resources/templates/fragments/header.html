@@ -15,7 +15,7 @@
         <div th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:text="${'Баланс: ' + #numbers.formatDecimal(invested, 1, 'WHITESPACE', 2, 'COMMA') + ' руб.'}"></div>
         <div th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:text="${'Свободный капитал: ' + #numbers.formatDecimal(balance, 1, 'WHITESPACE', 2, 'COMMA') + ' руб.'}"></div>
         <a th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:href="@{/}">На главную</a>
-        <a th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:href="@{/}">Реализованные проекты</a>
+        <a th:if="${#request.getServletPath().contains('/investments')}" class="header__link" th:href="@{/}" id="closed-projects">Реализованные проекты</a>
     </div>
     <div th:if="${!#request.getServletPath().contains('/login') and #request.getServletPath().contains('/registration')}">
         <div class="header__btn">

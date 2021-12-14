@@ -26,6 +26,7 @@
     <meta property="twitter:description" content=""/>
     <link rel="image_src" href=""/>
     <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link th:href="@{/css/annex.css}" rel="stylesheet"/>
     <script>
         (function (H) {
             H.className = H.className.replace(/\bno-js\b/, 'js')
@@ -34,6 +35,7 @@
     <title>Мои инвестиции</title>
 </head>
 <body class="page ">
+<div class="out">
 <div class="page__top ">
     <div th:replace="~{fragments/header.html :: #header}"></div>
     <input type="hidden" id="investorLogin" th:value="*{investorLogin}">
@@ -73,5 +75,9 @@
         th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js}"></script>
 <script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
 <script th:src="@{/js/charts-for-flows.js}"></script>
+<script th:src="@{/js/annex.js}"></script>
+</div>
+<div th:replace="~{forms/annex-popup.html :: #read-attachment-table}"></div>
+<div th:replace="~{forms/annex-popup.html :: #read-attachment}"></div>
 </body>
 </html>
