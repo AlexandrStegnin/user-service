@@ -6,6 +6,7 @@ import com.ddkolesnik.userservice.configuration.property.NextcloudProperty;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.domain.Attachment;
 import com.ddkolesnik.userservice.model.dto.AttachmentDTO;
+import com.ddkolesnik.userservice.response.ApiResponse;
 import com.ddkolesnik.userservice.service.AppUserService;
 import com.ddkolesnik.userservice.service.AttachmentService;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
@@ -53,9 +54,10 @@ public class AttachmentController {
   }
 
   @PostMapping(value = "/mark-read", produces = MediaType.APPLICATION_JSON_VALUE)
-  public String saveAnnexRead(@RequestBody AttachmentDTO dto) {
+  public ApiResponse saveAnnexRead(@RequestBody AttachmentDTO dto) {
     attachmentService.markRead(dto.getId());
-    return "success";
+    var haveUnread = attachmentService.haveUnread(SecurityUtils.getCurrentUserPhone());
+    return ApiResponse.build200Response(String.valueOf(haveUnread));
   }
 
   @RequestMapping("/attachments/{attachmentId}")

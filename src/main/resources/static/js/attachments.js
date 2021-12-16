@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
  *
  * @param have
  */
-function toggleattachmentModal(have) {
+function toggleAttachmentModal(have) {
     let readAttachment = $('#read-attachment');
     if (have === true) {
         getAttachments(null);
@@ -99,7 +99,7 @@ function checkAttachments(login) {
         }
     })
         .done(function (have) {
-            toggleattachmentModal(have);
+            toggleAttachmentModal(have);
         })
         .fail(function (e) {
             console.log(e);
@@ -212,31 +212,17 @@ function markRead(id) {
         timeout: 100000,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(header, token);
-        },
-        success: function () {
-            updateUnreadAttachments();
-        },
-        error: function (e) {
-            console.log('Произошла ошибка - ' + e.toString());
-        },
-        always: function () {
         }
-    });
-}
-
-/**
- * Проверить остались и непрочитанные приложения
- *
- */
-function updateUnreadAttachments() {
-    let unchecked = checkUnreadAttachments();
-    if (unchecked === 0) {
-        toggleattachmentModal(false);
-    }
-}
-
-function checkUnreadAttachments() {
-    return $('#attachment-table').find('tr').find('input[type="checkbox"]').not(':checked').length;
+    })
+        .done(function (data) {
+            let haveUnread = data.message === 'true'
+            toggleAttachmentModal(haveUnread)
+        })
+        .fail(function (e) {
+            console.log('Произошла ошибка - ' + e.toString());
+        })
+        .always(function () {
+        })
 }
 
 function blurElement(element, size) {
