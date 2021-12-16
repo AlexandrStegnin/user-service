@@ -102,6 +102,13 @@
             <version>3.12.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.aarboard.nextcloud/nextcloud-api -->
+        <dependency>
+            <groupId>org.aarboard.nextcloud</groupId>
+            <artifactId>nextcloud-api</artifactId>
+            <version>12.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
