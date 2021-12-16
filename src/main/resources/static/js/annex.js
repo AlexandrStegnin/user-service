@@ -163,7 +163,7 @@ function createAttachmentTable(attachments) {
         td = $('<td></td>');
         td.data('attachment-name', annex.annexName);
         a = $('<a>' + annex.annexName + '</a>');
-        a.attr('href', '/annexes/' + annex.id)
+        a.attr('href', '/attachments/' + annex.id)
             .attr('target', '_blank');
         a.appendTo(td);
         td.appendTo(tr);
