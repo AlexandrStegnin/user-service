@@ -24,6 +24,6 @@ public interface AccountTransactionRepository extends JpaRepository<AccountTrans
       "ORDER BY atx.owner.ownerName")
   AccountDTO fetchBalance(@Param("ownerType") OwnerType ownerType, @Param("investorId") Long investorId);
 
-  @Query("SELECT atx FROM AccountTransaction atx WHERE atx.owner.ownerId = :investorId")
+  @Query("SELECT atx FROM AccountTransaction atx WHERE atx.owner.ownerId = :investorId ORDER BY atx.txDate DESC ")
   List<AccountTransaction> findByInvestorId(@Param("investorId") Long investorId);
 }
