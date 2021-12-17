@@ -30,5 +30,6 @@ public class Location {
   public static final String UNION_PROFIT = "/union-profit";
   public static final String KIND_ON_PROJECT = "/kind-on-project";
   public static final String INVESTMENTS = "/investments";
+  public static final String INVESTMENTS_DETAILS = INVESTMENTS + "/details";
 
 }

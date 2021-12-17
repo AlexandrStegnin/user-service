@@ -1,6 +1,7 @@
 package com.ddkolesnik.userservice.controller.view;
 
 
+import com.ddkolesnik.userservice.model.dto.AccountTransactionDTO;
 import com.ddkolesnik.userservice.model.dto.BalanceDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.model.view.KindOnProject;
@@ -15,10 +16,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.ddkolesnik.userservice.configuration.Location.INVESTMENTS;
+import static com.ddkolesnik.userservice.configuration.Location.INVESTMENTS_DETAILS;
 
 /**
  * @author Alexandr Stegnin
@@ -41,6 +46,12 @@ public class InvestmentsController {
     model.addAttribute("balance", balanceDTO.getSum());
     model.addAttribute("invested", fetchInvestedCash(login));
     return "investments";
+  }
+
+  @ResponseBody
+  @PostMapping(path = INVESTMENTS_DETAILS)
+  public List<AccountTransactionDTO> fetchDetailsByAccountId() {
+    return accountTransactionService.getDetails();
   }
 
   private BigDecimal fetchInvestedCash(String phone) {

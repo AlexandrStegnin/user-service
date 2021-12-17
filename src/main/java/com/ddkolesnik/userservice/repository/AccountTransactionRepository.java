@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Alexandr Stegnin
  */
@@ -22,4 +24,6 @@ public interface AccountTransactionRepository extends JpaRepository<AccountTrans
       "ORDER BY atx.owner.ownerName")
   AccountDTO fetchBalance(@Param("ownerType") OwnerType ownerType, @Param("investorId") Long investorId);
 
+  @Query("SELECT atx FROM AccountTransaction atx WHERE atx.owner.ownerId = :investorId")
+  List<AccountTransaction> findByInvestorId(@Param("investorId") Long investorId);
 }

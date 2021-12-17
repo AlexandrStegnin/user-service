@@ -76,6 +76,31 @@ AccountSummaryDTO.prototype = {
     }
 }
 
+let AccountTransactionDTO = function () {}
+
+AccountTransactionDTO.prototype = {
+    id: null,
+    txDate: null,
+    operationType: null,
+    payer: null,
+    owner: null,
+    recipient: null,
+    cash: null,
+    cashType: null,
+    blocked: null,
+    build: function (id, txDate, operationType, payer, owner, recipient, cash, cashType, blocked) {
+        this.id = id
+        this.txDate = txDate
+        this.operationType = operationType
+        this.payer = payer
+        this.owner = owner
+        this.recipient = recipient
+        this.cash = cash
+        this.cashType = cashType
+        this.blocked = blocked
+    }
+}
+
 let popupTable;
 
 jQuery(document).ready(function ($) {
@@ -85,7 +110,7 @@ jQuery(document).ready(function ($) {
     getUnionProfit(login);
     getKindOnProject(login);
     clearOldLocalStorageData();
-    // subscribeTxShowClick()
+    subscribeTxShowClick()
 });
 
 /**
@@ -544,28 +569,20 @@ function showPopup(message) {
  * Нажатие кнопки "Просмотреть"
  */
 function subscribeTxShowClick() {
-    $('#free-cash').on('click', function () {
-        let ownerId = $(this).data('owner-id')
-        let accSummaryDTO = new AccountSummaryDTO()
-        accSummaryDTO.build(ownerId, null)
-        getDetails(accSummaryDTO)
+    $('#free-cash').on('click', function (event) {
+        event.preventDefault()
+        getDetails()
     })
 }
 
-/**
- * Получить детализацию по счёту
- *
- * @param accSummaryDTO {AccountSummaryDTO} DTO
- */
-function getDetails(accSummaryDTO) {
+function getDetails() {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
 
     $.ajax({
         type: "POST",
         contentType: "application/json;charset=utf-8",
-        url: "money/transactions/details",
-        data: JSON.stringify(accSummaryDTO),
+        url: "investments/details",
         dataType: 'json',
         timeout: 100000,
         beforeSend: function (xhr) {
@@ -575,8 +592,8 @@ function getDetails(accSummaryDTO) {
         .done(function (data) {
             createDetailTable(data);
         })
-        .fail(function (e) {
-            showPopup('Что-то пошло не так [' + e.message + ']');
+        .fail(function (jqXHR) {
+            showPopup(jqXHR.responseJson);
         })
         .always(function () {
             console.log('Закончили!');
