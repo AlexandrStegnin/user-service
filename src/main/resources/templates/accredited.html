@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">СНИЛС</div>
-                                        <div class="info__item" th:text="*{user.snils.number}"></div>
+                                        <div class="info__item" th:text="*{user.snils?.number}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Дата рождения</div>
@@ -104,19 +104,21 @@
                                     <div class="info__row">
                                         <div class="info__item">Серия и номер</div>
                                         <div class="info__item"
-                                             th:text="*{user.passport.serial + ' ' + user.passport.number}"></div>
+                                             th:with="serial=*{#strings.defaultString(user.passport?.serial, '')},
+                                                        number=*{#strings.defaultString(user.passport?.number, '')}"
+                                             th:text="*{#strings.concat(serial, ' ', number)}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Дата выдачи</div>
-                                        <div class="info__item" th:text="*{user.passport.issuedAt}"></div>
+                                        <div class="info__item" th:text="*{user.passport?.issuedAt}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Код подразделения</div>
-                                        <div class="info__item" th:text="*{user.passport.departmentCode}"></div>
+                                        <div class="info__item" th:text="*{user.passport?.departmentCode}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Кем выдан</div>
-                                        <div class="info__item" th:text="*{user.passport.issuedBy}"></div>
+                                        <div class="info__item" th:text="*{user.passport?.issuedBy}"></div>
                                     </div>
                                     <div class="info__row">
                                         <div class="info__item">Адрес регистрации</div>
