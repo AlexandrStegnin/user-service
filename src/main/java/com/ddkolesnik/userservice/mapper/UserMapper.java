@@ -167,7 +167,7 @@ public abstract class UserMapper {
   }
 
   protected boolean convertAccredited(BitrixContact bitrixContact) {
-    return !Objects.isNull(bitrixContact.getContactAccredited()) && bitrixContact.getContactAccredited() != 0;
+    return Objects.nonNull(bitrixContact.getContactAccredited()) && bitrixContact.getContactAccredited() != 0;
   }
 
   public Parameter getUpdatedFields(UserDTO dto, UserDTO dbUser) {
