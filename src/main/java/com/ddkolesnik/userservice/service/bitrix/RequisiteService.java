@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
-import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.ENTITY_ID;
-import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.ENTITY_TYPE_ID;
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 
 /**
  * @author Alexandr Stegnin
@@ -34,11 +34,7 @@ public class RequisiteService extends BitrixService {
     this.requisiteMapper = requisiteMapper;
   }
 
-  public Requisite findRequisite(String entityId) {
-    var filter = new LinkedHashMap<String, String>();
-    filter.put(ENTITY_TYPE_ID, "3");
-    filter.put(ENTITY_ID, entityId);
-
+  public Requisite findRequisite(Map<String, String> filter) {
     var requisiteFilter = new RequisiteFilter(filter);
     var requisite = restTemplate.exchange(bitrixProperty.getRequisiteList(),
         HttpMethod.POST, new HttpEntity<>(requisiteFilter), RequisiteResult.class);
@@ -52,6 +48,23 @@ public class RequisiteService extends BitrixService {
       return null;
     }
     return requisites.get(0);
+  }
+
+  public Requisite findRequisite(String entityId) {
+    var filter = new LinkedHashMap<String, String>();
+    filter.put(ENTITY_TYPE_ID, "3");
+    filter.put(ENTITY_ID, entityId);
+
+    return findRequisite(filter);
+  }
+
+  public Requisite findRequisite(String entityId, int presetId) {
+    var filter = new LinkedHashMap<String, String>();
+    filter.put(ENTITY_TYPE_ID, "3");
+    filter.put(ENTITY_ID, entityId);
+    filter.put(PRESET_ID, String.valueOf(presetId));
+
+    return findRequisite(filter);
   }
 
   public Requisite findRequisite(UserDTO dto) {

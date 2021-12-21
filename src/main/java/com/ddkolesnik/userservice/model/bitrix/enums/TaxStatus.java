@@ -16,22 +16,21 @@ import java.util.stream.Stream;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum TaxStatus {
 
-  INDIVIDUAL("ФИЗ ЛИЦО", 2303),
-  LEGAL_ENTITY("ЮР ЛИЦО", 2304),
-  BUSINESSMAN("ИП", 2305),
-  SELF_EMPLOYED("САМОЗАНЯТЫЙ", 2306);
+  INDIVIDUAL("ФИЗ ЛИЦО", 2303, 3),
+  LEGAL_ENTITY("ЮР ЛИЦО", 2304, 1),
+  BUSINESSMAN("ИП", 2305, 5),
+  SELF_EMPLOYED("САМОЗАНЯТЫЙ", 2306, 3);
 
   String title;
   int code;
+  int presetId;
 
   public static TaxStatus fromCode(Integer code) {
-    if (Objects.isNull(code)) {
-      return null;
-    }
     return Stream.of(values())
+        .filter(Objects::nonNull)
         .filter(value -> value.getCode() == code)
         .findAny()
-        .orElse(null);
+        .orElseThrow(IllegalArgumentException::new);
   }
 
 }

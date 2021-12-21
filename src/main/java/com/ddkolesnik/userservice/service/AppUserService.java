@@ -4,6 +4,7 @@ import com.ddkolesnik.userservice.configuration.exception.UserNotFoundException;
 import com.ddkolesnik.userservice.enums.OwnerType;
 import com.ddkolesnik.userservice.mapper.BalanceMapper;
 import com.ddkolesnik.userservice.mapper.UserMapper;
+import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.AccountDTO;
 import com.ddkolesnik.userservice.model.dto.BalanceDTO;
@@ -71,7 +72,8 @@ public class AppUserService {
   public UserDTO findUser(String phone) {
     var contact = bitrixContactService.getContact(phone);
     var dto = userMapper.toDTO(contact);
-    var requisite = requisiteService.findRequisite(contact.getId().toString());
+    var taxStatus = TaxStatus.fromCode(contact.getTaxStatus());
+    var requisite = requisiteService.findRequisite(contact.getId().toString(), taxStatus.getPresetId());
     userMapper.updatePassport(requisite, dto);
     userMapper.updateBirthdate(requisite, dto);
     if (Objects.nonNull(requisite)) {

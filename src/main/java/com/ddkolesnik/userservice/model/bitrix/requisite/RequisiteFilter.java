@@ -1,12 +1,9 @@
 package com.ddkolesnik.userservice.model.bitrix.requisite;
 
-import java.util.LinkedHashMap;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Map;
 
 /**
  * @author Aleksandr Stegnin on 14.07.2021
@@ -18,6 +15,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequisiteFilter {
 
-  LinkedHashMap<String, String> filter;
+  Map<String, String> filter;
 
 }
