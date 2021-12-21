@@ -63,10 +63,10 @@ public class AddressService extends BitrixService {
     }
   }
 
-  public void createAddress(UserDTO dto) {
+  public void createAddress(UserDTO dto, int presetId) {
     try {
       var address = Address.builder()
-          .fields(prepareAddressFields(dto))
+          .fields(prepareAddressFields(dto, presetId))
           .build();
       ParameterizedTypeReference<LinkedHashMap<String, Object>> responseType =
           new ParameterizedTypeReference<>() {
@@ -83,9 +83,9 @@ public class AddressService extends BitrixService {
     }
   }
 
-  public void updateAddress(UserDTO dto) {
+  public void updateAddress(UserDTO dto, int presetId) {
     var addressUpdate = Address.builder()
-        .fields(prepareAddressFields(dto))
+        .fields(prepareAddressFields(dto, presetId))
         .build();
     var update = restTemplate.exchange(bitrixProperty.getAddressUpdate(),
         HttpMethod.POST, new HttpEntity<>(addressUpdate), Object.class);
@@ -93,8 +93,8 @@ public class AddressService extends BitrixService {
     log.info("Результат обновления адреса {}", updated);
   }
 
-  private Map<String, Object> prepareAddressFields(UserDTO userDTO) {
-    var requisite = requisiteService.findRequisite(userDTO);
+  private Map<String, Object> prepareAddressFields(UserDTO userDTO, Integer presetId) {
+    var requisite = requisiteService.findRequisite(userDTO, presetId);
     var fields = new LinkedHashMap<String, Object>();
     if (Objects.isNull(requisite)) {
       log.error("Реквизит не найден: {}", userDTO);

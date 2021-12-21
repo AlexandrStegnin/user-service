@@ -33,8 +33,8 @@ public class BankRequisiteService extends BitrixService {
     this.requisiteService = requisiteService;
   }
 
-  public BankRequisite findRequisites(String entityId) {
-    var requisite = requisiteService.findRequisite(entityId);
+  public BankRequisite findRequisites(String entityId, Integer presetId) {
+    var requisite = requisiteService.findRequisite(entityId, presetId);
     if (Objects.isNull(requisite)) {
       log.error("Реквизит не найден");
       return null;

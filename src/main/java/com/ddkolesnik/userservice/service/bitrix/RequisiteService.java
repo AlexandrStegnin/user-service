@@ -34,7 +34,7 @@ public class RequisiteService extends BitrixService {
     this.requisiteMapper = requisiteMapper;
   }
 
-  public Requisite findRequisite(Map<String, String> filter) {
+  private Requisite findRequisite(Map<String, String> filter) {
     var requisiteFilter = new RequisiteFilter(filter);
     var requisite = restTemplate.exchange(bitrixProperty.getRequisiteList(),
         HttpMethod.POST, new HttpEntity<>(requisiteFilter), RequisiteResult.class);
@@ -50,15 +50,7 @@ public class RequisiteService extends BitrixService {
     return requisites.get(0);
   }
 
-  public Requisite findRequisite(String entityId) {
-    var filter = new LinkedHashMap<String, String>();
-    filter.put(ENTITY_TYPE_ID, "3");
-    filter.put(ENTITY_ID, entityId);
-
-    return findRequisite(filter);
-  }
-
-  public Requisite findRequisite(String entityId, int presetId) {
+  public Requisite findRequisite(String entityId, Integer presetId) {
     var filter = new LinkedHashMap<String, String>();
     filter.put(ENTITY_TYPE_ID, "3");
     filter.put(ENTITY_ID, entityId);
@@ -67,8 +59,8 @@ public class RequisiteService extends BitrixService {
     return findRequisite(filter);
   }
 
-  public Requisite findRequisite(UserDTO dto) {
-    return findRequisite(dto.getId().toString());
+  public Requisite findRequisite(UserDTO dto, Integer presetId) {
+    return findRequisite(dto.getId().toString(), presetId);
   }
 
   public void createRequisite(UserDTO dto) {

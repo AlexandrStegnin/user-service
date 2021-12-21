@@ -3,6 +3,7 @@ package com.ddkolesnik.userservice.service;
 import com.ddkolesnik.userservice.configuration.exception.BitrixException;
 import com.ddkolesnik.userservice.mapper.UserMapper;
 import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
+import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.AppUserDTO;
 import com.ddkolesnik.userservice.model.dto.ChangePasswordDTO;
@@ -87,20 +88,21 @@ public class UserService {
     businessProcessService.notifyAboutUpdatedFields(dto, dbUser);
 
     var contact = bitrixContactService.getContact(dto);
+    var taxStatus = TaxStatus.fromCode(contact.getTaxStatus());
     dto.setId(contact.getId());
-    var requisite = requisiteService.findRequisite(dto);
+    var requisite = requisiteService.findRequisite(dto, taxStatus.getPresetId());
     if (Objects.isNull(requisite)) {
       requisiteService.createRequisite(dto);
-      requisite = requisiteService.findRequisite(dto);
+      requisite = requisiteService.findRequisite(dto, taxStatus.getPresetId());
     } else {
       requisiteService.updateRequisite(requisite, dto);
     }
     if (Objects.nonNull(dto.getAddress())) {
       var address = addressService.findAddress(requisite);
       if (Objects.isNull(address)) {
-        addressService.createAddress(dto);
+        addressService.createAddress(dto, taxStatus.getPresetId());
       } else {
-        addressService.updateAddress(dto);
+        addressService.updateAddress(dto, taxStatus.getPresetId());
       }
     }
     bitrixContactService.updateContact(dto);

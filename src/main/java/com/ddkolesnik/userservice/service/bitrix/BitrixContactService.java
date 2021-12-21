@@ -5,6 +5,7 @@ import com.ddkolesnik.userservice.configuration.property.BitrixProperty;
 import com.ddkolesnik.userservice.mapper.ContactMapper;
 import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
+import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.enums.ValueType;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
@@ -62,7 +63,8 @@ public class BitrixContactService extends BitrixService {
 
   public BitrixContact getContact(String phone) {
     var contact = bitrixWebClient.getContact(phone);
-    var bankRequisites = bankRequisiteService.findRequisites(contact.getId().toString());
+    var taxStatus = TaxStatus.fromCode(contact.getTaxStatus());
+    var bankRequisites = bankRequisiteService.findRequisites(contact.getId().toString(), taxStatus.getPresetId());
     contact.setBankRequisites(bankRequisites);
     return contact;
   }
