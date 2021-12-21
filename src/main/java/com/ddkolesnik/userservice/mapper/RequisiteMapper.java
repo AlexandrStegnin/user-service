@@ -25,7 +25,7 @@ public class RequisiteMapper {
     fields.put(CONTACT_INN, dto.getInn());
     var snils = dto.getSnils();
     if (Objects.nonNull(snils)) {
-      fields.put(CONTACT_SNILS, snils.getNumber());
+      fields.put(REQUISITE_SNILS, snils.getNumber());
     }
     convertBirthdateAndPlaceOfBirth(fields, dto);
     convertPassport(fields, dto);
