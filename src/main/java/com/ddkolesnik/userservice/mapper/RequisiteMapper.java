@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.mapper;
 
+import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +26,11 @@ public class RequisiteMapper {
     fields.put(CONTACT_INN, dto.getInn());
     var snils = dto.getSnils();
     if (Objects.nonNull(snils)) {
-      fields.put(CONTACT_SNILS, snils.getNumber());
+      if (TaxStatus.BUSINESSMAN == dto.getTaxStatus()) {
+        fields.put(BUSINESSMAN_SNILS, snils.getNumber());
+      } else {
+        fields.put(CONTACT_SNILS, snils.getNumber());
+      }
     }
     convertBirthdateAndPlaceOfBirth(fields, dto);
     convertPassport(fields, dto);
@@ -49,21 +54,21 @@ public class RequisiteMapper {
 
   private void convertBirthdateAndPlaceOfBirth(Map<String, Object> fields, UserDTO dto) {
     switch (dto.getTaxStatus()) {
-      case INDIVIDUAL:
-      case SELF_EMPLOYED:
+      case INDIVIDUAL, SELF_EMPLOYED -> {
         fields.put(PRESET_ID, PRESET_ID_FOR_INDIVIDUAL);
         fields.put(CONTACT_BIRTHDATE, dto.getBirthdate());
         fields.put(CONTACT_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
-        break;
-      case BUSINESSMAN:
+      }
+      case BUSINESSMAN -> {
         fields.put(PRESET_ID, PRESET_ID_FOR_BUSINESSMAN);
         fields.put(BUSINESSMAN_BIRTHDATE, dto.getBirthdate());
         fields.put(BUSINESSMAN_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
-        break;
-      case LEGAL_ENTITY:
+      }
+      case LEGAL_ENTITY -> {
         fields.put(PRESET_ID, PRESET_ID_FOR_LEGAL_ENTITY);
         fields.put(LEGAL_ENTITY_BIRTHDATE, dto.getBirthdate());
         fields.put(LEGAL_ENTITY_PLACE_OF_BIRTH, dto.getPlaceOfBirth());
+      }
     }
   }
 

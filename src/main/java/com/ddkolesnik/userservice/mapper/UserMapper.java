@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Alexandr Stegnin
@@ -59,7 +60,7 @@ public abstract class UserMapper {
   @Mapping(target = "accredited", expression = "java(convertAccredited(bitrixContact))")
   public abstract UserDTO toDTO(BitrixContact bitrixContact);
 
-  @Mapping(target = "snils", expression = "java(extractSnils(requisite))")
+  @Mapping(target = "snils", expression = "java(extractSnils(requisite, dto))")
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
@@ -72,45 +73,20 @@ public abstract class UserMapper {
   public abstract void updateAddress(BitrixAddress address, @MappingTarget UserDTO dto);
 
   protected String extractBirthdate(Requisite requisite, UserDTO dto) {
-    switch (dto.getTaxStatus()) {
-      case INDIVIDUAL:
-      case SELF_EMPLOYED:
-        if (Objects.nonNull(requisite.getBirthdate())) {
-          return DateUtils.convertToDDMMYYYY(requisite.getBirthdate().split("T")[0]);
-        }
-        break;
-      case BUSINESSMAN:
-        if (Objects.nonNull(requisite.getBusinessmanBirthdate())) {
-          return DateUtils.convertToDDMMYYYY(requisite.getBusinessmanBirthdate().split("T")[0]);
-        }
-        break;
-      case LEGAL_ENTITY:
-        if (Objects.nonNull(requisite.getLegalEntityBirthdate())) {
-          return DateUtils.convert(requisite.getLegalEntityBirthdate().split("T")[0]);
-        }
-    }
-    return null;
+    String birthdate = switch (dto.getTaxStatus()) {
+      case INDIVIDUAL, SELF_EMPLOYED -> Optional.ofNullable(requisite.getBirthdate()).orElse("");
+      case BUSINESSMAN -> Optional.ofNullable(requisite.getBusinessmanBirthdate()).orElse("");
+      case LEGAL_ENTITY -> Optional.ofNullable(requisite.getLegalEntityBirthdate()).orElse("");
+    };
+    return DateUtils.convertToDDMMYYYY(birthdate.split("T")[0]);
   }
 
   protected String extractPlaceOfBirth(Requisite requisite, UserDTO dto) {
-    switch (dto.getTaxStatus()) {
-      case INDIVIDUAL:
-      case SELF_EMPLOYED:
-        if (Objects.nonNull(requisite.getPlaceOfBirth())) {
-          return requisite.getPlaceOfBirth();
-        }
-        break;
-      case BUSINESSMAN:
-        if (Objects.nonNull(requisite.getBusinessmanPlaceOfBirth())) {
-          return requisite.getBusinessmanPlaceOfBirth();
-        }
-        break;
-      case LEGAL_ENTITY:
-        if (Objects.nonNull(requisite.getLegalEntityPlaceOfBirth())) {
-          return requisite.getLegalEntityPlaceOfBirth();
-        }
-    }
-    return null;
+    return switch (dto.getTaxStatus()) {
+      case INDIVIDUAL, SELF_EMPLOYED -> requisite.getPlaceOfBirth();
+      case BUSINESSMAN -> requisite.getBusinessmanPlaceOfBirth();
+      case LEGAL_ENTITY -> requisite.getLegalEntityPlaceOfBirth();
+    };
   }
 
   protected AppRole getInvestorRole() {
@@ -118,11 +94,10 @@ public abstract class UserMapper {
   }
 
   protected UserProfile getProfile(UserDTO dto, AppUser user) {
-    UserProfile profile = UserProfile.builder()
+    return UserProfile.builder()
         .email(dto.getEmail())
+        .user(user)
         .build();
-    profile.setUser(user);
-    return profile;
   }
 
   protected String extractEmail(BitrixContact bitrixContact) {
@@ -149,10 +124,16 @@ public abstract class UserMapper {
         .build();
   }
 
-  protected SnilsDTO extractSnils(Requisite requisite) {
-    return SnilsDTO.builder()
-        .number(requisite.getSnils())
-        .build();
+  protected SnilsDTO extractSnils(Requisite requisite, UserDTO dto) {
+    return switch (dto.getTaxStatus()) {
+      case SELF_EMPLOYED, INDIVIDUAL -> SnilsDTO.builder()
+          .number(requisite.getSnils())
+          .build();
+      case BUSINESSMAN -> SnilsDTO.builder()
+          .number(requisite.getBusinessmanSnils())
+          .build();
+      default -> SnilsDTO.builder().build();
+    };
   }
 
   protected String extractPhone(BitrixContact bitrixContact) {

@@ -23,6 +23,9 @@ public class Requisite {
   @JsonProperty(CONTACT_INN)
   String inn;
 
+  @JsonProperty(BUSINESSMAN_SNILS)
+  String businessmanSnils;
+
   @JsonProperty(CONTACT_SNILS)
   String snils;
 

@@ -22,7 +22,8 @@ public class BitrixFields {
   public static final String CONTACT_PHONE = "PHONE";
   public static final String CONTACT_TAX_STATUS = "UF_CRM_1633509856";
   public static final String CONTACT_INN = "RQ_INN";
-  public static final String CONTACT_SNILS = "UF_CRM_1569583111";
+  public static final String BUSINESSMAN_SNILS = "UF_CRM_1569583111";
+  public static final String CONTACT_SNILS = "UF_CRM_1631100860";
   public static final String CONTACT_IS_INDIVIDUAL ="UF_CRM_1623241031";
   public static final String CONTACT_IS_SELF_EMPLOYED = "UF_CRM_1623241054";
   public static final String CONTACT_NEW_PHONE = "UF_CRM_1630478597";
@@ -57,5 +58,6 @@ public class BitrixFields {
   public static final String LEGAL_ENTITY_BIRTHDATE = "UF_CRM_1637751380";
   public static final String LEGAL_ENTITY_PLACE_OF_BIRTH = "UF_CRM_1636710681";
   public static final String RETRY_CONFIRM_CODE = "UF_CRM_1625143364";
+  public static final String COMPANY_FULL_NAME = "RQ_COMPANY_FULL_NAME";
 
 }
