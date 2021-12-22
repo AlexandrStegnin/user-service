@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author Alexandr Stegnin
@@ -45,7 +44,7 @@ public class AccountTransactionService {
     return transactions
         .stream()
         .map(AccountTransactionDTO::new)
-        .collect(Collectors.toList());
+        .toList();
   }
 
 }
