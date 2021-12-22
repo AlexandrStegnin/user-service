@@ -23,7 +23,7 @@ public class Requisite {
   @JsonProperty(CONTACT_INN)
   String inn;
 
-  @JsonProperty(REQUISITE_SNILS)
+  @JsonProperty(CONTACT_SNILS)
   String snils;
 
   @JsonProperty(PASSPORT_SERIAL)

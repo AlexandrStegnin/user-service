@@ -46,7 +46,6 @@ public class ContactListFilter {
     select.add(CONTACT_ADDRESS);
     select.add(IS_CONTACT_ACCREDITED);
     select.add(RETRY_CONFIRM_CODE);
-    select.add(CONTACT_SNILS);
   }
 
   public ContactListFilter(Map<String, String[]> filter) {

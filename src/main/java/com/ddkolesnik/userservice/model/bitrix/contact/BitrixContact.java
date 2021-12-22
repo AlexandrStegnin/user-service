@@ -91,11 +91,4 @@ public class BitrixContact {
   @JsonProperty(RETRY_CONFIRM_CODE)
   String retryConfirmCode;
 
-  @JsonProperty(CONTACT_SNILS)
-  String contactSnils;
-
-  public String getContactSnils() {
-    return contactSnils.replaceAll("[^0-9]+", "");
-  }
-
 }
