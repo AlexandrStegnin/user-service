@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 /**
  * @author Alexandr Stegnin
  */
@@ -17,5 +19,11 @@ public class SnilsDTO implements Scanned {
 
   String number;
   MultipartFile[] scans;
+
+  public String getNumber() {
+    return Optional.ofNullable(this.number)
+        .map(n -> n.replaceAll("[^0-9]+", ""))
+        .orElse("");
+  }
 
 }
