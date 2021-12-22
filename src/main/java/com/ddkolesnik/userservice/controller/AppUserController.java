@@ -2,6 +2,7 @@ package com.ddkolesnik.userservice.controller;
 
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import com.ddkolesnik.userservice.service.AppUserService;
+import com.ddkolesnik.userservice.utils.PhoneUtils;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,6 @@ public class AppUserController {
 
   private void addAttributes(Model model, UserDTO dto) {
     model.addAttribute(USER, dto);
-    model.addAttribute(LOGIN, dto.getFormattedPhone());
+    model.addAttribute(LOGIN, PhoneUtils.getFormattedPhone(dto.getPhone()));
   }
 }
