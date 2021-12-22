@@ -1,5 +1,6 @@
 package com.ddkolesnik.userservice.service;
 
+import com.ddkolesnik.userservice.configuration.exception.UserNotFoundException;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.repository.AppUserRepository;
 import com.ddkolesnik.userservice.utils.PhoneUtils;
@@ -28,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     phone = PhoneUtils.cleanPhone(phone);
     Optional<AppUser> optionalAppUser = appUserRepository.findByPhone(phone);
     return optionalAppUser
-        .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
   }
 
 }
