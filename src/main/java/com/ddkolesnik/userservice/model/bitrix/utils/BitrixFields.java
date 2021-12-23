@@ -50,6 +50,7 @@ public class BitrixFields {
   public static final String TYPE_ID = "TYPE_ID";
   public static final String ADDRESS_2 = "ADDRESS_2";
   public static final String REGISTRATION_ADDRESS = "4";
+  public static final String LEGAL_ADDRESS = "6";
   public static final String PRESET_ID_FOR_INDIVIDUAL = "3";
   public static final String PRESET_ID_FOR_LEGAL_ENTITY = "1";
   public static final String PRESET_ID_FOR_BUSINESSMAN = "5";
@@ -59,5 +60,9 @@ public class BitrixFields {
   public static final String LEGAL_ENTITY_PLACE_OF_BIRTH = "UF_CRM_1636710681";
   public static final String RETRY_CONFIRM_CODE = "UF_CRM_1625143364";
   public static final String COMPANY_FULL_NAME = "RQ_COMPANY_FULL_NAME";
+  public static final String LEGAL_ENTITY_PASSPORT_SN = "UF_CRM_1618481013";
+  public static final String LEGAL_ENTITY_PASSPORT_ISSUED_AT = "UF_CRM_1618481038";
+  public static final String LEGAL_ENTITY_PASSPORT_ISSUED_BY = "UF_CRM_1618481053";
+  public static final String LEGAL_ENTITY_PASSPORT_DEP_CODE = "UF_CRM_1618481115";
 
 }

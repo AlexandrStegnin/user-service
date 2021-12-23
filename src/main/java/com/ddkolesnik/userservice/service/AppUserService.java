@@ -77,7 +77,7 @@ public class AppUserService {
     userMapper.updatePassport(requisite, dto);
     userMapper.updateBirthdate(requisite, dto);
     if (Objects.nonNull(requisite)) {
-      var address = addressService.findAddress(requisite);
+      var address = addressService.findAddress(requisite, dto.getTaxStatus());
       userMapper.updateAddress(address, dto);
     }
     fetchBalance(dto);

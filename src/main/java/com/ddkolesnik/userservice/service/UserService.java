@@ -98,7 +98,7 @@ public class UserService {
       requisiteService.updateRequisite(requisite, dto);
     }
     if (Objects.nonNull(dto.getAddress())) {
-      var address = addressService.findAddress(requisite);
+      var address = addressService.findAddress(requisite, dto.getTaxStatus());
       if (Objects.isNull(address)) {
         addressService.createAddress(dto, taxStatus.getPresetId());
       } else {

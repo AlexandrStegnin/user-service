@@ -6,6 +6,7 @@ import com.ddkolesnik.userservice.model.bitrix.address.Address;
 import com.ddkolesnik.userservice.model.bitrix.address.AddressFilter;
 import com.ddkolesnik.userservice.model.bitrix.address.AddressResult;
 import com.ddkolesnik.userservice.model.bitrix.address.BitrixAddress;
+import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.requisite.Requisite;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
 import lombok.AccessLevel;
@@ -39,11 +40,15 @@ public class AddressService extends BitrixService {
     this.requisiteService = requisiteService;
   }
 
-  public BitrixAddress findAddress(Requisite requisite) {
+  public BitrixAddress findAddress(Requisite requisite, TaxStatus taxStatus) {
     try {
       var filter = new LinkedHashMap<String, String>();
       filter.put(ENTITY_TYPE_ID, "8");
-      filter.put(TYPE_ID, REGISTRATION_ADDRESS);
+      if (TaxStatus.LEGAL_ENTITY == taxStatus) {
+        filter.put(TYPE_ID, LEGAL_ADDRESS);
+      } else {
+        filter.put(TYPE_ID, REGISTRATION_ADDRESS);
+      }
       filter.put(ENTITY_ID, requisite.getId());
       var addressFilter = new AddressFilter(filter);
       var address = restTemplate.exchange(bitrixProperty.getAddressList(),
@@ -101,7 +106,11 @@ public class AddressService extends BitrixService {
     } else {
       fields.put(ENTITY_ID, requisite.getId());
     }
-    fields.put(TYPE_ID, 4);
+    if (TaxStatus.LEGAL_ENTITY == userDTO.getTaxStatus()) {
+      fields.put(TYPE_ID, LEGAL_ADDRESS);
+    } else {
+      fields.put(TYPE_ID, REGISTRATION_ADDRESS);
+    }
     fields.put(ENTITY_TYPE_ID, 8);
     prepareAddress(fields, userDTO);
     return fields;
