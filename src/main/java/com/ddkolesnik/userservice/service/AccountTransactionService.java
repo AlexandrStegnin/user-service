@@ -26,7 +26,6 @@ public class AccountTransactionService {
 
   AccountTransactionRepository accountTransactionRepository;
   AppUserService appUserService;
-  AccountService accountService;
 
   public BalanceDTO getBalanceByInvestorPhone(String investorLogin) {
     AppUser user = appUserService.findByPhone(investorLogin);
