@@ -75,4 +75,16 @@ public class Requisite {
   @JsonProperty(COMPANY_FULL_NAME)
   String companyFullName;
 
+  @JsonProperty(LEGAL_ENTITY_PASSPORT_SN)
+  String legalEntityPassportSN;
+
+  @JsonProperty(LEGAL_ENTITY_PASSPORT_ISSUED_AT)
+  String legalEntityPassportIssuedAt;
+
+  @JsonProperty(LEGAL_ENTITY_PASSPORT_ISSUED_BY)
+  String legalEntityPassportIssuedBy;
+
+  @JsonProperty(LEGAL_ENTITY_PASSPORT_DEP_CODE)
+  String legalEntityPassportDepCode;
+
 }

@@ -61,7 +61,7 @@ public abstract class UserMapper {
   public abstract UserDTO toDTO(BitrixContact bitrixContact);
 
   @Mapping(target = "snils", expression = "java(extractSnils(requisite, dto))")
-  @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
+  @Mapping(target = "passport", expression = "java(extractPassport(requisite, dto))")
   @Mapping(target = "companyFullName", expression = "java(getFullName(requisite, dto))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
@@ -122,7 +122,15 @@ public abstract class UserMapper {
     return null;
   }
 
-  protected PassportDTO extractPassport(Requisite requisite) {
+  protected PassportDTO extractPassport(Requisite requisite, UserDTO dto) {
+    if (TaxStatus.LEGAL_ENTITY == dto.getTaxStatus()) {
+      return PassportDTO.builder()
+          .serial(requisite.getLegalEntityPassportSN())
+          .issuedBy(requisite.getLegalEntityPassportIssuedBy())
+          .departmentCode(requisite.getLegalEntityPassportDepCode())
+          .issuedAt(requisite.getLegalEntityPassportIssuedAt())
+          .build();
+    }
     return PassportDTO.builder()
         .serial(requisite.getSerial())
         .issuedBy(requisite.getIssuedBy())
