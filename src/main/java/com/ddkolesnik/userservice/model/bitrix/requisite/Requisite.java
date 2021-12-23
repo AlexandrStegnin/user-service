@@ -48,9 +48,8 @@ public class Requisite {
   @JsonProperty(ENTITY_ID)
   String contactId;
 
-  @Builder.Default
   @JsonProperty(PRESET_ID)
-  String presetId = "5";
+  String presetId;
 
   @JsonProperty(PASSPORT_ISSUED_AT)
   String issuedAt;
@@ -72,5 +71,8 @@ public class Requisite {
 
   @JsonProperty(LEGAL_ENTITY_PLACE_OF_BIRTH)
   String legalEntityPlaceOfBirth;
+
+  @JsonProperty(COMPANY_FULL_NAME)
+  String companyFullName;
 
 }

@@ -62,6 +62,7 @@ public abstract class UserMapper {
 
   @Mapping(target = "snils", expression = "java(extractSnils(requisite, dto))")
   @Mapping(target = "passport", expression = "java(extractPassport(requisite))")
+  @Mapping(target = "companyFullName", expression = "java(getFullName(requisite, dto))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
   @Mapping(target = "snils", ignore = true)
@@ -98,6 +99,13 @@ public abstract class UserMapper {
         .email(dto.getEmail())
         .user(user)
         .build();
+  }
+
+  protected String getFullName(Requisite requisite, UserDTO dto) {
+    if (TaxStatus.LEGAL_ENTITY == dto.getTaxStatus()) {
+      return requisite.getCompanyFullName();
+    }
+    return null;
   }
 
   protected String extractEmail(BitrixContact bitrixContact) {

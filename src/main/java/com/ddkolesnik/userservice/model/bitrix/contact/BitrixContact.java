@@ -91,7 +91,4 @@ public class BitrixContact {
   @JsonProperty(RETRY_CONFIRM_CODE)
   String retryConfirmCode;
 
-  @JsonProperty(COMPANY_FULL_NAME)
-  String companyFullName;
-
 }
