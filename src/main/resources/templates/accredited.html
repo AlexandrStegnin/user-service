@@ -84,15 +84,15 @@
                                         <div class="info__item">ИНН</div>
                                         <div class="info__item" th:text="*{user.inn}"></div>
                                     </div>
-                                    <div class="info__row">
+                                    <div class="info__row" th:if="*{user.getTaxStatus().name() != 'LEGAL_ENTITY'}">
                                         <div class="info__item">СНИЛС</div>
                                         <div class="info__item" th:text="*{user.snils?.number}"></div>
                                     </div>
-                                    <div class="info__row">
+                                    <div class="info__row" th:if="*{user.getTaxStatus().name() != 'LEGAL_ENTITY'}">
                                         <div class="info__item">Дата рождения</div>
                                         <div class="info__item" th:text="*{user.birthdate}"></div>
                                     </div>
-                                    <div class="info__row">
+                                    <div class="info__row" th:if="*{user.getTaxStatus().name() != 'LEGAL_ENTITY'}">
                                         <div class="info__item">Место рождения</div>
                                         <div class="info__item" th:text="*{user.placeOfBirth}"></div>
                                     </div>
