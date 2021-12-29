@@ -51,7 +51,7 @@ public class AppUserService {
 
   public void create(AppUser appUser) {
     var user = appUserRepository.save(appUser);
-    var account = accountService.findByOwnerId(user.getId(), OwnerType.INVESTOR);
+    var account = accountService.findByInvestorId(user.getId());
     if (Objects.isNull(account)) {
       accountService.createAccount(user);
     }
@@ -90,9 +90,9 @@ public class AppUserService {
   }
 
   private void updateAccount(AppUser user) {
-    var account = accountService.findByOwnerId(user.getId(), OwnerType.INVESTOR);
+    var account = accountService.findByInvestorId(user.getId());
     if (Objects.nonNull(account)) {
-      account.setAccountNumber(user.getPhone());
+      account.setAccountNumber(user.getAccountNumber());
       accountService.update(account);
     }
   }
@@ -102,7 +102,9 @@ public class AppUserService {
     AccountDTO accountDTO = accountTransactionRepository.fetchBalance(OwnerType.INVESTOR, investor.getId());
     BalanceDTO balance = balanceMapper.toBalance(accountDTO);
     if (Objects.isNull(balance)) {
-      balance = BalanceDTO.builder().build();
+      balance = BalanceDTO.builder()
+          .accountNumber(investor.getAccountNumber())
+          .build();
     }
     dto.setBalance(balance);
   }

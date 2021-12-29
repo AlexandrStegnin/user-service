@@ -32,11 +32,7 @@ public class AccountService {
   }
 
   private String generateAccountNumber(AppUser user) {
-    return user.getPhone();
-  }
-
-  public Account findByOwnerId(Long ownerId, OwnerType ownerType) {
-    return accountRepository.findByOwnerIdAndOwnerType(ownerId, ownerType);
+    return user.getAccountNumber();
   }
 
   public void update(Account account) {
@@ -44,7 +40,7 @@ public class AccountService {
   }
 
   public Account findByInvestorId(Long ownerId) {
-    return findByOwnerId(ownerId, OwnerType.INVESTOR);
+    return accountRepository.findByOwnerIdAndOwnerType(ownerId, OwnerType.INVESTOR);
   }
 
 }
