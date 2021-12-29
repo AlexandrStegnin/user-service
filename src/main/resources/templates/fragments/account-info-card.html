@@ -9,13 +9,13 @@
         <div class="info-card info-card--l info-card--flex">
             <div class="info-card__name" th:text="*{user.balance.accountNumber} ? *{'Счёт № ' + user.balance.accountNumber} : 'Счёт не найден'"></div>
             <div class="info-card__item">
-                <span>Свободно </span><span th:text="${#numbers.formatDecimal(user.balance.sum, 1, 'WHITESPACE', 2, 'COMMA') + ' руб.'}"></span>
+                <span>Свободно </span><span th:text="${#numbers.formatDecimal(user.balance.sum, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>
             </div>
             <div class="info-card__item">
-                <span>В инвестициях </span ><span th:text="${#numbers.formatDecimal(0, 1, 'WHITESPACE', 2, 'COMMA') + ' руб.'}"></span>
+                <span>В инвестициях </span ><span th:text="${#numbers.formatDecimal(0, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>
             </div>
             <div class="info-card__item">
-                <span>Заработано </span><span th:text="${#numbers.formatDecimal(0, 1, 'WHITESPACE', 2, 'COMMA') + ' руб.'}"></span>
+                <span>Заработано </span><span th:text="${#numbers.formatDecimal(0, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>
             </div>
         </div>
     </div>
