@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Optional;
+
 /**
  * @author Alexandr Stegnin
  */
@@ -26,6 +28,16 @@ public class BitrixAddress {
   String entityId;
 
   @JsonProperty("ADDRESS_2")
-  String address;
+  String address2;
+
+  @JsonProperty("ADDRESS_1")
+  String address1;
+
+  public String getAddress() {
+    return Optional.ofNullable(address1).orElse("")
+        .concat(" ")
+        .concat(Optional.ofNullable(address2).orElse(""))
+        .stripLeading();
+  }
 
 }
