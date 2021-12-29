@@ -17,8 +17,8 @@ Attachment.prototype = {
 }
 
 jQuery(document).ready(function ($) {
-    blurElement($('.out'), 4);
-    checkAttachments(null);
+    // blurElement($('.out'), 4);
+    // checkAttachments(null);
     $('#look').on('click', function () {
         $('#read-attachment').css('display', 'none');
         $('#read-attachment-table').modal('show')
@@ -26,16 +26,15 @@ jQuery(document).ready(function ($) {
 
     $('#closed-projects').on('click', function (e) {
         e.preventDefault()
-        getAttachments(null)
-        $('#read-attachment-table').modal('show');
+        getAttachments()
     });
 
-    $("#read-attachment-table").on("hidden.bs.modal", function () {
-        let readAttachment = $('#read-attachment')
-        if (readAttachment.css('z-index') !== '-1000001') {
-            readAttachment.css('display', 'block');
-        }
-    });
+    // $("#read-attachment-table").on("hidden.bs.modal", function () {
+    //     let readAttachment = $('#read-attachment')
+    //     if (readAttachment.css('z-index') !== '-1000001') {
+    //         readAttachment.css('display', 'block');
+    //     }
+    // });
     $(document).on('change', 'input[type="checkbox"]:checked', function () {
         let userId = $(this).data('user-id');
         let attachment = {
@@ -58,7 +57,7 @@ jQuery(document).ready(function ($) {
 function toggleAttachmentModal(have) {
     let readAttachment = $('#read-attachment');
     if (have === true) {
-        getAttachments(null);
+        getAttachments();
         blurElement($('.out'), 4);
         readAttachment.css('z-index', '1000001');
         readAttachment.css('display', 'block');
@@ -108,24 +107,14 @@ function checkAttachments(login) {
         })
 }
 
-/**
- * Получить приложения к договорам инвестора
- *
- * @param login
- */
-function getAttachments(login) {
+function getAttachments() {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
-
-    let user = {
-        login: login
-    };
 
     $.ajax({
         type: "POST",
         contentType: "application/json;charset=utf-8",
         url: "get-attachments",
-        data: JSON.stringify(user),
         dataType: 'json',
         timeout: 100000,
         beforeSend: function (xhr) {
@@ -133,7 +122,7 @@ function getAttachments(login) {
         }
     })
         .done(function (data) {
-            createAttachmentTable(data);
+            createAndShowAttachmentTable(data);
         })
         .fail(function (e) {
             console.log(e);
@@ -147,7 +136,7 @@ function getAttachments(login) {
  *
  * @param attachments
  */
-function createAttachmentTable(attachments) {
+function createAndShowAttachmentTable(attachments) {
 
     let body = $('table#attachment-table').find('tbody');
     let tr, td, a, label, input, strDate;
@@ -189,6 +178,7 @@ function createAttachmentTable(attachments) {
         td.attr('id', 'attachment-date-' + annex.id);
         td.appendTo(tr);
     });
+    $('#read-attachment-table').modal('show');
 }
 
 /**
@@ -215,8 +205,8 @@ function markRead(id) {
         }
     })
         .done(function (data) {
-            let haveUnread = data.message === 'true'
-            toggleAttachmentModal(haveUnread)
+            // let haveUnread = data.message === 'true'
+            // toggleAttachmentModal(haveUnread)
         })
         .fail(function (e) {
             console.log('Произошла ошибка - ' + e.toString());
