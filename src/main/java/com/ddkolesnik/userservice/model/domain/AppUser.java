@@ -47,6 +47,10 @@ public class AppUser implements UserDetails {
 
   Integer bitrixId;
 
+  public String getAccountNumber() {
+    return this.phone.replace("+", "");
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(role::getName);
