@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ddkolesnik.userservice.configuration.Location.UNION_PROFIT;
 
@@ -35,7 +34,7 @@ public class ProfitController {
 
     List<CompanyInvestorProfit> profitUnions = companyProfits.stream()
         .map(CompanyInvestorProfit::new)
-        .collect(Collectors.toList());
+        .toList();
 
     profitUnions.forEach(profitUnion -> investorProfits.stream()
         .filter(investorProfit -> investorProfit.getYearSale() == profitUnion.getYearSale())
