@@ -6,6 +6,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Optional;
 
+import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
+
 /**
  * @author Alexandr Stegnin
  */
@@ -17,20 +19,20 @@ import java.util.Optional;
 public class BitrixAddress {
 
   @Builder.Default
-  @JsonProperty("TYPE_ID")
+  @JsonProperty(TYPE_ID)
   String typeId = "1";
 
   @Builder.Default
-  @JsonProperty("ENTITY_TYPE_ID")
+  @JsonProperty(ENTITY_TYPE_ID)
   String entityTypeId = "8";
 
-  @JsonProperty("ENTITY_ID")
+  @JsonProperty(ENTITY_ID)
   String entityId;
 
-  @JsonProperty("ADDRESS_2")
+  @JsonProperty(ADDRESS_2)
   String address2;
 
-  @JsonProperty("ADDRESS_1")
+  @JsonProperty(ADDRESS_1)
   String address1;
 
   public String getAddress() {
