@@ -1,7 +1,9 @@
 package com.ddkolesnik.userservice.controller;
 
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.model.view.KindOnProject;
 import com.ddkolesnik.userservice.service.AppUserService;
+import com.ddkolesnik.userservice.service.view.KindOnProjectService;
 import com.ddkolesnik.userservice.utils.PhoneUtils;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
 import lombok.AccessLevel;
@@ -10,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.math.BigDecimal;
 
 import static com.ddkolesnik.userservice.configuration.Location.*;
 
@@ -26,6 +30,7 @@ public class AppUserController {
   private static final String USER = "user";
 
   AppUserService appUserService;
+  KindOnProjectService kindOnProjectService;
 
   @GetMapping(path = PROFILE)
   public String profile(Model model) {
@@ -62,5 +67,13 @@ public class AppUserController {
   private void addAttributes(Model model, UserDTO dto) {
     model.addAttribute(USER, dto);
     model.addAttribute(LOGIN, PhoneUtils.getFormattedPhone(dto.getPhone()));
+    model.addAttribute("invested", fetchInvestedCash(PhoneUtils.getFormattedPhone(dto.getPhone())));
+  }
+
+  private BigDecimal fetchInvestedCash(String phone) {
+    return kindOnProjectService.findByInvestorPhone(phone).stream()
+        .distinct()
+        .map(KindOnProject::getGivenCash)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }

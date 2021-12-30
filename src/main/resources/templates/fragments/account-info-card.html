@@ -12,7 +12,7 @@
                 <span>Свободно </span><span th:text="${#numbers.formatDecimal(user.balance.sum, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>
             </div>
             <div class="info-card__item">
-                <span>В инвестициях </span ><span th:text="${#numbers.formatDecimal(0, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>
+                <span>В инвестициях </span ><span th:text="${#numbers.formatDecimal(invested, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>
             </div>
             <div class="info-card__item">
                 <span>Заработано </span><span th:text="${#numbers.formatDecimal(0, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>

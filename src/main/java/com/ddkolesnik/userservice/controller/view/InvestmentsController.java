@@ -55,8 +55,7 @@ public class InvestmentsController {
   }
 
   private BigDecimal fetchInvestedCash(String phone) {
-    var kindOnProjects = kindOnProjectService.findByInvestorPhone(phone);
-    return kindOnProjects.stream()
+    return kindOnProjectService.findByInvestorPhone(phone).stream()
         .distinct()
         .map(KindOnProject::getGivenCash)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
