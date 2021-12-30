@@ -4,6 +4,7 @@ import com.ddkolesnik.userservice.configuration.exception.UserNotFoundException;
 import com.ddkolesnik.userservice.enums.OwnerType;
 import com.ddkolesnik.userservice.mapper.BalanceMapper;
 import com.ddkolesnik.userservice.mapper.UserMapper;
+import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.domain.AppUser;
 import com.ddkolesnik.userservice.model.dto.AccountDTO;
@@ -81,20 +82,12 @@ public class AppUserService {
       userMapper.updateAddress(address, dto);
     }
     fetchBalance(dto);
+    updateAccount(phone, contact);
     return dto;
   }
 
   public void update(AppUser user) {
     appUserRepository.save(user);
-    updateAccount(user);
-  }
-
-  private void updateAccount(AppUser user) {
-    var account = accountService.findByInvestorId(user.getId());
-    if (Objects.nonNull(account)) {
-      account.setAccountNumber(user.getAccountNumber());
-      accountService.update(account);
-    }
   }
 
   private void fetchBalance(UserDTO dto) {
@@ -102,11 +95,18 @@ public class AppUserService {
     AccountDTO accountDTO = accountTransactionRepository.fetchBalance(OwnerType.INVESTOR, investor.getId());
     BalanceDTO balance = balanceMapper.toBalance(accountDTO);
     if (Objects.isNull(balance)) {
-      balance = BalanceDTO.builder()
-          .accountNumber(investor.getAccountNumber())
-          .build();
+      balance = BalanceDTO.builder().build();
     }
     dto.setBalance(balance);
+  }
+
+  private void updateAccount(String phone, BitrixContact contact) {
+    var investor = appUserRepository.findByPhone(phone).orElseThrow(UserNotFoundException::buildNotFoundException);
+    var account = accountService.findByInvestorId(investor.getId());
+    if (Objects.nonNull(account) && Objects.isNull(account.getAccountNumber())) {
+      account.setAccountNumber(contact.getInvestorNumber());
+      accountService.update(account);
+    }
   }
 
 }

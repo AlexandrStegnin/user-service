@@ -7,7 +7,7 @@
     </div>
     <div th:if="*{user.accredited}">
         <div class="info-card info-card--l info-card--flex">
-            <div class="info-card__name" th:text="*{user.balance.accountNumber} ? *{'Счёт № ' + user.balance.accountNumber} : 'Счёт не найден'"></div>
+            <div class="info-card__name" th:text="*{user.investorNumber} ? *{'Счёт № ' + user.investorNumber} : 'Счёт не найден'"></div>
             <div class="info-card__item">
                 <span>Свободно </span><span th:text="${#numbers.formatDecimal(user.balance.sum, 1, 'WHITESPACE', 0, 'COMMA') + ' руб.'}"></span>
             </div>

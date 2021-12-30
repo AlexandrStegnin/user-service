@@ -91,4 +91,7 @@ public class BitrixContact {
   @JsonProperty(RETRY_CONFIRM_CODE)
   String retryConfirmCode;
 
+  @JsonProperty(INVESTOR_NUMBER)
+  String investorNumber;
+
 }

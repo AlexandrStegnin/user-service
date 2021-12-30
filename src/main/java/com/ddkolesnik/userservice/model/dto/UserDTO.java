@@ -47,6 +47,7 @@ public class UserDTO {
   boolean accredited = false;
   BalanceDTO balance;
   String companyFullName;
+  String investorNumber;
 
   public String getPhone() {
     return PhoneUtils.cleanPhone(this.phone);

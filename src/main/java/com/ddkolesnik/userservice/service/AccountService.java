@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author Alexandr Stegnin
  */
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,15 +23,10 @@ public class AccountService {
 
   public void createAccount(AppUser user) {
     Account account = new Account();
-    account.setAccountNumber(generateAccountNumber(user));
     account.setOwnerId(user.getId());
     account.setOwnerType(OwnerType.INVESTOR);
     account.setOwnerName(user.getLogin());
     accountRepository.save(account);
-  }
-
-  private String generateAccountNumber(AppUser user) {
-    return user.getAccountNumber();
   }
 
   public void update(Account account) {

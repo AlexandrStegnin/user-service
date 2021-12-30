@@ -65,5 +65,6 @@ public class BitrixFields {
   public static final String LEGAL_ENTITY_PASSPORT_ISSUED_AT = "UF_CRM_1618481038";
   public static final String LEGAL_ENTITY_PASSPORT_ISSUED_BY = "UF_CRM_1618481053";
   public static final String LEGAL_ENTITY_PASSPORT_DEP_CODE = "UF_CRM_1618481115";
+  public static final String INVESTOR_NUMBER = "UF_CRM_1568363263537";
 
 }
