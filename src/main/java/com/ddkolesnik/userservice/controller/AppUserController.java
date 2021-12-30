@@ -1,8 +1,10 @@
 package com.ddkolesnik.userservice.controller;
 
 import com.ddkolesnik.userservice.model.dto.UserDTO;
+import com.ddkolesnik.userservice.model.view.InvestorProfit;
 import com.ddkolesnik.userservice.model.view.KindOnProject;
 import com.ddkolesnik.userservice.service.AppUserService;
+import com.ddkolesnik.userservice.service.view.InvestorProfitService;
 import com.ddkolesnik.userservice.service.view.KindOnProjectService;
 import com.ddkolesnik.userservice.utils.PhoneUtils;
 import com.ddkolesnik.userservice.utils.SecurityUtils;
@@ -31,6 +33,7 @@ public class AppUserController {
 
   AppUserService appUserService;
   KindOnProjectService kindOnProjectService;
+  InvestorProfitService investorProfitService;
 
   @GetMapping(path = PROFILE)
   public String profile(Model model) {
@@ -65,9 +68,11 @@ public class AppUserController {
   }
 
   private void addAttributes(Model model, UserDTO dto) {
+    var phone = PhoneUtils.getFormattedPhone(dto.getPhone());
     model.addAttribute(USER, dto);
-    model.addAttribute(LOGIN, PhoneUtils.getFormattedPhone(dto.getPhone()));
-    model.addAttribute("invested", fetchInvestedCash(PhoneUtils.getFormattedPhone(dto.getPhone())));
+    model.addAttribute(LOGIN, phone);
+    model.addAttribute("invested", fetchInvestedCash(phone));
+    model.addAttribute("profit", fetchInvestorProfit(phone));
   }
 
   private BigDecimal fetchInvestedCash(String phone) {
@@ -76,4 +81,13 @@ public class AppUserController {
         .map(KindOnProject::getGivenCash)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
+
+  private BigDecimal fetchInvestorProfit(String phone) {
+    var investorProfit = investorProfitService.findByPhone(phone);
+    return investorProfit.stream()
+        .distinct()
+        .map(InvestorProfit::getProfit)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
 }
