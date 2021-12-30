@@ -22,4 +22,8 @@ public class UserNotFoundException extends RuntimeException {
     this.status = HttpStatus.NOT_FOUND;
   }
 
+  public static UserNotFoundException buildNotFoundException() {
+    return new UserNotFoundException("User not found");
+  }
+
 }

@@ -60,11 +60,13 @@ public abstract class UserMapper {
   @Mapping(target = "accredited", expression = "java(convertAccredited(bitrixContact))")
   public abstract UserDTO toDTO(BitrixContact bitrixContact);
 
+  @Mapping(target = "id", ignore = true)
   @Mapping(target = "snils", expression = "java(extractSnils(requisite, dto))")
   @Mapping(target = "passport", expression = "java(extractPassport(requisite, dto))")
   @Mapping(target = "companyFullName", expression = "java(getFullName(requisite, dto))")
   public abstract void updatePassport(Requisite requisite, @MappingTarget UserDTO dto);
 
+  @Mapping(target = "id", ignore = true)
   @Mapping(target = "snils", ignore = true)
   @Mapping(target = "birthdate", expression = "java(extractBirthdate(requisite, dto))")
   @Mapping(target = "placeOfBirth", expression = "java(extractPlaceOfBirth(requisite, dto))")
