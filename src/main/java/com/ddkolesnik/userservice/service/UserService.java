@@ -53,10 +53,7 @@ public class UserService {
   public void confirm(UserDTO dto) {
     var contact = bitrixContactService.getContact(dto);
     if (!dto.getConfirmCode().equalsIgnoreCase(contact.getConfirmCode())) {
-      throw BitrixException.builder()
-          .status(HttpStatus.PRECONDITION_FAILED)
-          .message("Ошибка. Контакт не подтверждён")
-          .build();
+      throw BitrixException.build422Exception("Ошибка. Контакт не подтверждён");
     }
     log.info("Пользователь успешно подтверждён {}", dto);
     appUserService.updatePassword(dto.getPhone(), dto.getConfirmCode());
@@ -122,10 +119,7 @@ public class UserService {
     businessProcessService.sendRestoreMessage(dto);
     var contact = bitrixContactService.getContact(dto);
     if (Objects.isNull(contact.getRawPassword()) || contact.getRawPassword().isBlank()) {
-      throw BitrixException.builder()
-          .status(HttpStatus.PRECONDITION_FAILED)
-          .message("Не удалось обновить контакт. Код из Б24 не получен")
-          .build();
+      throw BitrixException.build422Exception("Не удалось обновить контакт. Код из Б24 не получен");
     }
     dto.setPassword(passwordEncoder.encode(contact.getRawPassword()));
     appUserService.updatePassword(dto);
@@ -143,10 +137,7 @@ public class UserService {
   public void changePassword(ChangePasswordDTO changePasswordDTO) {
     var user = appUserService.findByPhone(SecurityUtils.getCurrentUserPhone());
     if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
-      throw BitrixException.builder()
-          .status(HttpStatus.BAD_REQUEST)
-          .message("Имя пользователя или пароль указан не верно")
-          .build();
+      throw BitrixException.build400Exception("Имя пользователя или пароль указан не верно");
     }
     user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
     appUserService.update(user);
@@ -175,10 +166,7 @@ public class UserService {
     var contact = bitrixContactService.getContact(phone);
     var confirmCode = Objects.isNull(contact.getRetryConfirmCode()) ? contact.getConfirmCode() : contact.getRetryConfirmCode();
     if (Objects.isNull(confirmCode) || !confirmCode.equalsIgnoreCase(dto.getConfirmCode())) {
-      throw BitrixException.builder()
-          .status(HttpStatus.PRECONDITION_FAILED)
-          .message("Не указан или неверно указан код подтверждения")
-          .build();
+      throw BitrixException.build422Exception("Не указан или неверно указан код подтверждения");
     }
     var userDTO = UserDTO.builder()
         .bitrixId(contact.getId())
@@ -228,16 +216,10 @@ public class UserService {
     var confirmCode = Objects.isNull(bitrixContact.getRetryConfirmCode()) ?
         bitrixContact.getConfirmCode() : bitrixContact.getRetryConfirmCode();
     if (Objects.isNull(confirmCode) || Objects.isNull(dto.getConfirmCode())) {
-      throw BitrixException.builder()
-          .status(HttpStatus.BAD_REQUEST)
-          .message("Не указан код подтверждения")
-          .build();
+      throw BitrixException.build400Exception("Не указан код подтверждения");
     }
     if (!confirmCode.equals(dto.getConfirmCode())) {
-      throw BitrixException.builder()
-          .status(HttpStatus.PRECONDITION_FAILED)
-          .message("Код подтверждения не верный")
-          .build();
+      throw BitrixException.build422Exception("Код подтверждения не верный");
     }
     var userDTO = UserDTO.builder()
         .bitrixId(bitrixContact.getId())
