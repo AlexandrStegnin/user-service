@@ -35,7 +35,6 @@
     <title>Мои инвестиции</title>
 </head>
 <body class="page ">
-<div class="out">
 <div class="page__top ">
     <div th:replace="~{fragments/header.html :: #header}"></div>
     <input type="hidden" id="investorLogin" th:value="*{investorLogin}">
@@ -76,7 +75,6 @@
 <script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
 <script th:src="@{/js/charts-for-flows.js}"></script>
 <script th:src="@{/js/attachments.js}"></script>
-</div>
 <div th:replace="~{forms/annex-popup.html :: #read-attachment-table}"></div>
 <div th:replace="~{forms/annex-popup.html :: #read-attachment}"></div>
 <div th:replace="~{forms/popup-table.html :: #popup-table}"></div>

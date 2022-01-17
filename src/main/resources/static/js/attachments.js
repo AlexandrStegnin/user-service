@@ -17,8 +17,10 @@ Attachment.prototype = {
 }
 
 jQuery(document).ready(function ($) {
-    // blurElement($('.out'), 4);
-    // checkAttachments(null);
+    checkAttachments(null);
+    $('#read-attachment-table').modal({
+        dismissible: false
+    })
     $('#look').on('click', function () {
         $('#read-attachment').css('display', 'none');
         $('#read-attachment-table').modal('show')
@@ -29,23 +31,16 @@ jQuery(document).ready(function ($) {
         getAttachments()
     });
 
-    // $("#read-attachment-table").on("hidden.bs.modal", function () {
-    //     let readAttachment = $('#read-attachment')
-    //     if (readAttachment.css('z-index') !== '-1000001') {
-    //         readAttachment.css('display', 'block');
-    //     }
-    // });
     $(document).on('change', 'input[type="checkbox"]:checked', function () {
-        let userId = $(this).data('user-id');
         let attachment = {
-            id: $(this).data('attachment-id')
+            id: $(this).data('annex-id')
         };
         $(this).attr('disabled', 'disabled');
         let d = new Date();
         let output = d.toLocaleDateString();
         $('#attachment-date-' + attachment.id).html(output);
-        let trId = $(this).closest('tr').attr('id');
-        markRead(trId, userId, attachment, 1);
+        let attachmentId = $(this).data('annex-id');
+        markRead(attachmentId);
     });
 });
 
@@ -55,21 +50,10 @@ jQuery(document).ready(function ($) {
  * @param have
  */
 function toggleAttachmentModal(have) {
-    let readAttachment = $('#read-attachment');
     if (have === true) {
         getAttachments();
-        blurElement($('.out'), 4);
-        readAttachment.css('z-index', '1000001');
-        readAttachment.css('display', 'block');
-        $('#look').attr('disabled', false);
-        disableScroll(true);
     } else {
         $("#read-attachment-table").modal('hide');
-        blurElement($('.out'), 0);
-        $('div.out').css('filter', '');
-        readAttachment.css('z-index', '-1000001');
-        readAttachment.css('display', 'none');
-        disableScroll(false);
     }
 }
 
@@ -131,54 +115,57 @@ function getAttachments() {
         })
 }
 
-/**
- * Создать таблицу с приложениями
- *
- * @param attachments
- */
 function createAndShowAttachmentTable(attachments) {
 
-    let body = $('table#attachment-table').find('tbody');
-    let tr, td, a, label, input, strDate;
+    let body = $('div.modal__list');
+    let strDate;
     body.empty();
+
+    let header = createHeader()
+    header.appendTo(body)
 
     $.each(attachments, function (i, el) {
         let annex = new Attachment();
         annex.build(el.id, el.annex.annexName, el.annexRead, el.userId, el.dateRead);
-        tr = $('<tr></tr>');
-        tr.attr('id', annex.id);
-        tr.appendTo(body);
 
-        td = $('<td></td>');
-        td.data('attachment-name', annex.annexName);
-        a = $('<a>' + annex.annexName + '</a>');
-        a.attr('href', '/attachments/' + annex.id)
-            .attr('target', '_blank');
-        a.appendTo(td);
-        td.appendTo(tr);
-
-        label = $('<label></label>');
-        label.attr('htmlFor', 'annexId' + annex.id);
-        let checked = annex.annexRead === 1 ? 'checked="checked"' : ''
-        let disabled = annex.annexRead === 1 ? 'disabled="disabled"' : ''
-        input = $('<label class="f-checkbox ">' +
-            '<input data-user-id="' + annex.userId +'" ' +
-            'data-attachment-id="' + annex.id + '" ' +
-            'data-attachment-name="' + annex.annexName + '" ' +
-            'type="checkbox"' + checked + ' ' + disabled + '>' +
-            '<span>✓</span>');
-        td = $('<td style="text-align: center"></td>');
-        label.appendTo(td);
-        input.appendTo(td);
-        td.appendTo(tr);
+        let row = $('<div class="modal__list-row"></div>')
+        let linkItem = $('<div class="modal__list-item"></div>')
+        let link = $('<a class="link " href="/attachments/' + annex.id + '" target="_blank">' + annex.annexName + '</a>')
+        link.appendTo(linkItem)
+        linkItem.appendTo(row)
 
         strDate = annex.dateRead === null ? '' : new Date(annex.dateRead).toLocaleDateString();
+        let dateItem = $('<div class="modal__list-item" id="attachment-date-' + annex.id + '">' + strDate + '</div>')
+        dateItem.appendTo(row)
 
-        td = $('<td>' + strDate + '</td>');
-        td.attr('id', 'attachment-date-' + annex.id);
-        td.appendTo(tr);
+        let checked = annex.annexRead === 1 ? 'checked="checked"' : ''
+        let disabled = annex.annexRead === 1 ? 'disabled="disabled"' : ''
+
+        let checkboxItem = $('<div class="modal__list-item"></div>')
+        let checkbox = $('' +
+            '<label class="f-checkbox  ">' +
+            '   <input type="checkbox" name="annex" data-annex-id="' + annex.id + '" ' + checked + ' ' + disabled + '>' +
+            '       <span>' +
+            '           <svg width="14" height="10" viewBox="0 0 14 10" fill="none" ' +
+            '               xmlns="http://www.w3.org/2000/svg">' +
+            '                   <path d="M0.872869 5.23438L5.35369 9.68324L13.4652 1.60369L12.1996 0.331676L5.35369 7.15199L2.11932 3.96236L0.872869 5.23438Z" fill="black"/>' +
+            '           </svg>' +
+            '       </span>' +
+            '</label>')
+        checkbox.appendTo(checkboxItem)
+        checkboxItem.appendTo(row)
+        row.appendTo(body)
     });
     $('#read-attachment-table').modal('show');
+}
+
+function createHeader() {
+    return $('' +
+        '<div class="modal__list-row">' +
+        '   <div class="modal__list-item">Приложение</div>' +
+        '   <div class="modal__list-item">Дата</div>' +
+        '   <div class="modal__list-item">Ознакомлен</div>' +
+        '</div>')
 }
 
 /**
@@ -205,38 +192,12 @@ function markRead(id) {
         }
     })
         .done(function (data) {
-            // let haveUnread = data.message === 'true'
-            // toggleAttachmentModal(haveUnread)
+            let haveUnread = data.message === 'true'
+            toggleAttachmentModal(haveUnread)
         })
         .fail(function (e) {
             console.log('Произошла ошибка - ' + e.toString());
         })
         .always(function () {
         })
-}
-
-function blurElement(element, size) {
-    let filterVal = 'blur(' + size + 'px)';
-    $(element).css({
-        'filter': filterVal,
-        'webkitFilter': filterVal,
-        'mozFilter': filterVal,
-        'oFilter': filterVal,
-        'msFilter': filterVal,
-        'transition': 'all 0.5s ease-out',
-        '-webkit-transition': 'all 0.5s ease-out',
-        '-moz-transition': 'all 0.5s ease-out',
-        '-o-transition': 'all 0.5s ease-out'
-    });
-}
-
-function disableScroll(disable) {
-    let body = $('body');
-    if (disable === true) {
-        body.addClass('stop-scrolling');
-        body.bind('touchmove', function(e){e.preventDefault()});
-    } else {
-        body.removeClass('stop-scrolling');
-        body.unbind('touchmove');
-    }
 }
