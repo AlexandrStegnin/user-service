@@ -7,6 +7,7 @@ import com.ddkolesnik.userservice.model.bitrix.contact.BitrixContact;
 import com.ddkolesnik.userservice.model.bitrix.contact.Contact;
 import com.ddkolesnik.userservice.model.bitrix.enums.TaxStatus;
 import com.ddkolesnik.userservice.model.bitrix.enums.ValueType;
+import com.ddkolesnik.userservice.model.bitrix.requisite.bank.BankRequisite;
 import com.ddkolesnik.userservice.model.bitrix.utils.Phone;
 import com.ddkolesnik.userservice.model.dto.ChangePhoneDTO;
 import com.ddkolesnik.userservice.model.dto.UserDTO;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.ddkolesnik.userservice.model.bitrix.utils.BitrixFields.*;
 
@@ -65,6 +67,9 @@ public class BitrixContactService extends BitrixService {
     var contact = bitrixWebClient.getContact(phone);
     var taxStatus = TaxStatus.fromCode(contact.getTaxStatus());
     var bankRequisites = bankRequisiteService.findRequisites(contact.getId().toString(), taxStatus.getPresetId());
+    if (Objects.isNull(bankRequisites)) {
+      bankRequisites = new BankRequisite();
+    }
     contact.setBankRequisites(bankRequisites);
     return contact;
   }
